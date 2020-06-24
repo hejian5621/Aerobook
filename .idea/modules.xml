@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AircraftClient.iml" filepath="$PROJECT_DIR$/.idea/AircraftClient.iml" />
+      <module fileurl="file://$USER_HOME$/PycharmProjects/testUiDemo/.idea/testUiDemo.iml" filepath="$USER_HOME$/PycharmProjects/testUiDemo/.idea/testUiDemo.iml" />
     </modules>
   </component>
 </project>

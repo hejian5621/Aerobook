@@ -1,0 +1,8 @@
+一、启动应用程序
+from pywinauto.application import Application
+start_address = r"C:\Users\Administrator\AppData\Roaming\baidu\BaiduNetdisk\BaiduNetdisk.exe"  # 启动应用程序的地址
+app = Application().start(start_address)
+
+二、方法说明
+pywinauto提供了print_control_identifiers()函数来显示该窗体下所有控件的结构。
+dlg_spec.print_control_identifiers()
