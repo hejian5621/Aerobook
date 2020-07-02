@@ -1,3 +1,5 @@
+# 获取配置文件内容
+
 import configparser
 # from utils.appletConnector import initialize
 import os
