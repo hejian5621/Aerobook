@@ -1,5 +1,5 @@
 
 
 from pywinauto.application import Application
-app = Application(backend="uia").start("notepad.exe")
-app.UntitledNotepad.type_keys("%FX")
+
+dlg_spec = pywinauto.window(title=r'Aerobook平台启动器').window(title=r'本地授权')

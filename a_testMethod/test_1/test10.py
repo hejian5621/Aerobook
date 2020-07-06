@@ -1,4 +1,4 @@
-
+import time
 
 from pywinauto.application import Application
 # 应用程序的地址
@@ -17,10 +17,30 @@ dlg_spec1.child_window(title="确定").click()
 app.window(title=r'Aerobook平台启动器').window(title=r'运行').click()
 #切换到Aerobook主窗口
 Aerobook_main=app.window(title=r'Aerobook v1.0.4')
+# Aerobook_main.print_control_identifiers()
 # 切换到工具栏
-Aerobook_main_tool=Aerobook_main.child_window(auto_id="ribbonStatusBar1")
-# 打印控件
-Aerobook_main.print_control_identifiers()
+#打开Aerolab
+# Aerobook_main_tool=Aerobook_main.window(auto_id="panel_Page",control_type="System.Windows.Forms.Panel").\
+#     window(auto_id="RibbonControl1").click()
+
+#打开Aerolab
+# Aerobook_main_tool=Aerobook_main.window(auto_id="panel_Page",control_type="System.Windows.Forms.Panel").\
+#     window(auto_id="RibbonControl1").click()
+time.sleep(1)
+
+# Aerobook_main_tool=Aerobook_main.\
+#     child_window(title="Aerobook v1.0.4", auto_id="FrmMainFrame", control_type="MainFrame.FrmMainFrame").click()
+
+log=Aerobook_main.print_control_identifiers()
+
+
+
+
+
+
+
+
+
 
 
 
