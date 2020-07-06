@@ -108,7 +108,9 @@ f.close()
 二、标准库
 pip install xlrd
 
-pip install MYSQLDB
+pip install Common
+
+pip install pymysql
 
 
 pip install PYMYSQL
