@@ -112,6 +112,7 @@ pip install Common
 
 pip install pymysql
 
+pip install uiautomation
 
 pip install PYMYSQL
 

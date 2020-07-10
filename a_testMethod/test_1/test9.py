@@ -1,9 +1,17 @@
 
 
 from pywinauto.application import Application
-from src.utils.privately_owned.ClientInitialization import *
 
-location = r"C:\Program Files (x86)\Aerobook\bin\Aerobook.exe"
 
-dlg_spec=ClientInitialization().open_Aerobook(location)
-dlg_spec_Aerolab=ClientInitialization().open_Aerolab(dlg_spec)
+app = Application(backend="uia").connect(process=15000)
+
+Aerobook_main = app.window(title=r'Aerobook v1.0.4')
+
+
+
+Aerobook_main1=Aerobook_main.child_window(title_re="splitter", class_name="WindowsForms10.Window.8.app.0.141b42a_r9_ad1")
+
+
+
+
+print(Aerobook_main1.print_control_identifiers())

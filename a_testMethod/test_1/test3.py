@@ -1,7 +1,11 @@
+import subprocess
+import uiautomation as automation
 
-a=2
-
-
-if a == 0: print(0)
-elif a == 1 : print(1)
-else:  print(2)
+print(automation.GetRootControl())
+subprocess.Popen('notepad.exe')
+notepadWindow = automation.WindowControl(searchDepth = 1, ClassName = 'Notepad')
+print(notepadWindow.Name)
+notepadWindow.SetTopmost(True)
+edit = notepadWindow.EditControl()
+edit.SetValue('Hello')
+edit.SendKeys('{Ctrl}{End}{Enter}World')
