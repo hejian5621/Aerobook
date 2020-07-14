@@ -2,7 +2,7 @@ import time
 
 from pywinauto.application import Application
 # 应用程序的地址
-a = r"C:\Program Files (x86)\Aerobook\bin\Aerobook.exe"
+a = r"E:\Program Files (x86)\Aerobook\bin\Aerobook.exe"
 #打开应用程序
 app = Application().start(a)
 #选择应用程序
