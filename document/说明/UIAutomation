@@ -1,8 +1,0 @@
-
-
-在UIAutomation中有如下几个重要属性：
-关闭、最大化、最小化
-notepadWindow.ButtonControl(searchDepth=2, Name='最大化').Click()
-
-
-

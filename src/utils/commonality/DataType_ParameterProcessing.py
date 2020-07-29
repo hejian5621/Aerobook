@@ -37,8 +37,8 @@ class DataType_processing:
     def fetch_Database(self, key):
         """
          取出字典里指定键名的值
-         from privately_owned.method import privately_owned
-         value = privately_owned.fetch_Database(self)
+         from operation.method import operation
+         value = operation.fetch_Database(self)
         :return:
         """
         if self.parameter:

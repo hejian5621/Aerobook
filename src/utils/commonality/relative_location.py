@@ -16,6 +16,3 @@ class relative_site:
 
 
 
-# from relative_location import relative_site
-# locat = relative_site.location()
-# D:\python demo\ProjectTemplate\

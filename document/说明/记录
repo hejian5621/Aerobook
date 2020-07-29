@@ -1,4 +1,0 @@
-
-# 打开Aerolab
-Aerobook_main_tool=Aerobook_main.window(auto_id="panel_Page",control_type="System.Windows.Forms.Panel").\
-    window(auto_id="RibbonControl1").click()
