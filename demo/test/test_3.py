@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 import uiautomation
@@ -25,13 +24,3 @@ wc.CaptureToImage('1.png')
 time.sleep(2)
 wc.ButtonControl(Name='关闭').Click()
 os.system("taskkill /F /IM calc.exe")
-
-
-
-
-
-
-
-
-
-

@@ -54,7 +54,7 @@ class Logger(object):
         pass
 
 # from utils.log.log import Logger
-# sys.stdout = Logger('D:/python demo/a.log', sys.stdout)
+# sys.stdout = Logger('D:/python demo_1/a.log', sys.stdout)
 # # sys.stderr = Logger('a.log_file', sys.stderr)
 # print('print something')
 # print('print something2')

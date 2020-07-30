@@ -44,15 +44,3 @@ Aerobook_main_4=Aerobook_main_3.window(title=r'Fembook').click()
 Aerobook_main.print_control_identifiers()
 
 
-
-
-
-
-
-
-
-
-
-
-
-

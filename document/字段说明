@@ -112,6 +112,8 @@ pip install xlwt
 
 pip install paramiko
 
+pip install pywinauto
+
 pip install relative_location     相对位置
 
 pip install xlutils
@@ -140,6 +142,7 @@ pip install flask
 
 pip install  wxpython  # 常用控件实例
 
+pip install application
 
 pip install xlwt
 
