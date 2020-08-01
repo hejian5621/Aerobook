@@ -106,6 +106,12 @@ f.close()
 
 
 二、标准库
+
+pip install --user  upgrade pip
+
+
+pip install --user  upgrade pip
+
 pip install xlrd
 
 pip install xlwt
@@ -114,13 +120,8 @@ pip install paramiko
 
 pip install pywinauto
 
-pip install relative_location     相对位置
-
 pip install xlutils
 
-pip install log
-
-pip install os
 
 pip install Common
 
@@ -143,9 +144,6 @@ pip install flask
 pip install  wxpython  # 常用控件实例
 
 pip install application
-
-pip install xlwt
-
 三、Cookie
 无状态的协议  cookie技术的发展
 Set-Cookie: username=wuya; expires=Thu, 16-Aug-2018 15:04:02 GMT; Max-Age=3600;

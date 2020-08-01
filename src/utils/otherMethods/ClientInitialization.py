@@ -2,6 +2,8 @@
 import subprocess
 import uiautomation
 import time
+from pywinauto.application import Application
+
 
 class ClientInitialization:
     """1、Aerobook授权
@@ -27,6 +29,7 @@ class ClientInitialization:
         window_impower.ButtonControl(searchDepth=1, Name='运行').Click()  # 在Aerobook平台启动器窗口中点击运行按钮
         time.sleep(2)  # 等待两秒
 
+
     def open_Aerocheck(self,module):
         """
         点击Aerolab按钮，打开Aerolab
@@ -45,12 +48,33 @@ class ClientInitialization:
         sub5.TabItemControl(searchDepth=1, Name=module).Click()
 
 
+class ConnectApp:
+    """连接应用程序"""
 
-#
-# class ProcesslinkApplication:
-#
-#     def __init__(self):
-#         pass
-#
-#
-#     def Aia_link(self):
+    def __init__(self,title):
+        """
+        :param title:  pywinauto是标题，uiautomation是名称
+        """
+        self.title=title
+
+    def pyw_Connect(self):
+        """
+         pywinauto通过应用程序标题（title）连接到应用程序
+        :return:
+        """
+        # 通过应用标题连接到应用
+        app = Application().connect(title_re=self.title)  # 通过应用标题连接到该应用的进程
+        dlg_spec = app.window(title=self.title)  #切换到应用的窗口
+        return dlg_spec  #返回应用对象
+
+
+    def uia_Connect(self):
+        """
+        uiavtomation通过应用程序名称（Name）连接到应用程序
+        :return:
+        """
+        # 通过应用名称连接到应用，searchDepth搜索深度
+        app = uiautomation.WindowControl(searchDepth=1, Name=self.title)
+        return app
+
+
