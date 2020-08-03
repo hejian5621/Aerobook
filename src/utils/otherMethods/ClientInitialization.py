@@ -62,9 +62,13 @@ class ConnectApp:
          pywinauto通过应用程序标题（title）连接到应用程序
         :return:
         """
+        app=None
         # 通过应用标题连接到应用
-        app = Application().connect(title_re=self.title)  # 通过应用标题连接到该应用的进程
-        dlg_spec = app.window(title=self.title)  #切换到应用的窗口
+        try:
+            app = Application().connect(title_re=self.title)  # 通过应用标题连接到该应用的进程
+        except:
+            print("没有找到被测应用窗口的标题，请检查是否没有打开应用" ,__file__, sys._getframe().f_lineno)
+        dlg_spec = app.window(title=self.title)  # 切换到应用的窗口
         return dlg_spec  #返回应用对象
 
 

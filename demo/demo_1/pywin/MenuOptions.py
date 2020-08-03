@@ -1,7 +1,6 @@
 
-from src.utils.otherMethods.control_except import combination_Control
 from src.utils.otherMethods.ClientInitialization import ConnectApp
-from src.utils.operation.Placement_majorization import laminate_WorkField
+from src.utils.operation.LayerInformation import laminate_WorkField
 
 dicti = {"最大铺层数": "50", "最小铺层数": "30", "铺层比一": "3", "铺层比二": "5", "铺层比三": "2",
          "容差比": "6", "单层厚度": "0.25", "弹性模量E11": "165000", "弹性模量E22": "8000", "泊松比v12": "0.50",
@@ -10,5 +9,5 @@ dicti = {"最大铺层数": "50", "最小铺层数": "30", "铺层比一": "3", 
 
 
 dlg_spec=ConnectApp('Aerobook v1.0.4').pyw_Connect()
-workField=laminate_WorkField(dlg_spec).enterInto()
-laminate_WorkField(workField).ControlOperating(dicti)
+workField=laminate_WorkField(dlg_spec).enterInto_laminate()
+laminate_WorkField(workField).ControlOperating_laminate(dicti)

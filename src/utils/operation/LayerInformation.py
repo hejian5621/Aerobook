@@ -1,6 +1,7 @@
 # 铺层库优化工作栏，对应Aerobook路径：铺层信息--》铺层库优化
 from src.utils.otherMethods.control_except import combination_Control
 import time
+import os,sys
 
 
 
@@ -14,19 +15,22 @@ class laminate_WorkField():
         self.dlg_spec=dlg_spec
 
 
-    def enterInto(self):
+    def enterInto_laminate(self):
         """
         进入铺层库优化工作栏
         :return:工作栏对象
         """
-        # 点击菜单栏的“铺层信息->铺层库优化”，显示出“铺层库优化”工作栏
-        combination_Control(self.dlg_spec).enterInto_menuBar("Aerocheck 1.0.4", "wxWindowNR", r"铺层信息->铺层库优化")
+        try:
+            # 点击菜单栏的“铺层信息->铺层库优化”，显示出“铺层库优化”工作栏
+            combination_Control(self.dlg_spec).enterInto_menuBar("Aerocheck 1.0.3", "wxWindowNR",r"铺层信息->铺层库优化")
+        except:
+            print("Aerobook的子应用的名称不对", __file__, sys._getframe().f_lineno)
         # 切换到“铺层库优化”工作栏
         workField=self.dlg_spec.scrolledpanel2
         return workField
 
 
-    def ControlOperating(self,dicti):
+    def ControlOperating_laminate(self,dicti):
         """
         铺层库控件操作
         :return:
@@ -100,6 +104,31 @@ class laminate_WorkField():
         if solve != "默认":
             #保存为铺层数据库勾选框
             self.dlg_spec.Button2.check()
-        # if clo != "默认":
-        #     # 保存为铺层数据库勾选框
-        #     self.dlg_spec.Button3.check()
+        if clo != "默认":
+            # 保存为铺层数据库勾选框
+            self.dlg_spec.Button3.check()
+
+
+
+class laminateData_Tool:
+    """铺层数据库制作工具"""
+
+    def __init__(self,dlg_spec):
+        """
+        :param dlg_spec:
+        """
+        self.dlg_spec=dlg_spec
+
+    def enterInto_laminateData(self):
+        """
+        进入铺层库优化工作栏
+        :return:工作栏对象
+        """
+        try:
+            # 点击菜单栏的“铺层信息->铺层库优化”，显示出“铺层库优化”工作栏
+            combination_Control(self.dlg_spec).enterInto_menuBar("Aerocheck 1.0.3", "wxWindowNR", r"铺层信息->铺层库数据库制作工具")
+        except:
+            print("Aerobook的子应用的名称不对", __file__, sys._getframe().f_lineno)
+        # 切换到“铺层库优化”工作栏
+        workField = self.dlg_spec.scrolledpanel2
+        return workField
