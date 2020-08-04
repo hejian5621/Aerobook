@@ -1,0 +1,18 @@
+Can not load UIAutomationCore.dll.
+You may need to install Windows Update KB971513.
+https://github.com/yinkaisheng/WindowsUpdateKB971513ForIUIAutomation
+2020-08-03 15:03:09.777 pydevd_xml.py[325] var_to_xml -> Find Control Timeout: {Name: '警告', ControlType: WindowControl}
+2020-08-03 15:03:13.384 test_2.py[12] <module> -> Find Control Timeout: {Name: '7', ControlType: ButtonControl}
+2020-08-03 15:03:58.144 test_2.py[12] <module> -> Find Control Timeout: {Name: '7', ControlType: ButtonControl}
+2020-08-03 15:04:42.765 test_2.py[12] <module> -> Find Control Timeout: {Name: '7', ControlType: ButtonControl}
+2020-08-03 15:05:10.251 test_2.py[11] <module> -> Find Control Timeout: {Name: '7', ControlType: ButtonControl}
+2020-08-03 15:07:47.723 pydevd_xml.py[325] var_to_xml -> Find Control Timeout: {Name: '警告', ControlType: WindowControl}
+2020-08-03 15:11:28.437 test_1.py[13] <module> -> Find Control Timeout: {Name: 'OK', ControlType: ButtonControl}
+2020-08-03 15:13:26.848 test_1.py[13] <module> -> Find Control Timeout: {Name: 'OK', ControlType: ButtonControl}
+2020-08-03 15:15:48.585 test_1.py[13] <module> -> Find Control Timeout: {Name: 'OK', ControlType: ButtonControl}
+2020-08-03 15:19:45.389 test_1.py[13] <module> -> Find Control Timeout: {Name: 'OK', ControlType: ButtonControl}
+2020-08-03 15:21:23.830 test_1.py[13] <module> -> Find Control Timeout: {Name: 'OK', ControlType: ButtonControl}
+2020-08-03 15:24:13.768 test_1.py[13] <module> -> Find Control Timeout: {ClassName: 'CCPushButton', ControlType: TextControl}
+2020-08-03 15:57:26.436 test_2.py[11] <module> -> Find Control Timeout: {AutomationId: '65535', ControlType: TextControl}
+2020-08-03 16:14:37.860 test_2.py[11] <module> -> Find Control Timeout: {AutomationId: '002709DA', ControlType: TextControl}
+2020-08-03 16:32:00.621 test_2.py[11] <module> -> Find Control Timeout: {ClassName: 'SysLink', ControlType: WindowControl}
