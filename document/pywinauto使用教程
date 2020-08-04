@@ -14,3 +14,31 @@ app = Application().connect(path=r"D:\Program Files (x86)\tlxsoft\屏幕录像�
 
 5、使用标题、类型等匹配
 app = Application().connect(title_re="屏幕录像专家.*", class_name="TMainForm")
+
+
+键盘操作
+
+# 导入模块
+from pywinauto.keyboard import send_keys
+​
+# 全选（ctrl+A）
+send_keys("^a")
+​
+# 复制(ctrl+C)
+send_keys("^c")
+​
+# 粘贴(ctrl+V)
+send_keys("^v")
+​
+# 回车键
+send_keys("{VK_RETURN}")
+​
+# 粘贴(ctrl+V)
+send_keys("^v")
+
+ESC键：VK_ESCAPE
+回车键：VK_RETURN
+TAB键：VK_TAB
+Shift键：VK_SHIFT
+Ctrl键：VK_CONTROL
+Alt键：VK_MENU
