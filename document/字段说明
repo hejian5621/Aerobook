@@ -116,7 +116,11 @@ pip install xlrd
 
 pip install xlwt
 
+pip install pillow
+
 pip install paramiko
+
+pip install pywinauto
 
 pip install pywinauto
 

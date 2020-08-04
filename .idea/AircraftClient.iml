@@ -18,7 +18,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/utils/operation" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/otherMethods" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (Aerobook)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (Aerobook) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
