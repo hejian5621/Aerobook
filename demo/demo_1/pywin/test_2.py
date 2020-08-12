@@ -1,21 +1,14 @@
-
-from pywinauto.application import Application
-
 import time
+from BeautifulReport import BeautifulReport
+import unittest
 
-app = Application().connect(title_re="Aerobook v1.0.4")
+'''指定测试用例为当前文件夹下的interface_case_msg目录'''
+test_dir = './test'
+discover = unittest.defaultTestLoader.discover(test_dir, pattern='*_test.py')
 
-print(app)
-
-time.sleep(2)
-
-dlg_spec = app.window(title='Aerobook v1.0.4')
-
-dlg_spec1=dlg_spec.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
-
-dlg_spec2=dlg_spec1.child_window(title="Aerocheck 1.0.4", class_name="wxWindowNR")
-
-dlg_spec2.menu_select( r"铺层信息->铺层库优化")
-
-
-
+if __name__ == "__main__":
+    now = time.strftime("%Y-%m-%d %H_%M_%S")
+    filename = './test/' + now + '_result.html'
+    fp = open(filename, 'wb')
+    BeautifulReport(discover).report(description='测试', filename=filename)
+    fp.close()

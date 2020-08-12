@@ -1,11 +1,9 @@
 # 铺层库优化工作栏，对应Aerobook路径：铺层信息--》铺层库优化
-from src.utils.otherMethods.control_except import combination_Control
 import time
-import os,sys
 
 
 
-class laminate_WorkField():
+class ModuleControlOperation():
     """进入铺层库优化工作栏"""
 
     def __init__(self,dlg_spec):
@@ -15,35 +13,30 @@ class laminate_WorkField():
         self.dlg_spec=dlg_spec
 
 
-    def enterInto_laminate(self):
-        """
-        进入铺层库优化工作栏
-        :return:工作栏对象
-        """
-        try:
-            # 点击菜单栏的“铺层信息->铺层库优化”，显示出“铺层库优化”工作栏
-            combination_Control(self.dlg_spec).enterInto_menuBar("Aerocheck 1.0.3", "wxWindowNR",r"铺层信息->铺层库优化")
-        except:
-            print("Aerobook的子应用的名称不对", __file__, sys._getframe().f_lineno)
-        # 切换到“铺层库优化”工作栏
-        workField=self.dlg_spec.scrolledpanel2
-        return workField
 
-
-    def ControlOperating_laminate(self,dicti):
+    def laminate_optimize(self,dicti):
         """
-        铺层库控件操作
+        铺层库优化工作栏控件操作
+        :param dicti: 输入的实际数据
         :return:
         """
-
-        Max=dicti["最大铺层数"];           minimum=dicti["最小铺层数"]
-        LayerThan1 = dicti["铺层比一"];    LayerThan2 = dicti["铺层比二"]      ;      LayerThan3 = dicti["铺层比三"]
-        ToleranceThan = dicti["容差比"];   thickness_monolayer = dicti["单层厚度"]
-        elasticityModulusE11 = dicti["弹性模量E11"];          elasticityModulusE22 = dicti["弹性模量E22"]
-        PoissonRatio = dicti["泊松比v12"];           shearElasticity = dicti["剪切模量G12"]
-        LaminateLength=dicti["层合板长度"];           LaminateWidth=dicti["层合板宽度"]
-        Mat8 = dicti["Mat8材料ID"];                  database = dicti["数据库名称"]
-        save_database = dicti["保存为铺层数据库"] ;     save_file = dicti["保存为Excel文件"]
+        Max=dicti["最大铺层数"]
+        minimum=dicti["最小铺层数"]
+        LayerThan1 = dicti["铺层比一"]
+        LayerThan2 = dicti["铺层比二"]
+        LayerThan3 = dicti["铺层比三"]
+        ToleranceThan = dicti["容差比"]
+        thickness_monolayer = dicti["单层厚度"]
+        elasticityModulusE11 = dicti["弹性模量E11"]
+        elasticityModulusE22 = dicti["弹性模量E22"]
+        PoissonRatio = dicti["泊松比v12"]
+        shearElasticity = dicti["剪切模量G12"]
+        LaminateLength=dicti["层合板长度"]
+        LaminateWidth=dicti["层合板宽度"]
+        Mat8 = dicti["Mat8材料ID"]
+        database = dicti["数据库名称"]
+        save_database = dicti["保存为铺层数据库"]
+        save_file = dicti["保存为Excel文件"]
         path1 = dicti["路径"]
         solve = dicti["求解"]
         clo = dicti["关闭"]
@@ -105,30 +98,9 @@ class laminate_WorkField():
             #保存为铺层数据库勾选框
             self.dlg_spec.Button2.check()
         if clo != "默认":
+            time.sleep(10)
             # 保存为铺层数据库勾选框
             self.dlg_spec.Button3.check()
 
 
 
-class laminateData_Tool:
-    """铺层数据库制作工具"""
-
-    def __init__(self,dlg_spec):
-        """
-        :param dlg_spec:
-        """
-        self.dlg_spec=dlg_spec
-
-    def enterInto_laminateData(self):
-        """
-        进入铺层库优化工作栏
-        :return:工作栏对象
-        """
-        try:
-            # 点击菜单栏的“铺层信息->铺层库优化”，显示出“铺层库优化”工作栏
-            combination_Control(self.dlg_spec).enterInto_menuBar("Aerocheck 1.0.3", "wxWindowNR", r"铺层信息->铺层库数据库制作工具")
-        except:
-            print("Aerobook的子应用的名称不对", __file__, sys._getframe().f_lineno)
-        # 切换到“铺层库优化”工作栏
-        workField = self.dlg_spec.scrolledpanel2
-        return workField

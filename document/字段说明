@@ -106,11 +106,11 @@ f.close()
 
 
 二、标准库
+pip 升级命令
 
 pip install --user  upgrade pip
 
 
-pip install --user  upgrade pip
 
 pip install xlrd
 
@@ -124,7 +124,7 @@ pip install xlutils
 
 pip install pytesseract
 
-pip install wheel
+
 
 pip install pillow
 
@@ -148,6 +148,12 @@ pip install flask
 
 pip install  wxpython  # 常用控件实例
 
+pip install wheel
+
+百度aip
+
+pip install baidu-aip
+
 
 图片处理
 
@@ -159,6 +165,11 @@ pip install pytesseract
 
 pip install wheel
 
+pip install pykeyboard
+
+pip install PyUserInput
+
+pip install  pyhook
 
 三、Cookie
 无状态的协议  cookie技术的发展

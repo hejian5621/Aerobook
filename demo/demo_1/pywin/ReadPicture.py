@@ -6,7 +6,7 @@ from PIL import Image
 
 
 # im_en = Image.open('115.png')
-im_ch = Image.open('12.png')
+im_ch = Image.open('456.png')
 print('========识别字母========')
 # print(pytesseract.image_to_string(im_en), '\n\n')
 print(im_ch)

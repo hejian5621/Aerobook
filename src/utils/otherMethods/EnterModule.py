@@ -1,21 +1,15 @@
-# 控件处理方法
+# 进入被测模块
 
 
-from pywinauto.application import Application
-import subprocess
-import uiautomation
-import time
+class Entrance_module:
+    """进入被测模块"""
 
-
-
-class combination_Control:
-    """组合控件，例如：菜单、工作栏等"""
 
     def __init__(self,dlg_spec):
         self.dlg_spec=dlg_spec
 
 
-    def enterInto_menuBar(self,title,class_name,MenuOptions):
+    def combination_Control(self, title, class_name, MenuOptions):
         """
         切换到菜单栏，并点击对应的菜单选项
         通过pywinauto框架执行
