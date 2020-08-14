@@ -132,6 +132,8 @@ pip install Common
 
 pip install pymysql
 
+pip install ddt
+
 pip install uiautomation
 
 pip install PYMYSQL
