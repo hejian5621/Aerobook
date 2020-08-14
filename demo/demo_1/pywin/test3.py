@@ -1,50 +1,59 @@
 
+n = -1;t=1
 
-from pywinauto.application import Application
-
-import time
-
-app = Application().connect(title_re="Aerobook v1.0.4")
-
-print(app)
-
-time.sleep(2)
-
-dlg_spec = app.window(title='Aerobook v1.0.4')
-# dlg_spec.print_control_identifiers()
-
-dlg_spec1=dlg_spec.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
-
-dlg_spec2=dlg_spec1.child_window(title="Aerocheck 1.0.3", class_name="wxWindowNR")
-
-dlg_spec3= dlg_spec2.child_window(title="panel", class_name="wxWindowNR")
+dataQuantity=320
+txtName="cache.txt"
+actuals=""
 
 
-# dlg_spec2.menu_select(r"铺层信息->铺层库优化")
+# 去掉缓存TXT文件里的空行
+with open(txtName, "r") as f:  # 打开文件
+    lines = f.readlines()  # 读取所有行
+    while True:
+        if "\n"  in lines:
+            lines.remove("\n")
+        else:
+            break
+number=len(lines)  # 获取列表元素的个数
 
-
-
-dlg_spec3=dlg_spec2.wxWindowNR4
-
-dlg_spec4=dlg_spec3.splitter
-
-
-dlg_spec5=dlg_spec4.wxWindowNR4
+n=0
+actuals=""
+# 取出TXT文件中需要的数据
+while n<dataQuantity :
+    line =dataQuantity-n
+    t=number-line
+    if t >= 0:
+        actual= lines[t]
+        actual = actual[23:]
+        actuals=str(actuals)+str(actual)
+    n=n+1
 
 
 
-dlg_spec6=dlg_spec5.child_window(title="richText", class_name="wxWindow")
-
-# dlg_spec7=dlg_spec6["richText2"]
-
-dlg_spec5.print_control_identifiers()
 
 
-dlg_spec6.print_control_identifiers()
-dlg_spec6.Dialog.Static1.window_text()
+print("actuals:",actuals)
 
 
-# dlg_spec3.print_control_identifiers()
+# while t>= -dataQuantity+2:
+#     actual = None
+#     n = -t + n
+#     print("n:", n)
+#     while True:
+#
+#             last_line = lines[n]  # 取最后一行
+#             if last_line != "\n":
+#                 break
+#         n = n + (-1)
+#     t = t + (-1)
+#     # 去掉时间
+#     actual = last_line[23:]
+#     actuals = str(actuals) + str(actual)
+# print("actuals:", actuals)
+# 删除TXT文件
+# if os.path.exists(txtName): os.remove(txtName)
+
+
 
 
 

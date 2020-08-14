@@ -17,7 +17,7 @@ class read_excel():
 
 
 
-    def ReadingSpreadsheets_listNestedDicti(self):
+    def readExcel_testCase (self):
         """
         读取电子表格里的内容生成列表嵌套字典数据类型的值
         :return:
@@ -42,12 +42,10 @@ class read_excel():
             os._exit(0)
         return list_dicti_Excel
 
-
-
-dict1={"详细地址":"src\\testCase\\useCase_file\\Aerocheck\\铺层库优化工具.xlsx","表单名称":"模块说明","初始行":1}
-# dict1={"详细地址":"src\\testCase\\useCase_file\\Aerocheck\\铺层库优化工具.xlsx","表单名称":"铺层库优化工具","初始行":1}
 #
-dict2=read_excel(dict1).ReadingSpreadsheets_listNestedDicti()
-print("dict2:",dict2)
-
+#
+# dict1={"详细地址":"src\\testCase\\useCase_file\\Aerocheck\\铺层库优化工具.xlsx","表单名称":"模块说明","初始行":1}
+# dict2=read_excel(dict1).readExcel_testCase()
+# print("dict2:",dict2)
+#
 

@@ -124,7 +124,7 @@ pip install xlutils
 
 pip install pytesseract
 
-
+pip install numpy
 
 pip install pillow
 

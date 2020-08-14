@@ -33,7 +33,7 @@ class ProfileDataProcessing:
         # 找到配置文件
         cf.read(location, encoding='utf-8')
         self.argument = cf.get(self.column, self.programa)
-        print("从配置文件取出的参数:", self.argument)
+        # print("从配置文件取出的参数:", self.argument)
         return self.argument
 
 

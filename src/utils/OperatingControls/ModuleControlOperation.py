@@ -4,7 +4,7 @@ import time
 
 
 class ModuleControlOperation():
-    """进入铺层库优化工作栏"""
+    """工作栏控件操作"""
 
     def __init__(self,dlg_spec):
         """
@@ -39,6 +39,7 @@ class ModuleControlOperation():
         save_file = dicti["保存为Excel文件"]
         path1 = dicti["路径"]
         solve = dicti["求解"]
+        solve_time = int(dicti["求解等待时间"])
         clo = dicti["关闭"]
         if Max!="默认":
             #最大铺层数文本框
@@ -90,17 +91,19 @@ class ModuleControlOperation():
             self.dlg_spec.Edit16.set_text(path1)
         if save_database != "默认":
             #保存为铺层数据库勾选框
-            self.dlg_spec.CheckBox0.check()
+            self.dlg_spec.CheckBox0.click()
         if save_file != "默认":
             #保存为铺层数据库勾选框
-            self.dlg_spec.CheckBox2.check()
+            self.dlg_spec.CheckBox2.click()
         if solve != "默认":
-            #保存为铺层数据库勾选框
-            self.dlg_spec.Button2.check()
+            time.sleep(1)
+            #点击求解按钮
+            self.dlg_spec.Button2.click()
+            time.sleep(solve_time)
         if clo != "默认":
-            time.sleep(10)
-            # 保存为铺层数据库勾选框
-            self.dlg_spec.Button3.check()
+            time.sleep(1)
+            # 点击关闭按钮
+            self.dlg_spec.Button3.click()
 
 
 

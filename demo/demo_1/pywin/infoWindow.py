@@ -12,7 +12,7 @@ dlg_spec = app.window(title='Aerobook v1.0.4')
 
 dlg_spec1=dlg_spec.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
 
-dlg_spec2=dlg_spec1.child_window(title="Aerocheck 1.0.4", class_name="wxWindowNR")
+dlg_spec2=dlg_spec1.child_window(title="Aerocheck1 1.0.4", class_name="wxWindowNR")
 
 dlg_spec3= dlg_spec2.child_window(title="multiSplitter", class_name="wxWindowNR")
 
@@ -31,6 +31,8 @@ dlg_spec8=dlg_spec7.Properties.child_window(title="richText", control_type="Cont
 
 dlg_spec7.print_control_identifiers()
 
-dlg_spec9=dlg_spec8.Dialog.richText.WindowText()
+dlg_spec9=dlg_spec7.Dialog.Static2.set_window_text()
 
+print("edit_box:",dlg_spec9)
+dlg_spec9.print_control_identifiers()
 # dlg_spec4=dlg_spec3.richText

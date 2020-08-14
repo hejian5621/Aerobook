@@ -2,16 +2,18 @@ import time
 
 from pywinauto.application import Application
 # 应用程序的地址
-a = r"E:\Program Files (x86)\Aerobook\bin\Aerobook.exe"
+a = r"C:\Program Files (x86)\Aerobook\bin\Aerobook.exe"
 #打开应用程序
-app = Application("uia").start(a)
+app = Application().start(a)
 #选择应用程序
 dlg_spec = app['Aerobook平台启动器']
 dlg_spec .print_control_identifiers()
 
-dlg_spec.maximize()
+# dlg_spec.maximize()
 #点击请求授权
-dlg_spec.child_window(title="请求授权").click()
+dlg_spec1=dlg_spec.child_window(title="本地授权", auto_id="groupBox_local",
+                                control_type="System.Windows.Forms.GroupBox").window(title="请求授权").click()
+# dlg_spec1.child_
 # 切换到授权成功窗口
 dlg_spec1 = app.window(title=r'成功')
 # 点击确定按钮Aerobook平台启动器
@@ -21,10 +23,10 @@ app.window(title=r'Aerobook平台启动器').window(title=r'运行').click()
 #切换到Aerobook主窗口
 Aerobook_main = app.window(title=r'Aerobook v1.0.4')
 
-Aerobook_main_1=Aerobook_main.window(title=r'正在启动应用程序，需要一定的时间，请耐心等待...')
-Aerobook_main_2=Aerobook_main_1.window(title=r'The Ribbon')
-Aerobook_main_3=Aerobook_main_2.window(title=r'Ribbon Tabs')
-Aerobook_main_4=Aerobook_main_3.window(title=r'Fembook').click()
+# Aerobook_main_1=Aerobook_main.window(title=r'正在启动应用程序，需要一定的时间，请耐心等待...')
+# Aerobook_main_2=Aerobook_main_1.window(title=r'The Ribbon')
+# Aerobook_main_3=Aerobook_main_2.window(title=r'Ribbon Tabs')
+# Aerobook_main_4=Aerobook_main_3.window(title=r'Fembook').click()
 # Aerobook_main.print_control_identifiers()
 # 切换到工具栏
 #打开Aerolab

@@ -14,7 +14,7 @@ dlg_spec = app.window(title='Aerobook v1.0.4')
 
 dlg_spec1=dlg_spec.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
 
-dlg_spec2=dlg_spec1.child_window(title="Aerocheck 1.0.3", class_name="wxWindowNR")
+dlg_spec2=dlg_spec1.child_window(title="Aerocheck1 1.0.3", class_name="wxWindowNR")
 
 
 
