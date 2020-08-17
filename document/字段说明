@@ -136,6 +136,12 @@ pip install ddt
 
 pip install uiautomation
 
+# 断言失败继续执行
+pip install pytest-assume
+
+
+pip install globalvar
+
 pip install PYMYSQL
 
 pip install selenium

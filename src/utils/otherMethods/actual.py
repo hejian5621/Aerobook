@@ -56,7 +56,6 @@ class ActualProcessing:
                 else:
                     break
         number = len(lines)  # 获取列表元素的个数
-        print("lines:",lines)
         # 取出TXT文件中需要的数据
         while n < dataQuantity:
             actual=None
