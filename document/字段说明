@@ -79,6 +79,10 @@ tuple1[5].insert(3,4)
 # print dict2,type(dict2)
 
 
+打印装饰器使用方法
+
+print("使用方法",dir(dlg_spec6.wrapper_object()))
+
 8、查询内置函数的用法
 print (help(print))
 
@@ -205,6 +209,9 @@ pip install pywinauto
 
 3、选中窗口
 dlg_spec = app.window(title=r'Aerobook平台启动器').window(title=r'本地授权')  # 选中窗口并切换到空间
+
+
+3、查找包装器
 
 
 

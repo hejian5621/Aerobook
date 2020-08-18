@@ -1,8 +1,9 @@
 # 获取实际值
 
-import time
+import time,os
 from utils.commonality.tool import instrument
-import os
+from pywinauto.application import Application
+import re
 
 
 class  reality:
@@ -27,6 +28,7 @@ class  reality:
 class ActualProcessing:
     """实际值处理"""
 
+
     def __init__(self,dlg_spec):
         self.dlg_spec=dlg_spec
 
@@ -34,6 +36,7 @@ class ActualProcessing:
     def laminateOptimize(self,dataQuantity):
         """
         获取铺层库优化工作栏的实际值
+        通过复制粘贴方法获取信息窗口里的数据
         :param dataQuantity: 需要获取的数据数量（数据条数）
         :return:
         """
@@ -72,3 +75,23 @@ class ActualProcessing:
 
 
 
+    def Laminatedata_warning_warning(self,expect_result):
+        """
+        获取警告窗口的文本信息
+        :return:
+        """
+        atLast_actuals=None
+        app = Application().connect(title_re="警告")
+        dlg_spec = app.window(title="警告")
+        # 切换到文本信息窗口
+        dlg_spec1=dlg_spec.警告DirectUIHWND
+        # 获取预期值
+        site=r"F:\Aerobook\src\testCase\useCase_screenshot\Aerocheck1\\"
+        location=site+expect_result+".png"
+        dlg_spec1.capture_as_image().save(location)  # 获取警告弹窗的文本截图
+        actuals=instrument().screenshot(location)
+        if "」OK" in actuals:
+            atLast_actuals=re.sub("」OK", '', actuals)
+        else:
+            atLast_actuals=actuals
+        return atLast_actuals

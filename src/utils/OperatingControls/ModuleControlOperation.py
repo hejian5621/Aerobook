@@ -39,8 +39,9 @@ class ModuleControlOperation():
         save_file = dicti["保存为Excel文件"]
         path1 = dicti["路径"]
         solve = dicti["求解"]
-        solve_time = int(dicti["求解等待时间"])
+        solve_time = int(dicti["求解按钮等待时间"])
         clo = dicti["关闭"]
+        clo_time = int(dicti["关闭按钮等待时间"])
         if Max!="默认":
             #最大铺层数文本框
             self.dlg_spec.Edit.set_text(Max)
@@ -96,15 +97,67 @@ class ModuleControlOperation():
             #保存为铺层数据库勾选框
             self.dlg_spec.CheckBox2.click()
         if solve != "默认":
-            time.sleep(1)
+            time.sleep(0.5)
             #点击求解按钮
             self.dlg_spec.Button2.click()
             time.sleep(solve_time)
         if clo != "默认":
-            time.sleep(1)
+            time.sleep(0.5)
             # 点击关闭按钮
             self.dlg_spec.Button3.click()
+            time.sleep(clo_time)
 
+
+
+    def Laminatedata(self,dicti):
+        """
+        铺层数据库制作工具弹窗控件操作
+        :param dicti: 字典参数
+        :return:
+        """
+        param1=dicti["选择铺层Excel文件文本框"]
+        param2=dicti["铺层数据保存路径文本框"]
+        param3 = dicti["选择铺层Excel文件浏览按钮"]
+        param4 = dicti["铺层数据保存路径浏览按钮"]
+        param5 = dicti["模板文件按钮"]
+        param6 = dicti["开始制作按钮"]
+        param7 = dicti["关闭按钮"]
+        param3_time = int(dicti["选择铺层Excel文件浏览按钮等到时"])
+        param4_time = int(dicti["选择铺层Excel文件浏览按钮等到时"])
+        param5_time = int(dicti["模板文件按钮等待时间"])
+        param6_time = int(dicti["开始制作按钮等待时间"])
+        param7_time = int(dicti["关闭按钮等待时间"])
+        if param1!="默认":
+            #选择铺层Excel文件文本框
+            self.dlg_spec.wxWindowNR.Edit.set_text(param1)
+        if param2!="默认":
+            #铺层数据保存路径文本框
+            self.dlg_spec.wxWindowNR2.Edit2.set_text(param2)
+        if param3 != "默认":
+            time.sleep(0.1)
+            #选择铺层Excel文件浏览按钮
+            self.dlg_spec.wxWindowNR.Button.click()
+            time.sleep(param3_time)
+        if param4 != "默认":
+            time.sleep(0.1)
+            #铺层数据保存路径浏览按钮
+            self.dlg_spec.wxWindowNR2.Button2.click()
+            time.sleep(param4_time)
+        if param5 != "默认":
+            time.sleep(0.1)
+            #模板文件按钮
+            self.dlg_spec.模板文件.click()
+            time.sleep(param5_time)
+        if param6 != "默认":
+            time.sleep(1)
+            #开始制作按钮
+            self.dlg_spec.开始制作Button.click()
+            time.sleep(param6_time)
+        if param7 != "默认":
+            time.sleep(0.1)
+            #关闭按钮
+            self.dlg_spec.关闭.click()
+            time.sleep(param7_time)
 
 
 

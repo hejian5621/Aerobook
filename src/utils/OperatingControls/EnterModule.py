@@ -1,5 +1,8 @@
 # 打开被模块
 import time
+from pywinauto.application import Application
+
+
 
 class open_module:
     """进入被测模块"""
@@ -33,7 +36,7 @@ class open_module:
 
 
 
-    def menu_Laminatedata(self,self, MenuOptions,Aero_window,Aerocheck_title):
+    def menu_Laminatedata(self,MenuOptions,Aero_window,Aerocheck_title):
         """
         切换到菜单栏，点击对应的菜单选项，打开铺层数据库工具，切换到铺层数据库工具弹窗
         :return:
@@ -44,3 +47,7 @@ class open_module:
         # 点击菜单选项
         dlg_spec2.menu_select(MenuOptions)
         # 切换到铺层库数据库弹窗
+        time.sleep(1)
+        app = Application().connect(title_re="铺层数据库制作工具")
+        dlg_spec = app.window(title="铺层数据库制作工具")
+        return dlg_spec

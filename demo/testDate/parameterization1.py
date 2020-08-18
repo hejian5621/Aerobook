@@ -42,6 +42,6 @@ if __name__ == '__main__':
     # unittest.main(verbosity=2)
     suite = unittest.TestSuite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestAdd))
-    filename = "F:\\Aerobook\\demo\\demo_1\\pywin\\testDate"  # 定义个报告存放路径，支持相对路径
+    filename = "/demo_1/testDate"  # 定义个报告存放路径，支持相对路径
     result = BeautifulReport(suite)
     result.report(filename='BeautifulReportTest.html', description='测试deafult报告', log_path=filename)

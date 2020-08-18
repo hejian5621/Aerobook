@@ -25,6 +25,8 @@ import time
 #
 # k.release_key(k.shift_key)
 
+send_keys('{ENTER}')
+
 
 # 使用Ctrl+A  ，Ctrl+C
 
