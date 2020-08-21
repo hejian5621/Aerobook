@@ -5,7 +5,7 @@ from assertpy import assert_that
 import time, os
 from BeautifulReport import BeautifulReport
 from parameterized.parameterized import parameterized
-from src.utils.otherMethods.DataFormatConversion import FormatConversion
+from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from src.testCase.testCaseStep.Aerocheck.laminateOptimize_step import execute_step
 from ddt import ddt, data, unpack, file_data
 import numpy as np

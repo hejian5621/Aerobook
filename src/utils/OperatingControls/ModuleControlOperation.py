@@ -1,6 +1,7 @@
 # 铺层库优化工作栏，对应Aerobook路径：铺层信息--》铺层库优化
 import time
-
+from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
+from src.utils.commonality.tool import instrument
 
 
 class ModuleControlOperation():
@@ -109,55 +110,99 @@ class ModuleControlOperation():
 
 
 
-    def Laminatedata(self,dicti):
+    def Laminatedata(self,dicti,dlg_spec):
         """
         铺层数据库制作工具弹窗控件操作
         :param dicti: 字典参数
-        :return:
+        :param dlg_spec: 字典参数
+        :return:如果是点击浏览按钮，就返回浏览按钮对应文本框地址数据
         """
-        param1=dicti["选择铺层Excel文件文本框"]
-        param2=dicti["铺层数据保存路径文本框"]
-        param3 = dicti["选择铺层Excel文件浏览按钮"]
-        param4 = dicti["铺层数据保存路径浏览按钮"]
-        param5 = dicti["模板文件按钮"]
+        edit_box={"选择铺层Excel文件浏览按钮对应文本框实际":"","铺层数据保存路径浏览对应文本框实际":""}
+        param1 = dicti["选择铺层Excel文件浏览按钮"]
+        param2 = dicti["铺层数据保存路径浏览按钮"]
+        param3 = dicti["选择铺层Excel文件文本框"]
+        param4 = dicti["铺层数据保存路径文本框"]
+        # param5 = dicti["模板文件按钮"]
         param6 = dicti["开始制作按钮"]
         param7 = dicti["关闭按钮"]
-        param3_time = int(dicti["选择铺层Excel文件浏览按钮等到时"])
-        param4_time = int(dicti["选择铺层Excel文件浏览按钮等到时"])
         param5_time = int(dicti["模板文件按钮等待时间"])
         param6_time = int(dicti["开始制作按钮等待时间"])
         param7_time = int(dicti["关闭按钮等待时间"])
-        if param1!="默认":
-            #选择铺层Excel文件文本框
-            self.dlg_spec.wxWindowNR.Edit.set_text(param1)
-        if param2!="默认":
-            #铺层数据保存路径文本框
-            self.dlg_spec.wxWindowNR2.Edit2.set_text(param2)
-        if param3 != "默认":
-            time.sleep(0.1)
-            #选择铺层Excel文件浏览按钮
-            self.dlg_spec.wxWindowNR.Button.click()
-            time.sleep(param3_time)
-        if param4 != "默认":
+        location = dicti["被测程序文件地址"]
+        else1 = dicti["其他"]
+        messageType = dicti["提示信息类型"]
+        print("location:",location)
+        if param1 != "默认":
+            app1=self.dlg_spec.window(title="选择Excel铺层文件")
+            # 选择铺层Excel文件浏览按钮
+            dlg_spec1 = dlg_spec.wxWindowNR.Button
+            # 判断是否有选择铺层Excel文件弹窗，如果没有再次点击选择铺层Excel文件对应的浏览按钮
+            instrument().window_WhetherExist(dlg_spec1,app1,"没有选择铺层Excel文件弹窗")
+            # 在保存和选择文件路径弹窗中操作
+            ControlOperationSuite(None).SelectFile_Popover("选择Excel铺层文件",location,"打开","选择文件","PlyLibDb_352_541.xlsx")
+        if param2 != "默认":
             time.sleep(0.1)
             #铺层数据保存路径浏览按钮
-            self.dlg_spec.wxWindowNR2.Button2.click()
-            time.sleep(param4_time)
-        if param5 != "默认":
+            dlg_spec2=dlg_spec.wxWindowNR2.Button2
+            app2 = self.dlg_spec.window(title="选择铺层数据库保存路径")
+            # 判断是否有选择铺层数据保存路径弹窗，如果没有再次点击铺层数据保存路径对应的浏览按钮
+            instrument().window_WhetherExist(dlg_spec2, app2, "没有选择铺层数据保存路径弹窗")
+            # 判断有没有确认另存为窗口，有就点击“确定”按钮，没有就不做操作
+            # 在保存和选择文件路径弹窗中操作
+            ControlOperationSuite(None).SelectFile_Popover("选择铺层数据库保存路径",location,"保存",
+                                                                    "选择文件", "plylib.db","检查","确认另存为")
             time.sleep(0.1)
-            #模板文件按钮
-            self.dlg_spec.模板文件.click()
-            time.sleep(param5_time)
+        if param3!="默认" or param1 != "默认":
+            #选择铺层Excel文件文本框
+            if param1 != "默认":
+                dlg_spec3 = self.dlg_spec.Dialog.Edit
+                # 判断选择铺层Excel文件文本框控件是否存在，如果存在返回选择铺层Excel文件文本框中的文本
+                edit_box1=instrument().control_WhetherExist(dlg_spec3, "选择铺层Excel文件弹窗","window_text")
+                edit_box["选择铺层Excel文件浏览按钮对应文本框实际"]=edit_box1
+            else:
+                dlg_spec4=dlg_spec.wxWindowNR.Edit
+                # 拼接路径
+                if else1 == "拼接路径":
+                    param3=location+param3
+                # 判断选择铺层Excel文件文本框控件是否存在，如果存在向该文本框输入数据
+                edit_box1 = instrument().control_WhetherExist(dlg_spec4, "铺层Excel文件文本框", "set_text", param3)
+        if param4!="默认" or param2 != "默认":
+            #铺层数据保存路径文本框
+            if param2 != "默认":
+                dlg_spec5 = self.dlg_spec.Dialog.Edit2
+                # 判断铺层数据保存路径对应的选择文件窗口是否存在，如果存在返回铺层数据保存路径文本框中的文本
+                edit_box2 = instrument().control_WhetherExist(dlg_spec5, "铺层数据保存路径文本框", "window_text")
+                edit_box["铺层数据保存路径浏览对应文本框实际"]=edit_box2
+            else:
+                dlg_spec6=dlg_spec.wxWindowNR.Edit2
+                # 拼接路径
+                if else1=="拼接路径":
+                    param4 = location + param4
+                # 判断选择铺层Excel文件文本框控件是否存在，如果存在向该文本框输入数据
+                edit_box1 = instrument().control_WhetherExist(dlg_spec6, "铺层数据保存路径文本框", "set_text", param4)
+        # if param5 != "默认":
+        #     time.sleep(0.1)
+        #     #模板文件按钮
+        #     dlg_spec7=self.dlg_spec.模板文件.click()
+        #     # 判断是否有选择铺层Excel文件弹窗，如果没有再次点击选择铺层Excel文件对应的浏览按钮
+        #     instrument().window_WhetherExist(dlg_spec7, app, "ply_example_for_aerocheck.xls",3,5)
+        #     time.sleep(param5_time)
         if param6 != "默认":
             time.sleep(1)
-            #开始制作按钮
-            self.dlg_spec.开始制作Button.click()
+            if messageType=="警告弹窗":
+                #开始制作按钮
+                app3 = self.dlg_spec.window(title="警告")
+                dlg_spec6=dlg_spec.开始制作Button
+                instrument().window_WhetherExist(dlg_spec6, app3, "没有选择铺层Excel文件弹窗")
+            else:
+                dlg_spec6 = dlg_spec.开始制作Button.check()
             time.sleep(param6_time)
         if param7 != "默认":
             time.sleep(0.1)
             #关闭按钮
-            self.dlg_spec.关闭.click()
+            dlg_spec.关闭.click()
             time.sleep(param7_time)
+        return edit_box
 
 
 

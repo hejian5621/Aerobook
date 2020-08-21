@@ -50,4 +50,4 @@ class open_module:
         time.sleep(1)
         app = Application().connect(title_re="铺层数据库制作工具")
         dlg_spec = app.window(title="铺层数据库制作工具")
-        return dlg_spec
+        return app,dlg_spec
