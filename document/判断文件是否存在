@@ -1,0 +1,13 @@
+判断文件是否存在
+import os
+os.path.exists(test_file.txt)
+#True
+
+os.path.exists(no_exist_file.txt)
+#False
+判断文件夹是否存在
+import os
+os.path.exists(test_dir)
+#True
+
+os.path.exists(no_exist_dir)

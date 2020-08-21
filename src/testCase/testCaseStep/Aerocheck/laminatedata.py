@@ -11,8 +11,8 @@ from src.testCase.testCaseStep.Aerocheck.laminateOptimize_step import execute_st
 from ddt import ddt,data
 from src.utils.commonality.ExcelFile import read_excel
 from config.relative_location import  path
-from src.utils.otherMethods.DataFormatConversion import FormatConversion
-from src.utils.otherMethods.Initialize import programInitialization
+from src.utils.otherMethods.dataFormatConversion import FormatConversion
+from src.utils.commonality.tool import instrument
 
 
 
@@ -34,9 +34,9 @@ class Test_Laminatedata(unittest.TestCase):
                1、首先把需要的文件和模型复制一份出来
             """
             global  number
-            if number ==1:
-                programInitialization().delFile()
-                programInitialization().copyFile()
+            # if number ==1:
+            #     instrument().delFile()
+            #     instrument().copyFile()
 
 
 

@@ -30,6 +30,17 @@ send_keys('{ENTER}')
 
 # 使用Ctrl+A  ，Ctrl+C
 
+# 鼠标点击操作，可以修改coords来指定点击位置
+mouse.click(button='left', coords=(0, 0))
+# 鼠标双击操作，可以修改coords来指定双击位置
+mouse.double_click(button='left', coords=(0, 0))
+# 移动鼠标，可以修改coords使鼠标移动到指定位置
+mouse.move(coords=(0, 0))
+# 鼠标右键点击，可以修改coords来指定右键点击位置
+mouse.right_click(coords=(0, 0))
+# 鼠标滚动操作，可以修改coords来指定滚动位置，修改wheel_dist来指定滚动距离
+mouse.scroll(coords=(0, 0), wheel_dist=1)
+
 
 
 

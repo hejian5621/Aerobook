@@ -94,4 +94,5 @@ class ActualProcessing:
             atLast_actuals=re.sub("」OK", '', actuals)
         else:
             atLast_actuals=actuals
-        return atLast_actuals
+        dlg_spec2 = dlg_spec.child_window(title="OK", class_name="Button")
+        return atLast_actuals,dlg_spec,dlg_spec2

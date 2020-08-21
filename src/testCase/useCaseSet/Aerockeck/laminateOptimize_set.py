@@ -7,8 +7,8 @@ from src.testCase.testCaseStep.Aerocheck.laminateOptimize_step import LaminateOp
 from ddt import ddt,data
 from src.utils.commonality.ExcelFile import read_excel
 from config.relative_location import  path
-from src.utils.otherMethods.DataFormatConversion import FormatConversion
-from src.utils.otherMethods.Initialize import programInitialization
+from src.utils.otherMethods.dataFormatConversion import FormatConversion
+from src.utils.commonality.tool import instrument
 
 
 
@@ -77,24 +77,31 @@ class Test_Laminatedata(unittest.TestCase):
             """用例执行前的初始化
                1、首先把需要的文件和模型复制一份出来
             """
-            global number
+            global number;  global source;global source1;global dlg_windows
+            dlg_windows=None
             if number == 1:
-                programInitialization().delFile()
-                programInitialization().copyFile()
-
+                instrument().delFile()
+                # 复制模板文件，并返回复制的地址
+                source=instrument().copyFile()
+                number =number+1
 
         def tearDown(self):
             """用例执行完后收尾
                            1、首先把复制的文件夹删除
             """
-            global number
-            number=number+1
+            global dlg_windows
+            dlg_spec = dlg_windows.关闭
+            # 判断选择铺层Excel文件文本框控件是否存在，如果存在向该文本框输入数据
+            edit_box1 = instrument().window_WhetherClose(dlg_spec,dlg_windows,"铺层数据库制作工具弹窗没有关闭")
             print("测试结束")
 
 
 
         # 测试用例Excel文件的相关信息
-        site1 = [{"详细地址": "src\\testCase\\useCase_file\\Aerocheck\\铺层库制作工具弹窗.xlsx", "表单名称": "测试", "初始行": 1}]
+        site1 = [{"详细地址": "src\\testCase\\useCase_file\\Aerocheck\\铺层库制作工具弹窗.xlsx", "表单名称": "铺层库制作弹窗", "初始行": 1},
+                 {"详细地址": "src\\testCase\\useCase_file\\Aerocheck\\铺层库制作工具弹窗.xlsx", "表单名称": "选择铺层Excel文件", "初始行": 1},
+                 {"详细地址": "src\\testCase\\useCase_file\\Aerocheck\\铺层库制作工具弹窗.xlsx", "表单名称": "铺层数据保存路径文本框", "初始行": 1}]
+        # site1 =[{"详细地址": "src\\testCase\\useCase_file\\Aerocheck\\铺层库制作工具弹窗.xlsx", "表单名称": "测试", "初始行": 1}]
         list_dicts = []
         if len(site1)>0:
             for site in site1:
@@ -106,10 +113,25 @@ class Test_Laminatedata(unittest.TestCase):
         @data(*list_dicts)  # 参数化参数用例
         def test_1(self, testdicts):
             """铺层数据库制作工具弹框"""
-            expect_result = testdicts["预期结果提示信息"]  # 取出预期值
-            actual_result = Laminatedata_execute().SelectFile(testdicts)  # 调用测试步骤
+            global source; global dlg_windows
+            UseCaseNumber=testdicts["用例编号"]
+            print("开始执行用例：",UseCaseNumber)
+            testdicts["被测程序文件地址"]=source
+            expect1_binrowseButton = testdicts["选择铺层Excel文件浏览按钮对应文本框预期"]
+            expect2_binrowseButton = testdicts["铺层数据保存路径浏览对应文本框预期"]
+            expect3_result = testdicts["预期结果提示信息"]  # 取出预期值
+            actual_result,actual_editlist,dlg_windows = Laminatedata_execute().SelectFile(testdicts)  # 调用测试步骤
             # 断言测试结果
-            assert_that(expect_result).is_equal_to(actual_result)
+            # 点击浏览按钮，并且选择路径或者文件后的预期跟实际比较
+            if expect1_binrowseButton=="默认" and expect2_binrowseButton=="默认":
+                actual1, actual2, expect1, expect2 = FormatConversion().SelectFile(testdicts,actual_editlist,source)
+                assert_that(expect1).is_equal_to(actual1)
+                assert_that(actual2).is_equal_to(expect2)
+            # 去掉实际值跟预期值，前后的空格
+            atLast_expect3_result= expect3_result.strip()
+            atLast_actual_result = actual_result.strip()
+            # 最后的测试结果
+            assert_that(atLast_expect3_result).is_equal_to(atLast_actual_result)
 
 
 

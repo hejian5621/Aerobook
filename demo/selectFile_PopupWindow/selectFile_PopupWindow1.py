@@ -5,9 +5,15 @@ from pywinauto.keyboard import send_keys
 
 
 time.sleep(2)
-app = Application().connect(title_re="选择输出路径")
+# app = Application().connect(title_re="选择输出路径")
+# dlg_spec = app.window(title="选择输出路径")
 
-dlg_spec = app.window(title="选择输出路径")
+# app = Application().connect(title_re="选择Excel铺层文件")
+# dlg_spec = app.window(title="选择Excel铺层文件")
+
+app = Application().connect(title_re="选择铺层数据库保存路径")
+dlg_spec = app.window(title="选择铺层数据库保存路径")
+
 
 
 dlg_spec1 = dlg_spec.child_window(class_name="WorkerW")
@@ -21,7 +27,7 @@ dlg_spec4 = dlg_spec3.child_window(class_name="msctls_progress32")
 
 dlg_spec5 = dlg_spec4.child_window(class_name="Breadcrumb Parent")
 
-dlg_spec6=dlg_spec5.Toolbar
+# dlg_spec6=dlg_spec5.Toolbar
 
 # dlg_spec6.click()
 
@@ -36,19 +42,22 @@ dlg_spec6=dlg_spec5.Toolbar
 
 
 # 在文件夹内输入文件名
-
-dlg_spec.Edit.set_text("cs")
-
+#
+# dlg_spec.Edit.set_text("cs")
+#
+# dlg_spec.print_control_identifiers()
+#
+# 点击选择文件夹按钮
 dlg_spec.print_control_identifiers()
 
-# 点击选择文件夹按钮
+# dlg_spec.child_window(title="保存(&S)", class_name="Button").click()
 
-dlg_spec.选择文件夹Button.click()
+dlg_spec.保存.click()
 
 
 
 # dlg_spec6=dlg_spec5.Toolbar
-# dlg_spec6.print_control_identifiers()
+# dlg_spec.print_control_identifiers()
 
 
 
