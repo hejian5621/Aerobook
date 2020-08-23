@@ -70,7 +70,8 @@ class Laminatedata_execute:
             expect_result = testdicts["预期结果提示信息"]  # 取出预期值
             actual_Text,app1,dlg_spec_warn = ActualProcessing(aero_window).Laminatedata_warning_warning(expect_result)
             # 关闭警告窗口
-            instrument().window_WhetherClose(dlg_spec_warn,app1,"警告窗口没有关闭")
+            parWin_Dicti = {"窗口标题": "警告", "关闭窗口控件名称": "OK", "关闭窗口控件操作方法": "click"}
+            instrument().popUp_Whether_close(parWin_Dicti)
         elif Message_type=="信息窗口":
             expect_line = int(testdicts["预期结果行数"])
             actual_Text = ActualProcessing(aero_window).laminateOptimize(expect_line)

@@ -6,6 +6,7 @@ from aip import AipOcr
 import win32clipboard as wc
 import os,shutil,win32con,time,os,sys
 from config.relative_location import path
+from pywinauto.application import Application
 
 
 class  instrument:
@@ -145,8 +146,7 @@ class  instrument:
         判断窗口是否关闭
         :return:
         """
-        frequency = int(frequency)
-        wait_time = int(wait_time)
+        frequency = int(frequency) ;wait_time = int(wait_time)
         control = 0  # 循环初始次数
         while control <= frequency:  # 如果没有找到控件，就继续点击触发按钮
             control = control + 1
@@ -198,5 +198,62 @@ class  instrument:
             os._exit(0)
         return edit_box
 
+
+    def popUp_Whether_close(self,parWin_Dicti,nest_win="不检查",nestWin_Dicti=None):
+        """
+        检查弹窗是否存在，如果存在就关闭弹窗,如果不存在就不管
+        :param parWin_Dicti: 选择文件弹窗的属性参数
+        :param nest_win: 控件操作方法
+        :param nestWin_Dicti: 嵌套标题
+        :return:
+        """
+        result = None;app = None;typeError_str = None;nest_result = None
+        title = parWin_Dicti["窗口标题"]
+        control = parWin_Dicti["关闭窗口控件名称"]
+        operation = parWin_Dicti["关闭窗口控件操作方法"]
+        predict="There are 3 elements that match the criteria"
+        while True:
+            try:
+                app = Application().connect(title=title)
+                result = "找到了窗口"
+            except BaseException as typeError:
+                typeError_str=str(typeError)
+                result = "没有找到窗口"
+            if result=="找到了窗口":  # 窗口存在
+                # 检查是否有嵌套窗口——————————————————————————————————————————————
+                if nest_win == "检查":
+                    nest_title = nestWin_Dicti["嵌套窗口标题"]
+                    nest_control = nestWin_Dicti["嵌套控件名称"]
+                    nest_oper = nestWin_Dicti["嵌套控件操作方法"]
+                    try:
+                        app = Application().connect(title=nest_title)
+                        nest_result = "找到了嵌套窗口"
+                    except BaseException as typeError:
+                        typeError_str = str(typeError)
+                        nest_result = "没有找到嵌套窗口"
+                    if nest_result == "找到了嵌套窗口":  # 窗口存在
+                        py_app = app.window(title=nest_title)  # 切换到嵌套窗口
+                        if py_app[nest_control].exists():  # 如果嵌套窗口中的控件存在
+                            if nest_oper == "click":  # 操作控件
+                                py_app[nest_control].click()
+                        else:  # 如果控件不存在
+                            print("没有找到“%s”窗口" % nest_title, __file__, sys._getframe().f_lineno)
+                            os._exit(0)
+                    else:  # 如果窗口不存在
+                        print("没有找到”%s“窗口" % nest_title)
+                # 分割线————————————————————————————————————————————————————————————————————————————————
+                py_app = app.window(title=title)  # 切换到对应窗口
+                if py_app[control].exists():  # 如果控件存在
+                    if operation=="click":  # 操作控件
+                        py_app[control ].click()
+                # else:  # 如果控件不存在
+                #     print("没有找到“%s”窗口" % title, __file__, sys._getframe().f_lineno)
+                #     os._exit(0)
+            else:   # 如果窗口不存在
+                print("没有找到”%s“窗口"%title)
+                break
+            if typeError_str in predict:
+                print("出现了多个“%s”窗口" % title, __file__, sys._getframe().f_lineno)
+                os._exit(0)
 
 

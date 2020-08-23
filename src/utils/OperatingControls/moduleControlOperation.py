@@ -139,7 +139,9 @@ class ModuleControlOperation():
             # 判断是否有选择铺层Excel文件弹窗，如果没有再次点击选择铺层Excel文件对应的浏览按钮
             instrument().window_WhetherExist(dlg_spec1,app1,"没有选择铺层Excel文件弹窗")
             # 在保存和选择文件路径弹窗中操作
-            ControlOperationSuite(None).SelectFile_Popover("选择Excel铺层文件",location,"打开","选择文件","PlyLibDb_352_541.xlsx")
+            parWin_Dicti = {"窗口标题": "选择Excel铺层文件", "关闭窗口控件名称": "打开", "关闭窗口控件操作方法": "click",
+                            "地址": location,"文件夹输入状态": "文件名", "文件夹输入内容": "PlyLibDb_352_541.xlsx"}
+            ControlOperationSuite(None).SelectFile_Popover(parWin_Dicti)
         if param2 != "默认":
             time.sleep(0.1)
             #铺层数据保存路径浏览按钮
@@ -149,8 +151,10 @@ class ModuleControlOperation():
             instrument().window_WhetherExist(dlg_spec2, app2, "没有选择铺层数据保存路径弹窗")
             # 判断有没有确认另存为窗口，有就点击“确定”按钮，没有就不做操作
             # 在保存和选择文件路径弹窗中操作
-            ControlOperationSuite(None).SelectFile_Popover("选择铺层数据库保存路径",location,"保存",
-                                                                    "选择文件", "plylib.db","检查","确认另存为")
+            parWin_Dicti = {"窗口标题": "选择铺层数据库保存路径", "关闭窗口控件名称": "保存", "关闭窗口控件操作方法": "click",
+                            "地址": location,"文件夹输入状态": "文件名", "文件夹输入内容": "plylib.db"}
+            nestWin_Dicti= {"嵌套窗口标题":"确认另存为","嵌套控件名称":"是","嵌套控件操作方法":"click"}
+            ControlOperationSuite(None).SelectFile_Popover(parWin_Dicti,"检查",nestWin_Dicti)
             time.sleep(0.1)
         if param3!="默认" or param1 != "默认":
             #选择铺层Excel文件文本框

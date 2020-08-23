@@ -39,7 +39,7 @@ class programInitialization:
         app.window(title=r'Aerobook平台启动器').window(title=r'运行').click()
         # 切换到Aerobook主窗口
         Aerobook_main = app.window(title=self.windowTitle)
-        Aerobook_main.wait("exists",timeout=5,retry_interval=0.01)
+        Aerobook_main.wait("exists",timeout=60,retry_interval=0.01)
         Aerobook_main.Maximize()
         return Aerobook_main
 
