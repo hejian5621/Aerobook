@@ -90,9 +90,9 @@ class Test_Laminatedata(unittest.TestCase):
                            1、首先把复制的文件夹删除
             """
             global dlg_windows
-            dlg_spec = dlg_windows.关闭
             # 判断选择铺层Excel文件文本框控件是否存在，如果存在向该文本框输入数据
-            edit_box1 = instrument().window_WhetherClose(dlg_spec,dlg_windows,"铺层数据库制作工具弹窗没有关闭")
+            parWin_Dicti={"窗口标题":"铺层数据库制作工具","关闭窗口控件名称":"关闭","关闭窗口控件操作方法":"click"}
+            edit_box1 = instrument().popUp_Whether_close(parWin_Dicti)
             print("测试结束")
 
 
