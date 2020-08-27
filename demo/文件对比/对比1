@@ -1,0 +1,39 @@
+wxWindowNR - 'panel'    (L1555, T139, R1909, B981)
+['wxWindowNR', 'panelwxWindowNR', 'panel']
+child_window(title="panel", class_name="wxWindowNR")
+   |
+   | Static - 'Excel模板文件'    (L1560, T144, R1637, B162)
+   | ['Excel模板文件', 'Excel模板文件Static', 'Static']
+   | child_window(title="Excel模板文件", class_name="Static")
+   |
+   | GroupBox - '材料类型'    (L1560, T172, R1714, B230)
+   | ['材料类型GroupBox', '材料类型', 'GroupBox']
+   | child_window(title="材料类型", class_name="Button")
+   |
+   | RadioButton - '复合材料'    (L1566, T197, R1634, B222)
+   | ['RadioButton', '复合材料', '复合材料RadioButton', 'RadioButton0', 'RadioButton1']
+   | child_window(title="复合材料", class_name="Button")
+   |
+   | RadioButton - '金属材料'    (L1640, T197, R1708, B222)
+   | ['RadioButton2', '金属材料', '金属材料RadioButton']
+   | child_window(title="金属材料", class_name="Button")
+   |
+   | RadioButton - ''    (L1555, T139, R1555, B139)
+   | ['RadioButton3']
+   | child_window(class_name="Button")
+   |
+   | Edit - ''    (L1560, T240, R1745, B265)
+   | ['材料类型Edit', 'Edit']
+   | child_window(class_name="Edit")
+   |
+   | Button - '...'    (L1755, T242, R1775, B263)
+   | ['Button', '...', '...Button', 'Button0', 'Button1']
+   | child_window(title="...", class_name="Button")
+   |
+   | Button - '创建'    (L1560, T275, R1648, B305)
+   | ['Button2', '创建', '创建Button']
+   | child_window(title="创建", class_name="Button")
+   |
+   | Button - '关闭'    (L1658, T275, R1746, B305)
+   | ['关闭Button', 'Button3', '关闭']
+   | child_window(title="关闭", class_name="Button")

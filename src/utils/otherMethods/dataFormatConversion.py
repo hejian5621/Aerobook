@@ -49,7 +49,46 @@ class FormatConversion:
 
 
 
+    def GetLatestData(self,list_new,list_old):
+        """
+        两个列表对吧，去掉前面重复的数据
+        :return:
+        """
+        while True:
+            if list_new and list_old:
+                new = list_new[0]
+                old = list_old[0]
+                if new == old:
+                    del list_new[0]
+                    del list_old[0]
+                else:
+                    break
+            else:
+                break
+        return list_new
 
+
+
+
+    def takeOut_space(self,str_spacing):
+        """
+        去掉空格
+        :return:
+        """
+        list_NoSpace = []
+        str_spacing = str_spacing.strip()  # 去掉字符串的前后空格
+        str_spacing = str_spacing.split("\n") # 根据\n把字符串转化成列表
+        for str in str_spacing: # 去掉列表中每一个元素的前后空格
+            str = str.strip()
+            list_NoSpace.append(str)
+        return list_NoSpace
+
+
+
+# a1 =["a","b","c","d","e","f","g","h","j","k"]
+# b1 =["a","b","c","d","e","f"]
+# c1=FormatConversion().GetLatestData(a1,b1)
+# print(c1)
 
 
 

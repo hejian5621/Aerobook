@@ -3,6 +3,7 @@
 import configparser
 import os
 import time
+from configobj import ConfigObj
 
 class ProfileDataProcessing:
     """读取配置文件"""
@@ -20,7 +21,7 @@ class ProfileDataProcessing:
 
     def config_File(self):
         """
-        读取被系统的版本信息
+        读取配置文件信息
         参数:
         self.parameter:配置文件里标签
         self.argument：标签下面的键
@@ -37,7 +38,30 @@ class ProfileDataProcessing:
         return self.argument
 
 
-# ProfileDataProcessing("commonality","APP_ID").config_File()
+    def config_File_amend(self,deploy_value):
+        """
+        修改配置文件内容
+        :return:
+        """
+        cf = configparser.ConfigParser()  # 对象实体化
+        curpath = os.path.dirname(os.path.realpath(__file__))  # 获取当前位置
+        location = os.path.join(curpath, "config.ini")   # 配置文件路径
+        config = ConfigObj(location, encoding='UTF8')
+        config[self.column][ self.programa] = deploy_value
+        config.write()
+        # config.write()
+
+        #  修改内容
+        # cf.set("txtB",self.programa, deploy_value)
+        # cf.write(open(location, "r+", encoding="utf-8"))  # r+模式
+        # self.argument = cf.get(self.column, self.programa)
+
+
+
+#
+# ProfileDataProcessing("commonality","ProjectSave_path").\
+#     config_File_amend(r"F:\Aerobook\src\testCase\projectFile\automateFile\\")
+# APP_ID=ProfileDataProcessing("commonality","APP_ID").config_File()
 
 
 

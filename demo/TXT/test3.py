@@ -1,58 +1,44 @@
+from win32gui import *
+from win32api import *
+from win32process import *
+import win32con
 
-n = -1;t=1
+import time
 
-dataQuantity=320
-txtName="cache.txt"
-actuals=""
+time.sleep(3)
 
+# 获取窗体句柄
+hWnd = GetForegroundWindow()
+print('hownd: ', hWnd)
 
-# 去掉缓存TXT文件里的空行
-with open(txtName, "r") as f:  # 打开文件
-    lines = f.readlines()  # 读取所有行
-    while True:
-        if "\n"  in lines:
-            lines.remove("\n")
-        else:
-            break
-number=len(lines)  # 获取列表元素的个数
+FormThreadID = GetCurrentThreadId()
+print('FormThreadID: ', FormThreadID)
 
-n=0
-actuals=""
-# 取出TXT文件中需要的数据
-while n<dataQuantity :
-    line =dataQuantity-n
-    t=number-line
-    if t >= 0:
-        actual= lines[t]
-        actual = actual[23:]
-        actuals=str(actuals)+str(actual)
-    n=n+1
+CWndThreadID = GetWindowThreadProcessId(hWnd)
+print('CWndThreadID: ', CWndThreadID)
 
+AttachThreadInput(CWndThreadID[0], FormThreadID, True)
 
+# 获取光标所在文本框句柄
+hWnd = GetFocus()
+print('hWnd: ', hWnd)
 
+AttachThreadInput(CWndThreadID[0], FormThreadID, False)
 
+# SendMessage(hWnd, win32con.WM_SETTEXT, 0, "mextb1860 第一个文本框")
 
-print("actuals:",actuals)
+# 文本框内容长度
+length = SendMessage(hWnd, win32con.WM_GETTEXTLENGTH)+1
+print('Length: ', length)
 
+buf = '0'*length
+# 生成buffer对象
+# buf = PyMakeBuffer(length)
 
-# while t>= -dataQuantity+2:
-#     actual = None
-#     n = -t + n
-#     print("n:", n)
-#     while True:
-#
-#             last_line = lines[n]  # 取最后一行
-#             if last_line != "\n":
-#                 break
-#         n = n + (-1)
-#     t = t + (-1)
-#     # 去掉时间
-#     actual = last_line[23:]
-#     actuals = str(actuals) + str(actual)
-# print("actuals:", actuals)
-# 删除TXT文件
-# if os.path.exists(txtName): os.remove(txtName)
+# 获取文本框内容
+print('get: ', SendMessage(hWnd, win32con.WM_GETTEXT, length, buf))
 
+print('text: ', buf)
 
 
 

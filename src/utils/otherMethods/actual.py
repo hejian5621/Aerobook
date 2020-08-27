@@ -1,9 +1,11 @@
 # 获取实际值
-
+import win32clipboard as wc
+import os
 import time,os
 from utils.commonality.tool import instrument
 from pywinauto.application import Application
-import re
+import re, datetime
+from src.utils.commonality.tool import htmlFormat
 
 
 class  reality:
@@ -19,10 +21,13 @@ class  reality:
         通过全选/复制信息窗口里的数据，获取实际值
         :return:
         """
-
+        wc.OpenClipboard()
+        wc.EmptyClipboard()
+        wc.CloseClipboard()
         dlg_spec = aero_window.richText2   # 切换到信息窗口
         dlg_spec.send_keystrokes("^a")     # 全选信息窗口的文本信息
         dlg_spec.send_keystrokes("^c")     # 复制信息窗口的文本信息到粘贴板
+
 
 
 class ActualProcessing:
@@ -96,3 +101,27 @@ class ActualProcessing:
             atLast_actuals=actuals
         dlg_spec2 = dlg_spec.child_window(title="OK", class_name="Button")
         return atLast_actuals,dlg_spec,dlg_spec2
+
+
+
+    def acquire_HTML_TXT(self,source):
+        """
+        通过获取HTML文件里的文本，来获取信息窗口的实际值
+        :return:
+        """
+        # 取出HTML文本，只留下有中文的行，在存入TXT文件中
+        today = str(datetime.date.today())  # datetime.date类型当前日期
+        Name = "Aerocheck_prjLog_" + today + ".html"
+        ultimately_TXT=htmlFormat().compile_HTMl(source, Name)
+        # 去掉缓存TXT文件里的空行
+        with open(ultimately_TXT, 'r') as f:
+            content = list(f)
+        # 删除TXT文件
+        return content
+
+
+
+
+# source=r"F:\Aerobook\src\testCase\projectFile\automateFile"
+# content=ActualProcessing(None).acquire_HTML_TXT(source)
+# print("content:",content)
