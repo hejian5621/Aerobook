@@ -3,8 +3,8 @@
 import unittest,time
 from assertpy import assert_that
 from BeautifulReport import BeautifulReport
-from src.testCase.testCaseStep.Aerocheck.laminateOptimize_step import LaminateOptimize_execute,\
-    Laminatedata_execute,sizeInfo_1DXls_execute,solveCalculation_execute
+from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import LaminateOptimize_execute,\
+    Laminatedata_execute,sizeInfo_1DXls_execute,solveCalculation_execute,editWorkingCondition_execute
 from ddt import ddt,data
 from src.utils.commonality.ExcelFile import read_excel
 from config.relative_location import  path
@@ -33,30 +33,31 @@ class Test_LaminateOptimize(unittest.TestCase):
 
 
 
-    # # 测试用例Excel文件的相关信息
-    # site1 = [{"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "最大铺层数", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "最小铺层数", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "铺层比", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "容差比", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "单层厚度", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "弹性模量E11(MPa)", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "弹性模量E22（MPa）", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "泊松比v12", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "剪切模量G12（MPa）", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "层合板长度a(mm)", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "层合板宽度b(mm)", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "Mat8材料ID", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "数据库名称", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "路径文本框", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "Mat8材料ID", "初始行": 1},
-    #          {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "保存为铺层数据库和保存为Excel勾选框", "初始行": 1}
-    #          ]
-    # list_dicts=[]
-    # for site in site1:
-    #     dicts1 = read_excel(site).readExcel_testCase()  # 读取测试用例
-    #     ar_testdicts=FormatConversion().RemoveSubscript(dicts1)
-    #     list_dicts=list_dicts+ar_testdicts
-    # @data(*list_dicts)    # 参数化参数用例
+    # 测试用例Excel文件的相关信息
+    site1 = [{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "最大铺层数", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "最小铺层数", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "铺层比", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "容差比", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "单层厚度", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "弹性模量E11(MPa)", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "弹性模量E22（MPa）", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "泊松比v12", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "剪切模量G12（MPa）", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "层合板长度a(mm)", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "层合板宽度b(mm)", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "Mat8材料ID", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "数据库名称", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "路径文本框", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "Mat8材料ID", "初始行": 1},
+             {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库优化工具.xlsx", "表单名称": "保存为铺层数据库和保存为Excel勾选框", "初始行": 1}
+             ]
+    list_dicts=[]
+    for site in site1:
+        dicts1 = read_excel(site).readExcel_testCase()  # 读取测试用例
+        ar_testdicts=FormatConversion().RemoveSubscript(dicts1)
+        list_dicts=list_dicts+ar_testdicts
+    @unittest.skip(u"无条件跳过此用例")
+    @data(*list_dicts)    # 参数化参数用例
     def test_1(self,testdicts):
         """铺层库优化工作栏，最大铺层数文本框测试用例"""
         expect_result=testdicts["预期结果提示信息"]  # 取出预期值
@@ -100,10 +101,10 @@ class Test_Laminatedata(unittest.TestCase):
 
 
         # 测试用例Excel文件的相关信息
-        site1 = [{"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库制作工具弹窗.xlsx", "表单名称": "铺层库制作弹窗", "初始行": 1},
-                 {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库制作工具弹窗.xlsx", "表单名称": "选择铺层Excel文件", "初始行": 1},
-                 {"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库制作工具弹窗.xlsx", "表单名称": "铺层数据保存路径文本框", "初始行": 1}]
-        # site1 =[{"详细地址": r"src\testCase\useCase_file\Aerocheck\铺层信息\铺层库制作工具弹窗.xlsx", "表单名称": "测试", "初始行": 1}]
+        site1 = [{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库制作工具弹窗.xlsx", "表单名称": "铺层库制作弹窗", "初始行": 1},
+                 {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库制作工具弹窗.xlsx", "表单名称": "选择铺层Excel文件", "初始行": 1},
+                 {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库制作工具弹窗.xlsx", "表单名称": "铺层数据保存路径文本框", "初始行": 1}]
+        # site1 =[{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\铺层库制作工具弹窗.xlsx", "表单名称": "测试", "初始行": 1}]
         list_dicts = []
         if len(site1)>0:
             for site in site1:
@@ -112,6 +113,7 @@ class Test_Laminatedata(unittest.TestCase):
                 list_dicts = list_dicts + ar_testdicts
         else:
             list_dicts=site1
+        @unittest.skip(u"无条件跳过此用例")
         @data(*list_dicts)  # 参数化参数用例
         def test_1(self, testdicts):
             """铺层数据库制作工具弹框"""
@@ -182,11 +184,11 @@ class Test_sizeInfo_1DXls(unittest.TestCase):
 
 
         # 测试用例Excel文件的相关信息
-        site1 = [{"详细地址": r"src\testCase\useCase_file\Aerocheck\尺寸信息\一维单元尺寸定义（模板）.xlsx",
+        site1 = [{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\尺寸信息\一维单元尺寸定义（模板）.xlsx",
                   "表单名称": "一维单元尺寸定义复合材料（模板）", "初始行": 1},
-                 {"详细地址": r"src\testCase\useCase_file\Aerocheck\尺寸信息\一维单元尺寸定义（模板）.xlsx",
+                 {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\尺寸信息\一维单元尺寸定义（模板）.xlsx",
                   "表单名称": "一维单元尺寸定义金属材料（模板）", "初始行": 1}]
-        # site1 =[{"详细地址": r"src\testCase\useCase_file\Aerocheck\尺寸信息\一维单元尺寸定义（模板）.xlsx", "表单名称": "测试", "初始行": 1}]
+        # site1 =[{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\尺寸信息\一维单元尺寸定义（模板）.xlsx", "表单名称": "测试", "初始行": 1}]
         list_dicts = []
         if len(site1)>0:
             for site in site1:
@@ -196,6 +198,7 @@ class Test_sizeInfo_1DXls(unittest.TestCase):
         else:
             list_dicts=site1
         @data(*list_dicts)  # 参数化参数用例
+        @unittest.skip(u"无条件跳过此用例")
         def test_1(self, testdicts):
             """尺寸信息--一维单元尺寸定义（模板）"""
             global source;     global old_content
@@ -210,12 +213,15 @@ class Test_sizeInfo_1DXls(unittest.TestCase):
             actual_result= sizeInfo_1DXls_execute().SelectFile(testdicts)  # 调用测试步骤
 
 
+
+
+
         # 测试用例Excel文件的相关信息
-        site2 = [{"详细地址": r"src\testCase\useCase_file\Aerocheck\尺寸信息\二维单元尺寸定义（模板）.xlsx",
+        site2 = [{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\尺寸信息\二维单元尺寸定义（模板）.xlsx",
                   "表单名称": "二维单元尺寸定义复合材料（模板）", "初始行": 1},
-                 {"详细地址": r"src\testCase\useCase_file\Aerocheck\尺寸信息\二维单元尺寸定义（模板）.xlsx",
+                 {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\尺寸信息\二维单元尺寸定义（模板）.xlsx",
                   "表单名称": "二维单元尺寸定义金属材料（模板）", "初始行": 1}]
-        # site2 =[{"详细地址": r"src\testCase\useCase_file\Aerocheck\尺寸信息\二维单元尺寸定义（模板）.xlsx", "表单名称": "测试", "初始行": 1}]
+        # site2 =[{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\尺寸信息\二维单元尺寸定义（模板）.xlsx", "表单名称": "测试", "初始行": 1}]
         list_dicts2 = []
         if len(site1)>0:
             for site in site2:
@@ -225,6 +231,7 @@ class Test_sizeInfo_1DXls(unittest.TestCase):
         else:
             list_dicts2=site2
         @data(*list_dicts2)  # 参数化参数用例
+        @unittest.skip(u"无条件跳过此用例")
         def test_2(self, testdicts):
             """尺寸信息--二维单元尺寸定义（模板）"""
             global source;    global old_content
@@ -271,9 +278,11 @@ class Test_solveCalculation(unittest.TestCase):
             global source;   global old_content
             global messageType;   global actual_result
             global UseCaseNumber;  global expect3_result
-            # 断言测试结果
-            # 如果是对比信息窗口里的内容，就获取最新的内容
-            if messageType == "信息窗口":
+            # 收尾，判断有没有弹窗没有关闭，如果有就关闭
+            parWin_Dicti = {"窗口标题": "警告", "关闭窗口控件名称": "OK", "关闭窗口控件操作方法": "click"}
+            edit_box1 = instrument().popUp_Whether_close(parWin_Dicti)
+            # 测试结果处理
+            if messageType == "信息窗口":    # 如果是对比信息窗口里的内容，就获取最新的内容
                 actual_result = FormatConversion().GetLatestData(actual_result, old_content)
             if type(actual_result)==list:  # 实际值如果是列表，就转化成字符串
                 actual_result = ' '.join(actual_result)
@@ -283,18 +292,113 @@ class Test_solveCalculation(unittest.TestCase):
                 expect3_result = FormatConversion().takeOut_space(expect3_result)
             print("实际值：", actual_result)
             print("预期值：", expect3_result)
-            # 最后的测试结果
+            # 断言测试结果
             assert_that(expect3_result).is_equal_to(actual_result)
             print("测试结束")
 
 
 
         # 测试用例Excel文件的相关信息
-        site1 = [{"详细地址": r"src\testCase\useCase_file\Aerocheck\求解计算\自动化求解计算.xlsx",
+        site1 = [{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\求解计算\自动化求解计算.xlsx",
                   "表单名称": "属性更新选择路径", "初始行": 1},
-                 {"详细地址": r"src\testCase\useCase_file\Aerocheck\求解计算\自动化求解计算.xlsx",
+                 {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\求解计算\自动化求解计算.xlsx",
                   "表单名称": "载荷提取选择路径", "初始行": 1}]
-        # site1 =[{"详细地址": r"src\testCase\useCase_file\Aerocheck\求解计算\自动化求解计算.xlsx","表单名称": "测试", "初始行": 1}]
+        # site1 =[{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\求解计算\自动化求解计算.xlsx","表单名称": "测试", "初始行": 1}]
+        list_dicts = []
+        if len(site1)>0:
+            for site in site1:
+                dicts1 = read_excel(site).readExcel_testCase()  # 读取测试用例
+                ar_testdicts = FormatConversion().RemoveSubscript(dicts1)
+                list_dicts = list_dicts + ar_testdicts
+        else:
+            list_dicts=site1
+        @data(*list_dicts)  # 参数化参数用例
+        @unittest.skip(u"无条件跳过此用例")
+        def test_1(self, testdicts):
+            """求解计算--求解计算--文本框"""
+            global source;     global old_content
+            global messageType;  global actual_result
+            global UseCaseNumber;  global expect3_result
+            # 获取变量信息
+            messageType = testdicts["提示信息类型"]
+            UseCaseNumber = testdicts["用例编号"]
+            testdicts["被测程序文件地址"] = source
+            expect3_result = testdicts["预期结果提示信息"]  # 取出预期值
+            print("开始执行用例：", UseCaseNumber)
+            actual_result= solveCalculation_execute().SelectFile(testdicts)  # 调用测试步骤
+            #如有警告弹窗就关掉警告弹窗
+
+
+
+
+
+"""载荷信息--编辑工况"""
+@ddt
+# @unittest.skip(u"无条件跳过此用例")
+class Test_editWorkingCondition(unittest.TestCase):
+        """载荷信息--编辑工况"""
+        global number
+        number = 1
+
+        def setUp(self):
+            global source;    global old_content ;global number
+            global messageType ;global actual_result
+            global UseCaseNumber ;global expect3_result
+            from src.utils.otherMethods.initialize import module_initialize
+            # 初始化变量
+            source=None;old_content=None;messageType=None
+            actual_result=None; UseCaseNumber=None ;expect3_result=None
+            print("测试开始")
+            source = r"F:\Aerobook\src\testCase\projectFile\automateFile"
+            # 如果编辑工况弹窗没有关闭，就关闭
+            parWin_Dicti = {"窗口标题": "编辑工况", "关闭窗口控件名称": "关闭", "关闭窗口控件操作方法": "click"}
+            edit_box1 = instrument().popUp_Whether_close(parWin_Dicti)
+            # if number==1:
+            #     # 清除所有的包络工况
+            #     module_initialize().editWorkingCondition()
+            # number =number+1
+
+
+
+
+
+        def tearDown(self):
+            """用例执行完后收尾"""
+            global source;   global old_content
+            global messageType;   global actual_result
+            global UseCaseNumber;  global expect3_result
+            # 收尾，判断有没有弹窗没有关闭，如果有就关闭
+            parWin1_Dicti = {"窗口标题": "警告", "关闭窗口控件名称": "OK", "关闭窗口控件操作方法": "click"}
+            edit1_box1 = instrument().popUp_Whether_close(parWin1_Dicti)
+            # 如果编辑工况弹窗没有关闭，就关闭
+            parWin2_Dicti = {"窗口标题": "编辑工况", "关闭窗口控件名称": "关闭", "关闭窗口控件操作方法": "click"}
+            edit_box1 = instrument().popUp_Whether_close(parWin2_Dicti)
+            # 处理测试结果
+            if messageType == "信息窗口":    # 如果是对比信息窗口里的内容，就获取最新的内容
+                actual_result = FormatConversion().GetLatestData(actual_result, old_content)
+            if type(actual_result)==list:  # 实际值如果是列表，就转化成字符串
+                actual_result = ' '.join(actual_result)
+            if actual_result:   # 当实际值不为空的情况下
+                # 把实际值字符串根据换行符\n转化成列表，并去掉列表中的所有的空格
+                actual_result = FormatConversion().takeOut_space(actual_result)
+                expect3_result = FormatConversion().takeOut_space(expect3_result)
+            print("实际值：", actual_result)
+            print("预期值：", expect3_result)
+            #  # 断言测试结果
+            assert_that(expect3_result).is_equal_to(actual_result)
+            print("测试结束")
+
+
+
+
+
+
+        # 测试用例Excel文件的相关信息
+        # site1 = [{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\载荷信息\自动化编辑工况.xlsx",
+        #           "表单名称": "新建", "初始行": 1},
+        #          {"详细地址":  r"src\testCase\c_useCase_file\Aerocheck\载荷信息\自动化编辑工况.xlsx",
+        #           "表单名称": "重命名", "初始行": 1}]
+        site1 =[{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\载荷信息\自动化编辑工况.xlsx","表单名称": "测试1", "初始行": 1}]
         list_dicts = []
         if len(site1)>0:
             for site in site1:
@@ -315,13 +419,8 @@ class Test_solveCalculation(unittest.TestCase):
             testdicts["被测程序文件地址"] = source
             expect3_result = testdicts["预期结果提示信息"]  # 取出预期值
             print("开始执行用例：", UseCaseNumber)
-            actual_result= solveCalculation_execute().SelectFile(testdicts)  # 调用测试步骤
-            #如有警告弹窗就关掉警告弹窗
-            # 判断选择铺层Excel文件文本框控件是否存在，如果存在向该文本框输入数据
-            parWin_Dicti = {"窗口标题": "警告", "关闭窗口控件名称": "OK", "关闭窗口控件操作方法": "click"}
-            edit_box1 = instrument().popUp_Whether_close(parWin_Dicti)
-
-
+            actual_result= editWorkingCondition_execute().SelectFile(testdicts)  # 调用测试步骤
+            print("actual_result:",actual_result)
 
 
 
@@ -332,7 +431,8 @@ if __name__ == '__main__':
     # suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_LaminateOptimize))
     # suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_Laminatedata))
     # suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_sizeInfo_1DXls))
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_solveCalculation))
+    # suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_solveCalculation))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_editWorkingCondition))
     file_name=time.strftime("%Y%m%d%H%M%S")+"铺层库优化测试报告"    # 测试报告名称
     relativeAddress = path.location()
     logPath = relativeAddress+"report//Aerocheck//laminateOptimize_testReport//" # 测试报告保存地址

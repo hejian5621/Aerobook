@@ -15,7 +15,7 @@ print(tuple(API_KEY))
 aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
 # 读取图片
-filePath = "/useCase_screenshot/Aerocheck1\\word.png"
+filePath = "src/testCase/d_useCase_screenshot/Aerocheck\\word.png"
 
 
 def get_file_content(filePath):

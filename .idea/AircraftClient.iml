@@ -14,15 +14,46 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/commonality" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/operation" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/d_useCase_screenshot/Aerocheck" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/a_useCaseSet/Aerockeck" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/AccessToTextInformation" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/acquire_html_text" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/API" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/asert" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/copyFile" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/copypaste" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/DDT" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/Exception" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/a_initialize_dame" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/MessageWindow_text" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/MouseKeyboard" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/pywin_ToFindControl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/ReadContentsOfClipboard" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/selectFile_PopupWindow" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/test" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/test_Set" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/testDate" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/TXT" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/uiautomationTest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/文件对比" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/report/Aerocheck" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/report/Aerocheck/laminateOptimize_testReport" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/a_useCaseSet" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/b_testCaseStep" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/projectFile" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/d_useCase_screenshot" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/commonality" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/OperatingControls" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/otherMethods" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCase/useCaseSet" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCase/useCase_file" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCase/useCase_screenshot" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCase/useCase_file/Aerocheck" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCase/useCase_screenshot/Aerocheck1" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCase/useCaseSet/Aerockeck" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/b_testCaseStep/Aerocheck" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/initialize" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/尺寸信息" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/求解计算" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/铺层信息" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/载荷信息" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (Aerobook) (2)" jdkType="Python SDK" />

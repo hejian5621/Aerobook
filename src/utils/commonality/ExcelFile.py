@@ -44,7 +44,7 @@ class read_excel():
 
 #
 #
-# dict1={"详细地址":"src\\testCase\\useCase_file\\Aerocheck\\铺层库优化工具.xlsx","表单名称":"模块说明","初始行":1}
+# dict1={"详细地址":"src\\testCase\\c_useCase_file\\Aerocheck\\铺层库优化工具.xlsx","表单名称":"模块说明","初始行":1}
 # dict2=read_excel(dict1).readExcel_testCase()
 # print("dict2:",dict2)
 #

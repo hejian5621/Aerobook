@@ -283,7 +283,6 @@ class ModuleControlOperation():
         param4_time = int(dicti["关闭按钮等待时间"])
         location = dicti["被测程序文件地址"]
         else1 = dicti["其他"]
-        messageType = dicti["提示信息类型"]
         if param1 != "默认":
            # 属性更新选择路径文本框
            dlg1_spec=self.dlg_spec.Edit
@@ -334,4 +333,78 @@ class ModuleControlOperation():
             # 关闭按钮
             self.dlg_spec.关闭.click()
             time.sleep(param4_time)
+
+
+
+    def editWorkingCondition_operation(self,dicti):
+        """
+        载荷信息--编辑工况
+        :return:
+        """
+        param1 = dicti["新建勾选框"]
+        param2 = dicti["点击全选工况按钮"]
+        param3 = dicti["点击不全选工况按钮"]
+        param4 = dicti["新建文本框"]
+        param5 = dicti["新建确认按钮"]
+        param6 = dicti["重命名前工况组合下拉框选择"]
+        param7 = dicti["重命名勾选框"]
+        param8 = dicti["重命名文本框"]
+        param9 = dicti["重命名确认按钮"]
+        param10 = dicti["检查工况组合下拉框"]
+        param11 = dicti["工况组合删除按钮"]
+        param12 = dicti["关闭按钮"]
+        location = dicti["被测程序文件地址"]
+        else1 = dicti["其他"]
+        # self.dlg_spec.print_control_identifiers()
+        if param1 != "默认":
+           time.sleep(0.5)
+           # 新建勾选框
+           self.dlg_spec.RadioButton2.click()
+        if param2 != "默认":
+            time.sleep(0.1)
+            # 点击全选工况按钮
+            self.dlg_spec.Button4.click()
+        if param3 != "默认" :
+            time.sleep(0.1)
+            # 点击不全选工况按钮
+            self.dlg_spec.Button5.click()
+        if param4 != "默认" :
+            time.sleep(0.1)
+            # 新建文本框
+            if param4:
+                self.dlg_spec.Edit2.set_text(param4)
+        if param5 != "默认":
+            time.sleep(0.5)
+            # 新建确认按钮
+            self.dlg_spec.Button3.click()
+        if param6 != "默认":
+            time.sleep(0.1)
+            # 重命名前工况组合下拉框选择
+            self.dlg_spec.ComboBox.select(param6).click()
+        if param7 != "默认":
+            time.sleep(0.1)
+            # 重命名勾选框
+            self.dlg_spec.RadioButton0.click()
+        if param8 != "默认":
+            time.sleep(0.1)
+            # 重命名文本框
+            if param8:
+                self.dlg_spec.Edit0.set_text(param8)
+        if param9 != "默认":
+            time.sleep(0.1)
+            # 重命名确认按钮
+            self.dlg_spec.编辑工况Button2.click()
+        if param10 != "默认":
+            time.sleep(0.1)
+            # 检查工况组合下拉框
+            self.dlg_spec.ComboBox.select(param10).click()
+        if param11 != "默认":
+            time.sleep(0.1)
+            # 工况组合删除按钮
+            self.dlg_spec.编辑工况Button.click()
+        if param12 != "默认":
+            time.sleep(0.1)
+            # 关闭按钮
+            self.dlg_spec.关闭.click()
+
 

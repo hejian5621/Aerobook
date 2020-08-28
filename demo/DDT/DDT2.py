@@ -6,7 +6,7 @@ import time, os
 from BeautifulReport import BeautifulReport
 from parameterized.parameterized import parameterized
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
-from src.testCase.testCaseStep.Aerocheck.laminateOptimize_step import execute_step
+from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import execute_step
 from ddt import ddt, data, unpack, file_data
 import numpy as np
 
@@ -18,7 +18,7 @@ class Test_UseCaseSet(unittest.TestCase):
     # # 测试数据参数化
     # tableName = "铺层库优化工具.xlsx"  # Excel表格名称
     # frmName = "最大铺层数"  # 表单名称
-    # site = "src\\testCase\\useCase_file\\Aerocheck\\"
+    # site = "src\\testCase\\c_useCase_file\\Aerocheck\\"
     # detailedAddress = site + tableName  # 测试用例详细的地址
 
 

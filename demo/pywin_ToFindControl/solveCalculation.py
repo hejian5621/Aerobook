@@ -17,10 +17,10 @@ testdicts={}
 testdicts["所在模块"] = "尺寸信息->一维单元尺寸定义（模板）"
 
 
-aero_window, module_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
 
 
-dlg_spec=open_module().menu_general(module_window)
+dlg_spec=open_module().menu_general(son_window)
 
 # 属性更新对应的路径的文本框
 # dlg_spec.Edit.set_text(txet)

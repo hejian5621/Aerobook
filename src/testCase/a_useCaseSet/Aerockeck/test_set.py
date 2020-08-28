@@ -7,7 +7,7 @@
 import unittest,time,os
 from assertpy import assert_that
 from BeautifulReport import BeautifulReport
-from src.testCase.testCaseStep.Aerocheck.laminateOptimize_step import execute_step
+from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import execute_step
 from ddt import ddt,data
 from src.utils.commonality.ExcelFile import read_excel
 from config.relative_location import  path
@@ -56,7 +56,7 @@ class Test_Laminatedata(unittest.TestCase):
 
 
         # # 测试用例Excel文件的相关信息
-        # site1 = [{"详细地址": "src\\testCase\\useCase_file\\Aerocheck\\铺层库优化工具.xlsx", "表单名称": "最大铺层数", "初始行": 1}]
+        # site1 = [{"详细地址": "src\\testCase\\c_useCase_file\\Aerocheck\\铺层库优化工具.xlsx", "表单名称": "最大铺层数", "初始行": 1}]
         # list_dicts = []
         # for site in site1:
         #     dicts1 = read_excel(site).readExcel_testCase()  # 读取测试用例

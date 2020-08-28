@@ -12,9 +12,9 @@ testdicts={}
 testdicts["所在模块"] = "尺寸信息->一维单元尺寸定义（模板）"
 
 
-aero_window, module_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
 
-dlg_spec= module_window.scrolledpanelwxWindowNR2
+dlg_spec= son_window.scrolledpanelwxWindowNR2
 
 print("分割线————————————————————————————————————————————————————————————————————————————————————————————————————")
 

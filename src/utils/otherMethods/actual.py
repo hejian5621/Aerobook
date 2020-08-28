@@ -80,27 +80,30 @@ class ActualProcessing:
 
 
 
-    def Laminatedata_warning_warning(self,expect_result):
+    def Laminatedata_warning_warning(self,UseCase_Number):
         """
         获取警告窗口的文本信息
         :return:
         """
-        atLast_actuals=None
+        from config.relative_location import path
+        relativeAddress = path.location()  # 获取项目相对位置
         app = Application().connect(title_re="警告")
         dlg_spec = app.window(title="警告")
         # 切换到文本信息窗口
         dlg_spec1=dlg_spec.警告DirectUIHWND
         # 获取预期值
-        site=r"F:\Aerobook\src\testCase\useCase_screenshot\Aerocheck1\\"
-        location=site+expect_result+".png"
+        location=relativeAddress+r"src\testCase\d_useCase_screenshot\Aerocheck\\"+UseCase_Number+".png"
         dlg_spec1.capture_as_image().save(location)  # 获取警告弹窗的文本截图
-        actuals=instrument().screenshot(location)
+        actuals=instrument().screenshot(location)    # 读取截图中的文本
+        print("actuals",actuals)
         if "」OK" in actuals:
             atLast_actuals=re.sub("」OK", '', actuals)
+        if "OK" in actuals:
+            atLast_actuals = re.sub("OK", '', actuals)
         else:
             atLast_actuals=actuals
-        dlg_spec2 = dlg_spec.child_window(title="OK", class_name="Button")
-        return atLast_actuals,dlg_spec,dlg_spec2
+        dlg_spec2 = dlg_spec.child_window(title="OK", class_name="Button")  # 关闭弹窗
+        return atLast_actuals
 
 
 
@@ -118,6 +121,16 @@ class ActualProcessing:
             content = list(f)
         # 删除TXT文件
         return content
+
+
+
+    def editWorkingCondition_TXT(self, module_window):
+        """
+        获取编辑工况弹窗中，获取工况组合下拉框里的文本信息
+        :return:
+        """
+        txt=module_window.ComboBox.window_text()
+        return txt
 
 
 

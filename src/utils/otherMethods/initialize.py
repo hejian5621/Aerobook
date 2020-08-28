@@ -34,8 +34,6 @@ class programInitialization:
             wait("exists", timeout=10, retry_interval=0.1).click()
         dlg_spec2 = app.window(title=r'成功') # 切换到授权成功窗口
         dlg_spec2.child_window(title="确定").wait("exists", timeout=10, retry_interval=0.1).click()
-
-
         # 在授权成功窗口点击确定按钮
         # 切回到Aerobook平台启动器窗口并点击运行按钮
         app.window(title=r'Aerobook平台启动器').window(title=r'运行').wait("exists", timeout=10, retry_interval=0.1).click()
@@ -122,11 +120,11 @@ class  module_initialize:
         在测试尺寸信息模块时需要进行铺层数据库的制作
         :return:
         """
-        from src.testCase.testCaseStep.Aerocheck.laminateOptimize_step import Laminatedata_execute
+        from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import Laminatedata_execute
         dict_Laminatedata={}
         # 获取配置文件中项目的路径
         ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()
-        site = {"详细地址": r"src\testCase\useCase_file\Aerocheck\initialize\模块初始化.xlsx",
+        site = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\模块初始化.xlsx",
                   "表单名称": "一维二维单元尺寸定义（模块）", "初始行": 1}
         list_dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
         for dicts in list_dicts:
@@ -135,6 +133,25 @@ class  module_initialize:
         dict_Laminatedata["被测程序文件地址"] = ProjectPath
         actual_Text,edit_list = Laminatedata_execute().SelectFile(dict_Laminatedata)  # 调用测试步骤
 
+
+    def editWorkingCondition(self):
+        """
+        编辑工况测试前清除所有的包络工况
+        :return:
+
+        """
+        from OperatingControls.enterModule import open_module
+        testdicts={}
+        testdicts["所在模块"]="载荷信息->编辑工况"
+        aero_window,son_window =execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+        # 切换到编辑工况弹窗
+        module_window = open_module().menu_editWorkingCondition()
+        while True:
+            txt = module_window.ComboBox.window_text()
+            if txt:
+                module_window.编辑工况Button.click()
+            else:
+                break
 
 
 
