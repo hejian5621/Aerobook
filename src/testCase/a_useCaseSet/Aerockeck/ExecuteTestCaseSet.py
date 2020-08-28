@@ -409,7 +409,7 @@ class Test_editWorkingCondition(unittest.TestCase):
             list_dicts=site1
         @data(*list_dicts)  # 参数化参数用例
         def test_1(self, testdicts):
-            """求解计算--求解计算--文本框"""
+            """载荷信息--编辑工况"""
             global source;     global old_content
             global messageType;  global actual_result
             global UseCaseNumber;  global expect3_result
