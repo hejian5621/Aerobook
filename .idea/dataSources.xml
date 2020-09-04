@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="curvlib" uuid="3d9815ab-0423-4d25-a661-1ef6b75644cc">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:F:\Aerobook\src\testCase\projectFile\automateFile\curvlib.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="plylib" uuid="f2c3dab2-a74e-40ec-8ca1-e7d24fc5bb43">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:F:\Aerobook\src\testCase\projectFile\automateFile\plylib.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="load" uuid="e93615c2-c2a6-4344-8db9-1800e80c4200">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:F:\Aerobook\src\testCase\projectFile\automateFile\load.db</jdbc-url>
+    </data-source>
+  </component>
+</project>

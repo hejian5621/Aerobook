@@ -79,9 +79,20 @@ tuple1[5].insert(3,4)
 # print dict2,type(dict2)
 
 
+import sys, os
+            print("在执行用例步骤前不知道程序初始化级别", __file__, sys._getframe().f_lineno)
+            os._exit(0)
+
 打印装饰器使用方法
 
 print("使用方法",dir(dlg_spec6.wrapper_object()))
+
+
+
+
+
+
+
 
 8、查询内置函数的用法
 print (help(print))

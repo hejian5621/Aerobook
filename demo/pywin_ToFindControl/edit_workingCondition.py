@@ -1,6 +1,9 @@
+# 编辑工况
+
+
 
 from src.utils.otherMethods.initialize import execute_useCase_initialize
-from OperatingControls.enterModule import open_module
+from OperatingControls.enterModule import BeingMeasured_popupWin
 import sys,os,time
 from pywinauto.application import Application
 from pywinauto import findwindows
@@ -10,15 +13,15 @@ from pywinauto import findwindows
 
 
 
-# testdicts={}
+testdicts={}
 #
-# testdicts["所在模块"] = "载荷信息->编辑工况"
+testdicts["所在模块"] = "载荷信息->编辑工况"
 #
 #
-# aero_window, module_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+aero_window, module_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
 
 
-dlg_spec=open_module().menu_editWorkingCondition()
+dlg_spec=BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
 #
 
 dlg_spec.print_control_identifiers()

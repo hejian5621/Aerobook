@@ -54,6 +54,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/求解计算" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/铺层信息" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/载荷信息" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/材料信息" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/Reading_Excel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/window_top" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/复材结构强度校核" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (Aerobook) (2)" jdkType="Python SDK" />

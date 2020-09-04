@@ -1,0 +1,6 @@
+
+
+1、运行此段代码，停止运行，并返回代码所在位置
+import sys, os
+print("在执行用例步骤前不知道程序初始化级别", __file__, sys._getframe().f_lineno)
+os._exit(0)

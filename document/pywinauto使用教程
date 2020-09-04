@@ -42,3 +42,28 @@ TAB键：VK_TAB
 Shift键：VK_SHIFT
 Ctrl键：VK_CONTROL
 Alt键：VK_MENU
+
+
+
+
+
+打印装饰器使用方法
+
+print("使用方法",dir(dlg_spec6.wrapper_object()))
+
+
+
+1、对象操作方法说明
+uncheck() ： 不勾选复选框
+dlg_spec2.CheckBox0.uncheck()
+
+
+get_check_state  : 获取复选框的状态（是否被勾选），已勾选返回1，如果没有被勾选返回0
+State=dlg_spec2.CheckBox0.get_check_state()
+
+check()   ：勾选复选框
+dlg_spec2.CheckBox0.check()
+
+
+
+set_text() :向文本框中输入数据
