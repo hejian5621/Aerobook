@@ -11,9 +11,8 @@ from src.utils.commonality.ExcelFile import read_excel
 from config.relative_location import  path
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from src.utils.commonality.tool import instrument,folderFile_dispose,Check_winControl
-from src.utils.otherMethods.actual import ActualProcessing
 from src.utils.otherMethods.actual import Information_Win
-
+from src.utils.otherMethods.initialize import execute_useCase_initialize
 
 
 """铺层信息--铺层库优化工作栏测试用例"""
@@ -415,7 +414,6 @@ class Test_editWorkingCondition(unittest.TestCase):
             global source;    global old_content ;global number
             global messageType ;global actual_result
             global UseCaseNumber ;global expect3_result
-            from src.utils.otherMethods.initialize import module_initialize
             # 初始化变量
             source=None;old_content=None;messageType=None
             actual_result=None; UseCaseNumber=None ;expect3_result=None
@@ -424,7 +422,7 @@ class Test_editWorkingCondition(unittest.TestCase):
             Check_winControl("编辑工况", "关闭").popUp_Whether_close()
             if number==1:
                 # 清除所有的包络工况
-                module_initialize().clear_editWorkingCondition()
+                execute_useCase_initialize().clear_editWorkingCondition()
             number =number+1
             Check_winControl("编辑工况", "关闭").popUp_Whether_close()
 
@@ -519,7 +517,7 @@ class Test_compositeMaterial(unittest.TestCase):
             # # 如果编辑工况弹窗没有关闭，就关闭
             if number==1:
                 # 清除所有的许用值曲线
-                module_initialize().clear_AllowableCurve()
+                execute_useCase_initialize().clear_AllowableCurve()
             number =number+1
 
 

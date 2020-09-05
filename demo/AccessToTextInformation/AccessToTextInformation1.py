@@ -1,6 +1,6 @@
 #信息窗口获取文本信息
 
-from src.utils.otherMethods.initialize import programInitialization
+from src.utils.otherMethods.initialize import pywin_openAProgram
 from pywinauto.application import Application
 from config.configurationFile import ProfileDataProcessing
 from win32gui import *
@@ -17,7 +17,7 @@ aerocheck_title = ProfileDataProcessing("commonality", "AerocheckEdition").confi
 
 
 # # 通过Aerobook标题链接Aerobook进行，并切换到Aerobook窗口
-aero_window = programInitialization(aero_title).entrance_subroutine_title()
+aero_window = pywin_openAProgram().entrance_subroutine_title()
 
 dlg_spec = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
 

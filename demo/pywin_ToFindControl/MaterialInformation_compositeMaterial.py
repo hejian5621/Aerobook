@@ -1,7 +1,7 @@
 # 材料信息--复合材料需用值定义
 
 from config.configurationFile import ProfileDataProcessing
-from src.utils.otherMethods.initialize import programInitialization
+from src.utils.otherMethods.initialize import pywin_openAProgram
 from src.utils.otherMethods.initialize import execute_useCase_initialize
 from OperatingControls.enterModule import BeingMeasured_popupWin,specialWay_OperatingControls,BeingMeasured_work
 import uiautomation
@@ -10,14 +10,13 @@ import time
 
 
 
-# testdicts={}
-# testdicts["所在模块"] = "材料信息->定义复合材料参数"
-
+testdicts={"所在模块":"材料信息->定义复合材料参数"}
 
 # 在菜单栏中点击"材料信息->定义复合材料参数"
-aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+from config.configurationFile import ProfileDataProcessing
+aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
 
-
+pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
 
 
 Aero_window = Application().connect(title_re="Aerobook v1.0.4").window(title="Aerobook v1.0.4")  # 通过Aerobook标题连接Aerobook

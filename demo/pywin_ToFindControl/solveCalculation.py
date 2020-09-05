@@ -1,7 +1,7 @@
 #求解计算->求解计算
 
 
-from src.utils.otherMethods.initialize import execute_useCase_initialize
+from src.utils.otherMethods.initialize import execute_useCase_initialize,pywin_openAProgram
 from OperatingControls.enterModule import BeingMeasured_work
 import sys,os,time
 
@@ -18,7 +18,7 @@ testdicts={}
 testdicts["所在模块"] = "尺寸信息->一维单元尺寸定义（模板）"
 
 
-aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
 
 
 dlg_spec=BeingMeasured_work(son_window).workField_general()

@@ -1,5 +1,5 @@
 
-from src.utils.otherMethods.initialize import programInitialization,execute_useCase_initialize
+from src.utils.otherMethods.initialize import pywin_openAProgram,execute_useCase_initialize
 
 import sys,os,time
 
@@ -12,7 +12,7 @@ testdicts={}
 testdicts["所在模块"] = "尺寸信息->一维单元尺寸定义（模板）"
 
 
-aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
 
 dlg_spec= son_window.scrolledpanelwxWindowNR2
 

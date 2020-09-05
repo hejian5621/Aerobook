@@ -2,7 +2,7 @@
 
 
 
-from src.utils.otherMethods.initialize import execute_useCase_initialize
+from src.utils.otherMethods.initialize import execute_useCase_initialize,pywin_openAProgram
 from OperatingControls.enterModule import BeingMeasured_popupWin
 import sys,os,time
 from pywinauto.application import Application
@@ -18,7 +18,7 @@ testdicts={}
 testdicts["所在模块"] = "载荷信息->编辑工况"
 #
 #
-aero_window, module_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+aero_window, module_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
 
 
 dlg_spec=BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()

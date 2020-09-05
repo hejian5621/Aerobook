@@ -1,4 +1,4 @@
-from src.utils.otherMethods.initialize import programInitialization
+from src.utils.otherMethods.initialize import UIA_link,pywin_openAProgram
 from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
 from config.configurationFile import ProfileDataProcessing
 from src.utils.commonality.tool import folderFile_dispose
@@ -46,8 +46,8 @@ MenuOptions="文件->项目->新建"   # 菜单栏点击按钮
 
 
 # # 启动应用程序并进入被测子模块页面
-py_app=programInitialization(aero_title).open_accredit()    # 启动Aerobook应用程序
-uia_app=programInitialization(aero_title).EntrySubapplication(childApp_Name)  # 点击Aerocheck进入Aerocheck页面
+py_app=pywin_openAProgram().open_accredit()    # 启动Aerobook应用程序
+uia_app=UIA_link().EntrySubapplication(childApp_Name)  # 点击Aerocheck进入Aerocheck页面
 
 
 

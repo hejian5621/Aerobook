@@ -1,6 +1,6 @@
 # 用例步骤
 
-from src.utils.otherMethods.initialize import programInitialization,execute_useCase_initialize
+from src.utils.otherMethods.initialize import pywin_openAProgram,execute_useCase_initialize
 from OperatingControls.enterModule import BeingMeasured_popupWin,BeingMeasured_work,specialWay_OperatingControls
 from src.utils.OperatingControls.moduleControlOperation import ModuleControlOperation
 from src.utils.otherMethods.actual import ActualProcessing,Warning_PopUp
@@ -24,7 +24,7 @@ class LaminateOptimize_execute:
         """
         MenuOptions=testdicts["所在模块"];Message_type = int(testdicts["提示信息类型"]);actual_Text=None
         # 读取配置文档信息
-        aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(testdicts)
+        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
         # 通过操作菜单栏，打开被测模块，然后切换到被测模块
         module_window=BeingMeasured_work(son_window).workField_general()
         # 向被测模块输入数据
@@ -53,7 +53,7 @@ class Laminatedata_execute:
         铺层数据库工具弹窗，选择文件文本框
         :return:
         """
-        aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(self.testdicts)
+        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
         # 切入铺层数据库工具弹窗中
         module_window = BeingMeasured_popupWin("铺层数据库制作工具").menu_LetsGoTopopover()
         # 向被测模块输入数据
@@ -66,7 +66,6 @@ class Laminatedata_execute:
             Check_winControl("警告", "OK").popUp_Whether_close()
         elif self.Message_type=="信息窗口":
             self.actual_Text = Information_Win().acquire_HTML_TXT(self.source)
-
         return self.actual_Text,edit_list
 
 
@@ -86,7 +85,7 @@ class sizeInfo_1DXls_execute:
         选择文件文本框
         :return:
         """
-        aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(self.testdicts)
+        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
         # 切换到尺寸定义工作栏
         module_window = BeingMeasured_work(son_window).workField_sizeInfo()
         ModuleControlOperation(module_window).sizeInfo_1DXls_operation( self.testdicts)
@@ -124,7 +123,7 @@ class solveCalculation_execute:
         选择文件文本框
         :return:
         """
-        aero_window,son_window =execute_useCase_initialize().execute_useCase_enterInto(self.testdicts)
+        aero_window,son_window =pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
         # 切换到尺寸定义工作栏
         module_window = BeingMeasured_work(son_window).workField_general()
         # 向被测模块输入数据
@@ -158,7 +157,7 @@ class loaddatabase_popUp_execute:
         铺层数据库工具弹窗，选择文件文本框
         :return:
         """
-        aero_window, son_window = execute_useCase_initialize().execute_useCase_enterInto(self.testdicts)
+        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
         # 切入铺层数据库工具弹窗中
         module_window = BeingMeasured_popupWin("载荷数据库制作工具").menu_LetsGoTopopover()
         # 向被测模块输入数据
@@ -192,7 +191,7 @@ class editWorkingCondition_execute:
         """
         from src.utils.otherMethods.actual import localControl
         # 初始化，链接Aerobook，返回对象实体
-        aero_window,son_window =execute_useCase_initialize().execute_useCase_enterInto(self.testdicts)
+        aero_window,son_window =pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
         # 切换到编辑工况弹窗
         module_window = BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
         # 向被测模块输入数据
@@ -237,7 +236,7 @@ class compositeMaterial:
         """
         # 执行步骤之前初始化
         if self.initialLevel == "整个工作栏":  # 初始化这个工作栏，或者弹窗，返回对象实体
-            self.aero_window, self.son_window = execute_useCase_initialize().execute_useCase_enterInto(self.testdicts)
+            self.aero_window, self.son_window = pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
             specialWay_OperatingControls(self.operationWindow).uia_OperatingControls()
             self.module_window = BeingMeasured_work(self.son_window).workField_composite_information()
         elif self.initialLevel == "编辑材料许用值弹窗" or self.initialLevel == "定义材料许用值":  # 初始化编辑材料许用值和定义材料许用值
@@ -305,7 +304,7 @@ class CompoundStrengthCheck:
         """
         # 执行步骤之前初始化
         if self.initialLevel == "整个工作栏":  # 初始化这个工作栏，或者弹窗，返回对象实体
-            self.aero_window, self.son_window = execute_useCase_initialize().execute_useCase_enterInto(self.testdicts)
+            self.aero_window, self.son_window = pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
             specialWay_OperatingControls(self.operationWindow_son).uia_OperatingControls()
             self.module_window, self.work_window = BeingMeasured_work(self.son_window).workField_intensityCheck()
         else:
@@ -333,7 +332,7 @@ class CompoundStrengthCheck:
         """
         # 执行步骤之前初始化
         if self.initialLevel == "整个工作栏":  # 初始化这个工作栏，或者弹窗，返回对象实体
-            self.aero_window, self.son_window = execute_useCase_initialize().execute_useCase_enterInto(self.testdicts)
+            self.aero_window, self.son_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
             specialWay_OperatingControls(self.operationWindow_son).uia_OperatingControls()
             self.module_window, self.work_window = BeingMeasured_work(self.son_window).workField_intensityCheck()
         else:
