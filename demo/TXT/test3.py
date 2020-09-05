@@ -3,7 +3,7 @@
 from src.utils.otherMethods.initialize import programInitialization
 from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
 from config.configurationFile import ProfileDataProcessing
-from src.utils.commonality.tool import instrument
+from tool import instrument
 from config.relative_location import path
 from pywinauto.application import Application
 import uiautomation

@@ -3,7 +3,7 @@ from pywinauto.application import Application
 import time
 from config.configurationFile import ProfileDataProcessing
 import uiautomation
-from src.utils.commonality.tool import WindowTop
+from tool import WindowTop
 
 
 

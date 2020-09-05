@@ -125,7 +125,7 @@ dlg_spec3.确认.move_mouse()
 #
 
 
-from src.utils.commonality.tool import instrument
+from tool import instrument
 
 # 选择结构单元
 # dlg_spec1.child_window(title="选择结构单元", class_name="Button").click()

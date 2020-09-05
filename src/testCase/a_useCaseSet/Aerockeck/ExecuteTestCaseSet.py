@@ -10,7 +10,7 @@ from ddt import ddt,data
 from src.utils.commonality.ExcelFile import read_excel
 from config.relative_location import  path
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
-from src.utils.commonality.tool import instrument,folderFile_dispose,Check_winControl
+from tool import instrument,folderFile_dispose,Check_winControl
 from src.utils.otherMethods.actual import Information_Win
 from src.utils.otherMethods.initialize import execute_useCase_initialize
 
@@ -506,7 +506,7 @@ class Test_compositeMaterial(unittest.TestCase):
             global messageType ;global actual_result
             global UseCaseNumber ;global expect3_result
             from src.utils.otherMethods.initialize import module_initialize
-            from src.utils.commonality.tool import WindowTop
+            from tool import WindowTop
             # 被系统置顶
             WindowTop.EnumWindows("Aerobook v1.0.4")
             # 初始化变量
@@ -592,7 +592,7 @@ class Test_CompoundStrengthCheck(unittest.TestCase):
             global messageType ;global actual_result
             global UseCaseNumber ;global expect3_result
             from src.utils.otherMethods.initialize import module_initialize
-            from src.utils.commonality.tool import WindowTop
+            from tool import WindowTop
             # 被系统置顶
             WindowTop.EnumWindows("Aerobook v1.0.4")
             # 初始化变量

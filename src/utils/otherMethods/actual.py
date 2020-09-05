@@ -1,8 +1,8 @@
 # 获取实际值
 import time,os,re, datetime
-from utils.commonality.tool import pictureProcessing
+from tool import pictureProcessing
 from pywinauto.application import Application
-from src.utils.commonality.tool import htmlFormat
+from tool import htmlFormat
 
 
 
@@ -76,7 +76,7 @@ class Information_Win:
         :param dlg_spec: 需要获取的数据数量（数据条数）
         :return:
         """
-        from src.utils.commonality.tool import instrument
+        from tool import instrument
         n = 0;t=None;txtName="cache.txt";actuals = ""
         # 把信息窗口的文本信息粘贴到粘贴板
         instrument().infoWindow(dlg_spec)

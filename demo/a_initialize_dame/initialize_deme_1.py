@@ -1,7 +1,7 @@
 from src.utils.otherMethods.initialize import UIA_link,pywin_openAProgram
 from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
 from config.configurationFile import ProfileDataProcessing
-from src.utils.commonality.tool import folderFile_dispose
+from tool import folderFile_dispose
 from config.relative_location import path
 from pywinauto.application import Application
 

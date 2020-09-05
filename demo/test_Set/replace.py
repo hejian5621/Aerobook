@@ -1,6 +1,6 @@
 
 
-from src.utils.commonality.tool import folderFile_dispose
+from tool import folderFile_dispose
 
 
 sourceDir = r"F:\Aerobook\src\testCase\projectFile\自动化测试相关文件"

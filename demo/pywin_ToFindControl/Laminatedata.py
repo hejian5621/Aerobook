@@ -9,12 +9,12 @@ from config.configurationFile import ProfileDataProcessing
 import sys,os
 from src.utils.otherMethods.initialize import execute_useCase_initialize
 import time
-from utils.commonality.tool import Check_winControl
+from tool import Check_winControl
 
 
 
 
-from src.utils.commonality.tool import WindowTop
+from tool import WindowTop
 # 被系统置顶
 WindowTop.EnumWindows("Aerobook v1.0.4")
 

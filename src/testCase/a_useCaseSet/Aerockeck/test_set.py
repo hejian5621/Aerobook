@@ -12,7 +12,7 @@ from ddt import ddt,data
 from src.utils.commonality.ExcelFile import read_excel
 from config.relative_location import  path
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
-from src.utils.commonality.tool import instrument
+from tool import instrument
 
 
 

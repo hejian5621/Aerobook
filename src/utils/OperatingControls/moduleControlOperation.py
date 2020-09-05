@@ -1,7 +1,7 @@
 # 铺层库优化工作栏，对应Aerobook路径：铺层信息--》铺层库优化
 import time
 from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
-from src.utils.commonality.tool import instrument,KeyboardMouse,Check_winControl
+from tool import instrument,KeyboardMouse,Check_winControl
 
 
 class ModuleControlOperation():

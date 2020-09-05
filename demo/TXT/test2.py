@@ -1,4 +1,4 @@
-from src.utils.commonality.tool import pictureProcessing,KeyboardMouse
+from tool import pictureProcessing,KeyboardMouse
 
 
 """在Aerobook--Aerocheck的图形区通过键盘和鼠标的操作方式选中全部的结构单元"""

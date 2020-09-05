@@ -2,7 +2,7 @@
 import time
 from pywinauto.application import Application
 from pywinauto.keyboard import send_keys
-from src.utils.commonality.tool import instrument,Check_winControl
+from tool import instrument,Check_winControl
 from pywinauto import mouse
 from pykeyboard import PyKeyboard
 from pywinauto  import  findwindows

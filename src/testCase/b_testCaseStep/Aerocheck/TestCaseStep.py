@@ -5,7 +5,7 @@ from OperatingControls.enterModule import BeingMeasured_popupWin,BeingMeasured_w
 from src.utils.OperatingControls.moduleControlOperation import ModuleControlOperation
 from src.utils.otherMethods.actual import ActualProcessing,Warning_PopUp
 import time
-from src.utils.commonality.tool import instrument,Check_winControl
+from tool import instrument,Check_winControl
 from src.utils.otherMethods.actual import localControl
 from src.utils.otherMethods.actual import Information_Win
 

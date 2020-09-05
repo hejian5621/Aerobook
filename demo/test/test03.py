@@ -5,7 +5,7 @@ from src.utils.otherMethods.initialize import execute_useCase_initialize
 from OperatingControls.enterModule import BeingMeasured_work
 
 
-from src.utils.commonality.tool import WindowTop
+from tool import WindowTop
 WindowTop.EnumWindows("Aerobook v1.0.4")
 
 location=r"F:\Aerobook\src\testCase\projectFile\automateFile"
