@@ -91,7 +91,6 @@ class  ControlOperationSuite:
             y = int(ProfileDataProcessing("commonality", "coord1_y").config_File())  # 从配置文件获取鼠标点击坐标
             mouse.click(button='left', coords= (x, y) )  # 点击有限元模型路径对应的文本框，显示出文本框
             DetailedPath = source + "\Htail.fem"
-            print("DetailedPath:",DetailedPath)
             self.dlg_spec.Edit.wait("exists", timeout=60, retry_interval=1).set_text(DetailedPath)  # 在有限元模型路径对应的文本框中输入数据
             Check_winControl("项目设置", "完成").nest_popUpWindows("警告", "OK")  # 检查嵌套弹窗是否关闭
 

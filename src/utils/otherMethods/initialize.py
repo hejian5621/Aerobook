@@ -28,7 +28,7 @@ class pywin_openAProgram:
         """
         app_window=pywin_openAProgram().passExe_open('Aerobook平台启动器')  # 打开Aerobook应用程序
         pywin_openAProgram().AuthorizedOperation(app_window)              # 进行授权操作
-        Aerobook_main=pywin_openAProgram().AeroB_console(app_window)      # 链接Aerbook控制台并最大化
+        Aerobook_main=pywin_openAProgram().AeroB_console()      # 链接Aerbook控制台并最大化
         return Aerobook_main
 
 
@@ -53,23 +53,24 @@ class pywin_openAProgram:
         son_window=app_window.child_window(title="本地授权",
                                            auto_id="groupBox_local", control_type="System.Windows.Forms.GroupBox")
         son_window.window(title="请求授权").wait("exists", timeout=10, retry_interval=0.1).click()
-        time.sleep(0.5)
-        son1_window = app_window.window(title=r'成功').wait("exists", timeout=10, retry_interval=0.1)  # 切换到授权成功窗口
-        son1_window.child_window(title="确定").wait("exists", timeout=10, retry_interval=0.1).click()  # 点击确定按钮
+        succeed_window=Application().connect(title_re=r'成功',timeout=10)
+        succeed1_window=succeed_window.window(title_re=r'成功')
+        # succeed1_window.print_control_identifiers()
+        succeed1_window.child_window(title="确定").wait("exists", timeout=10, retry_interval=0.1).click()  # 点击确定按钮
         # 切回到Aerobook平台启动器窗口并点击运行按钮
-        son2_window=app_window.window(title=r'Aerobook平台启动器').wait("exists", timeout=10, retry_interval=0.1)
-        son2_window.window(title=r'运行').wait("exists", timeout=10, retry_interval=0.1).click()
+        app_window.window(title=r'运行').wait("exists", timeout=10, retry_interval=0.1).click()
 
 
 
-    def AeroB_console(self,app_window):
+    def AeroB_console(self):
         """
         操作Aerobook控制台
         :return:
         """
-        Aerobook_main = app_window.window(title=self.aero_title)
-        Aerobook_main.wait("exists", timeout=60, retry_interval=0.01)
+        main_window = Application().connect(title_re=self.aero_title, timeout=10)
+        Aerobook_main = main_window.window(title_re=self.aero_title)
         Aerobook_main.maximize()
+        Aerobook_main.print_control_identifiers()
         return Aerobook_main
 
 
@@ -79,9 +80,12 @@ class pywin_openAProgram:
         进入子程序,通过标题链接
         :return:
         """
-        Aero_window = Application().connect(title_re=self.aero_title,timeout=10)  # 通过Aerobook标题连接Aerobook
-        Aero_window.window(title=self.aero_title).wait("exists", timeout=10, retry_interval=0.1)
-        return Aero_window
+        main_window = Application().connect(title_re="Aerobook v1.0.4", timeout=10)
+        Aerobook_main = main_window.window(title_re=self.aero_title)
+        # Aero_window =  Application().connect(title_re=self.aero_title, timeout=10)  # 通过Aerobook标题连接Aerobook
+        # Aero1_window=Aero_window.window(title_re=self.aero_title).wait("exists", timeout=10, retry_interval=0.1)
+        # Aerobook_main.print_control_identifiers()
+        return Aerobook_main
 
 
 
@@ -92,10 +96,10 @@ class pywin_openAProgram:
         :param testdicts:
         :return:
         """
-        MenuOptions = testdicts["所在模块"]
         # 通过Aerobook标题链接Aerobook进行，并切换到Aerobook窗口
         aero_window = pywin_openAProgram().entrance_subroutine_title()
         # 进行菜单栏操作
+        MenuOptions = testdicts["所在模块"]  # 取出菜单栏操作路径
         dlg_spec = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
         son_window = dlg_spec.child_window(title=self.aerocheck_title, class_name="wxWindowNR")
         son_window.menu_select(MenuOptions)# 点击菜单选项
@@ -118,7 +122,7 @@ class UIA_link:
         :return:
         """
         # 连接Aerobook控制台窗口进程
-        Use = uiautomation.WindowControl(searchDepth=1, Name=self.aero_title)
+        Use = uiautomation.WindowControl(searchDepth=1, Name=self.aero_title )
         # 点击子应用，进入子应用
         Use.Control(searchDepth=4,Name=childApp_Title).Click()
         return Use
@@ -243,7 +247,7 @@ class  module_initialize:
         # 获取配置文件中项目的路径
         ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()
         site = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\模块初始化.xlsx",
-                  "表单名称": "一维二维单元尺寸定义（模块）", "初始行": 1}
+                  "表单名称": "一维二维单元尺寸定义（模块）", "初始行": 1,"初始列":1}
         list_dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
         for dicts in list_dicts:
             if dicts["用例编号"] =="铺层数据库制作":

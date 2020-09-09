@@ -1,39 +1,42 @@
 # 用例步骤
-
 from src.utils.otherMethods.initialize import pywin_openAProgram,execute_useCase_initialize
 from OperatingControls.enterModule import BeingMeasured_popupWin,BeingMeasured_work,specialWay_OperatingControls
 from src.utils.OperatingControls.moduleControlOperation import ModuleControlOperation
-from src.utils.otherMethods.actual import ActualProcessing,Warning_PopUp
-import time
-from tool import instrument,Check_winControl
+from src.utils.otherMethods.actual import Warning_PopUp,GetActual_Value
+from tool import Check_winControl
 from src.utils.otherMethods.actual import localControl
 from src.utils.otherMethods.actual import Information_Win
+from src.utils.OperatingControls.moduleControlOperation import OperatingControls
+import time
+
 
 
 class LaminateOptimize_execute:
     """测试用例执行步骤"""
 
-    def __init__(self):
-        pass
+    def __init__(self,testCase_attribute,testCase_dict):
+        self.testCase_dict=testCase_dict  # 字典类型测试用例
+        self.testCase_attribute = testCase_attribute  # 字典类型嵌套字典类型的控件属性方法
+        self.Message_type = testCase_dict["预期值信息类型"]
+        self.ProjectPath = testCase_dict["被测程序文件地址"]
+        self.UseCase_Number = self.testCase_dict["用例编号"]  # 取出预期值
+        self.actual_Text = None
 
 
-    def textbox(self,testdicts):
+    def textbox(self):
         """
         文本框测试
         :return:
         """
-        MenuOptions=testdicts["所在模块"];Message_type = int(testdicts["提示信息类型"]);actual_Text=None
-        # 读取配置文档信息
-        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
+        # 连接到被测程序，并且通过菜单栏打开被测模块
+        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(self.testCase_dict)
         # 通过操作菜单栏，打开被测模块，然后切换到被测模块
         module_window=BeingMeasured_work(son_window).workField_general()
         # 向被测模块输入数据
-        ModuleControlOperation(module_window).laminate_optimize(testdicts)
+        OperatingControls(module_window).controlConsole(self.testCase_attribute,self.testCase_dict)
         # 获取实际值
-        if Message_type == "信息窗口":
-            expect_line = int(testdicts["预期结果行数"])
-            actual_Text=ActualProcessing(aero_window).laminateOptimize(expect_line)
-        return actual_Text
+        self.actual_Text = GetActual_Value(self.testCase_dict).ActualValue_controller()
+        return self.actual_Text
 
 
 

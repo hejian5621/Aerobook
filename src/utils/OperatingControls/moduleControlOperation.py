@@ -2,6 +2,208 @@
 import time
 from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
 from tool import instrument,KeyboardMouse,Check_winControl
+import sys, os
+
+
+class OperatingControls:
+    """操作控件"""
+
+
+
+
+    def __init__(self,generalWin,specialWin_one=None,specialWin_two=None):
+        self.generalWin=generalWin
+        self.specialWin_one = specialWin_one
+        self.specialWin_two = specialWin_two
+        self.dlg_spec=None
+
+
+    def controlConsole(self,Silverlight,argument ):
+        """
+        操作控件控制台
+        :param Silverlight: 控件的存在方法
+        :param argument: 控件的存在参数
+        :return:
+        """
+        location = argument["被测程序文件地址"]
+        els = argument["其他"]
+        for k1,v1 in Silverlight.items():   # 取出被操作控件的名称
+            for k2,v2 in argument.items():  # 取出被操作控件的名称
+                if k1 == k2:
+                    # 当两个名称相等的时候
+                    if v2 !="默认" :   # 当控件不等于默认（默认代表不用操作控件）
+                        ControlTypes =v1["控件类型"]
+                        ControlInstance = v1["所操作实例"]
+                        Controlmethod = v1["唯一标识方法"]
+                        discern = v1["唯一标识"]
+                        waitingTime = v1["操作控件后等待时间"]
+                        whetherpopup = v1["是否有弹窗出现"]
+                        WindowInstance=OperatingControls(self.generalWin,self.specialWin_one,self.specialWin_two).\
+                            OperationControlInstance(ControlInstance)  # 获取操作控件实例
+                        dlg_spec = OperatingControls(WindowInstance).IdentificationMethod(Controlmethod,discern)  # 获取操作控件实例
+                        if ControlTypes=="文本框":   # 当控件是文本框的时候
+                            if els == "拼接路径":   # 如果是路径文本框，就判断需不需要拼接路径
+                                v2=location+v2
+                            Check_winControl(None, dlg_spec).Verify_inputBox(v2)
+                        elif ControlTypes=="勾选框":
+                            Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
+                        elif ControlTypes == "按钮" and whetherpopup=="否":
+                            dlg_spec.check()
+                            dlg_spec.click()
+                        elif ControlTypes == "按钮" and whetherpopup=="是":
+                            OperatingControls(dlg_spec).button_popUp(v1,location,v2)
+                        else:
+                            print("说明控件属性", __file__, sys._getframe().f_lineno)
+                            os._exit(0)
+                        time.sleep(waitingTime)
+
+
+
+    def OperationControlInstance(self,ControlInstance):
+        """
+        获取操作控件的实例
+        :return:
+        """
+        if ControlInstance=="通用":
+            if self.generalWin:
+                return  self.generalWin
+            else:
+                print("传过来的实例为空", __file__, sys._getframe().f_lineno)
+                os._exit(0)
+        elif ControlInstance=="特殊一":
+            if self.specialWin_one:
+                return self.specialWin_one
+            else:
+                print("传过来的实例为空", __file__, sys._getframe().f_lineno)
+                os._exit(0)
+        elif ControlInstance=="特殊二":
+            if self.specialWin_two:
+                return self.specialWin_two
+            else:
+                print("传过来的实例为空", __file__, sys._getframe().f_lineno)
+                os._exit(0)
+        else:
+            if self.generalWin:
+                return self.generalWin
+            else:
+                print("传过来的实例为空", __file__, sys._getframe().f_lineno)
+                os._exit(0)
+
+
+
+    def IdentificationMethod(self,Controlmethod,discern):
+        """
+        唯一标识的操作方法
+        :return:
+        """
+        if Controlmethod=="方式一":
+            # self.dlg_spec=self.generalWin[discern]
+           self.dlg_spec= OperatingControls(self.generalWin).ExpressionAssembly(discern)
+        elif Controlmethod=="方式二":
+            list1=discern.split("；")
+            self.dlg_spec = self.generalWin.child_window(title=list1[0], class_name=list1[1])
+        else:
+            print("没有唯一标识的操作方法", __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        return  self.dlg_spec
+
+
+
+    def ExpressionAssembly(self, str_Name):
+        """
+        组装表达式
+        :param str_Name:
+        :return:
+        """
+        if str_Name=="Edit":
+            self.dlg_spec=self.generalWin.Edit
+        elif str_Name=="Edit2":
+            self.dlg_spec = self.generalWin.Edit2
+        elif str_Name=="Edit3":
+            self.dlg_spec = self.generalWin.Edit3
+        elif str_Name=="Edit4":
+            self.dlg_spec = self.generalWin.Edit4
+        elif str_Name=="Edit5":
+            self.dlg_spec = self.generalWin.Edit5
+        elif str_Name=="Edit6":
+            self.dlg_spec = self.generalWin.Edit6
+        elif str_Name=="Edit7":
+            self.dlg_spec = self.generalWin.Edit7
+        elif str_Name=="Edit8":
+            self.dlg_spec = self.generalWin.Edit8
+        elif str_Name=="Edit9":
+            self.dlg_spec = self.generalWin.Edit9
+        elif str_Name=="Edit10":
+            self.dlg_spec = self.generalWin.Edit10
+        elif str_Name=="Edit11":
+            self.dlg_spec = self.generalWin.Edit11
+        elif str_Name=="Edit12":
+            self.dlg_spec = self.generalWin.Edit12
+        elif str_Name=="Edit13":
+            self.dlg_spec = self.generalWin.Edit13
+        elif str_Name == "Edit14":
+            self.dlg_spec = self.generalWin.Edit14
+        elif str_Name == "Edit15":
+            self.dlg_spec = self.generalWin.Edit15
+        elif str_Name == "Edit16":
+            self.dlg_spec = self.generalWin.Edit16
+        elif str_Name == "路径Edit":
+            self.dlg_spec = self.generalWin.路径Edit
+        elif str_Name == "Button3":
+            self.dlg_spec = self.generalWin.Button3
+        elif str_Name == "CheckBox0":
+            self.dlg_spec = self.generalWin.CheckBox0
+        elif str_Name == "CheckBox1":
+            self.dlg_spec = self.generalWin.CheckBox1
+        elif str_Name == "CheckBox2":
+            self.dlg_spec = self.generalWin.CheckBox2
+        elif str_Name == "Button1":
+            self.dlg_spec = self.generalWin.Button1
+        elif str_Name == "Button2":
+            self.dlg_spec = self.generalWin.Button2
+        elif str_Name == "Button3":
+            self.dlg_spec = self.generalWin.Button3
+
+        else:
+            print("str_Name:",str_Name)
+            self.dlg_spec = self.generalWin[str_Name]
+        return self.dlg_spec
+
+
+
+    def button_popUp(self, properties,location, valu):
+        """
+       文本框输入
+       :param  properties: 控件的属性
+       :param  location: 项目存放路径
+       :param  valu: 项目存放路径
+       :return:
+       """
+        nestWin_Dicti ={}
+        examine =None
+        PopupTitle=properties["弹窗标题"]
+        Popuptype = properties["弹窗类型"]
+        nestPopup = properties["是否有嵌套弹窗"]
+        Check_winControl(PopupTitle,self.generalWin).window_WhetherOpen()  # 判断预期窗口是否出现
+        if Popuptype=="路径弹框":  # 操作弹窗套件
+            closeName = properties["关闭弹窗按钮名称"]
+            filename = properties["弹窗中输入文件名"]
+            parWin1_Dicti = {"窗口标题": PopupTitle, "关闭窗口控件名称": closeName,"地址": location, "文件夹输入内容": filename}
+            # 判断有没有嵌套弹窗
+            if nestPopup=="是":
+                examine= "检查"
+                nest_PopupTitle = properties["嵌套弹窗标题"]
+                nest_closeName = properties["嵌套弹窗关闭按钮名称"]
+                nestWin_Dicti = {"嵌套窗口标题": nest_PopupTitle, "嵌套控件名称": nest_closeName }
+            ControlOperationSuite(None).SelectFile_Popover(parWin1_Dicti, examine, nestWin_Dicti)
+        else:
+            print("没有弹窗类型", __file__, sys._getframe().f_lineno)
+            os._exit(0)
+
+
+
+
+
 
 
 class ModuleControlOperation():
@@ -21,28 +223,26 @@ class ModuleControlOperation():
         :param dicti: 输入的实际数据
         :return:
         """
-        Max=dicti["最大铺层数"]
-        minimum=dicti["最小铺层数"]
-        LayerThan1 = dicti["铺层比一"]
-        LayerThan2 = dicti["铺层比二"]
-        LayerThan3 = dicti["铺层比三"]
-        ToleranceThan = dicti["容差比"]
-        thickness_monolayer = dicti["单层厚度"]
-        elasticityModulusE11 = dicti["弹性模量E11"]
-        elasticityModulusE22 = dicti["弹性模量E22"]
-        PoissonRatio = dicti["泊松比v12"]
-        shearElasticity = dicti["剪切模量G12"]
-        LaminateLength=dicti["层合板长度"]
-        LaminateWidth=dicti["层合板宽度"]
-        Mat8 = dicti["Mat8材料ID"]
-        database = dicti["数据库名称"]
-        save_database = dicti["保存为铺层数据库"]
-        save_file = dicti["保存为Excel文件"]
-        path1 = dicti["路径"]
-        solve = dicti["求解"]
-        solve_time = int(dicti["求解按钮等待时间"])
-        clo = dicti["关闭"]
-        clo_time = int(dicti["关闭按钮等待时间"])
+        Max=dicti["最大铺层数文本框"]
+        minimum=dicti["最小铺层数文本框"]
+        LayerThan1 = dicti["铺层比一文本框"]
+        LayerThan2 = dicti["铺层比二文本框"]
+        LayerThan3 = dicti["铺层比三文本框"]
+        ToleranceThan = dicti["容差比文本框"]
+        thickness_monolayer = dicti["单层厚度文本框"]
+        elasticityModulusE11 = dicti["弹性模量E11文本框"]
+        elasticityModulusE22 = dicti["弹性模量E22文本框"]
+        PoissonRatio = dicti["泊松比v12文本框"]
+        shearElasticity = dicti["剪切模量G12文本框"]
+        LaminateLength=dicti["层合板长度文本框"]
+        LaminateWidth=dicti["层合板宽度文本框"]
+        Mat8 = dicti["Mat8材料ID文本框"]
+        database = dicti["数据库名称文本框"]
+        save_database = dicti["保存为铺层数据库勾选框"]
+        save_file = dicti["保存为Excel文件勾选框"]
+        path1 = dicti["路径按钮"]
+        solve = dicti["求解按钮"]
+        clo = dicti["关闭按钮"]
         if Max!="默认":
             #最大铺层数文本框
             self.dlg_spec.Edit.set_text(Max)
@@ -101,12 +301,12 @@ class ModuleControlOperation():
             time.sleep(0.5)
             #点击求解按钮
             self.dlg_spec.Button2.click()
-            time.sleep(solve_time)
+            time.sleep(1)
         if clo != "默认":
             time.sleep(0.5)
             # 点击关闭按钮
             self.dlg_spec.Button3.click()
-            time.sleep(clo_time)
+            time.sleep(1)
 
 
 

@@ -1,3 +1,5 @@
+# 强度校核
+
 
 from pywinauto.application import Application
 import time

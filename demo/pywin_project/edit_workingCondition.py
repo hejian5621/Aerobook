@@ -10,12 +10,8 @@ from pywinauto import findwindows
 
 
 
+testdicts={"所在模块":"载荷信息->编辑工况"}
 
-
-
-testdicts={}
-#
-testdicts["所在模块"] = "载荷信息->编辑工况"
 #
 #
 aero_window, module_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
@@ -28,11 +24,22 @@ dlg_spec.print_control_identifiers()
 
 print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
+
+
+variable="RadioButton2"
+
+variable1="Edit2"
+
+
 # # 勾选新建勾选框
-# dlg_spec.RadioButton2.click()
+dlg1_spec=dlg_spec[variable]
+
+dlg1_spec.click()
+
 #
 # # 在新建文本框中输入数据
-# dlg_spec.Edit2.set_text("all")
+dlg2_spec=dlg_spec[variable1]
+dlg2_spec.set_text("all")
 #
 #
 # # 点击全部取消工况按钮

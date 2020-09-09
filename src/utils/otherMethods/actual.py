@@ -3,6 +3,44 @@ import time,os,re, datetime
 from tool import pictureProcessing
 from pywinauto.application import Application
 from tool import htmlFormat
+from tool import Check_winControl
+
+
+
+
+class GetActual_Value:
+    """获取实际值"""
+
+    def __init__(self,testCase_dict,instance=None):
+        self.testCase_dict=testCase_dict
+        self.instance = instance
+        self.actual_Text=None
+
+
+
+    def ActualValue_controller(self):
+        """
+        获取实际值
+        :return:
+        """
+        Message_type = self.testCase_dict["预期值信息类型"]
+        ProjectPath = self.testCase_dict["被测程序文件地址"]
+        UseCase_Number = self.testCase_dict["用例编号"]  # 取出预期值
+        if Message_type == "警告弹窗":  # 获取警告弹窗的文本信息（实际值）
+            result= Warning_PopUp().Check_warning()
+            if result:    # 如果警告弹窗存在
+                self.actual_Text = Warning_PopUp().Warning_PopUp_TXT(UseCase_Number)
+                # 关闭警告窗口
+                Check_winControl("警告", "OK").popUp_Whether_close()
+            else:
+                self.actual_Text="没有警告弹窗"
+        elif Message_type == "信息窗口":  # 获取信息窗口的文本信息（实际值）
+            self.actual_Text = Information_Win().acquire_HTML_TXT(ProjectPath)
+        else:
+            import sys, os
+            print("该“%r”测试用例没有说实际值的获取途径" % UseCase_Number, __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        return self.actual_Text
 
 
 
@@ -10,8 +48,22 @@ class Warning_PopUp:
     """警告弹窗实际值"""
 
 
-    def __init__(self,dlg_spec):
-        self.dlg_spec=dlg_spec
+    def __init__(self):
+        pass
+
+    def Check_warning(self):
+        """
+        检查警告弹窗是否存在
+        :return:
+        """
+        from pywinauto import findwindows
+        try:
+            app = Application().connect(title_re="警告")
+            dlg_spec = app.window(title="警告")
+        except findwindows.ElementNotFoundError:
+            return False
+        else:
+            return True
 
 
     def Warning_PopUp_TXT(self,UseCase_Number):

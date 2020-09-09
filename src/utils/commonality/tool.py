@@ -71,6 +71,8 @@ class KeyboardMouse:
         self.k.release_key(self.k.shift_key) # 释放键盘上的shift键
 
 
+
+
 """图片处理"""
 class pictureProcessing:
     """图片处理"""

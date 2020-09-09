@@ -49,19 +49,11 @@ class ProfileDataProcessing:
         config = ConfigObj(location, encoding='UTF8')
         config[self.column][ self.programa] = deploy_value
         config.write()
-        # config.write()
-
-        #  修改内容
-        # cf.set("txtB",self.programa, deploy_value)
-        # cf.write(open(location, "r+", encoding="utf-8"))  # r+模式
-        # self.argument = cf.get(self.column, self.programa)
 
 
 
-#
-# ProfileDataProcessing("commonality","ProjectSave_path").\
-#     config_File_amend(r"F:\Aerobook\src\testCase\projectFile\automateFile\\")
-# APP_ID=ProfileDataProcessing("commonality","APP_ID").config_File()
+
+
 
 
 

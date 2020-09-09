@@ -2,7 +2,7 @@
 
 
 
-from src.utils.otherMethods.initialize import programInitialization
+
 from pywinauto.application import Application
 from config.configurationFile import ProfileDataProcessing
 
@@ -21,6 +21,7 @@ WindowTop.EnumWindows("Aerobook v1.0.4")
 
 
 testdicts={"所在模块":"铺层信息->铺层数据库制作工具"}
+
 
 # 链接“铺层数据库制作工具”弹窗
 app = Application().connect(title_re="铺层数据库制作工具")

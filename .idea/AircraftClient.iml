@@ -58,6 +58,8 @@
       <sourceFolder url="file://$MODULE_DIR$/demo/Reading_Excel" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/demo/window_top" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/复材结构强度校核" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/OperatingControls" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/pywin_project" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (Aerobook) (2)" jdkType="Python SDK" />
