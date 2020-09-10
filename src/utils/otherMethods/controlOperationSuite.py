@@ -36,6 +36,7 @@ class  ControlOperationSuite:
         location     =     parWin_Dicti["地址"]
         filename_content=  parWin_Dicti["文件夹输入内容"]
         try :
+            print("PopWinTitle",PopWinTitle)
             app = Application().connect(title=PopWinTitle,timeout=20)
             self.dlg_spec = app.window(title=PopWinTitle)  # 切换到选择文件弹窗窗口
         except findwindows.ElementNotFoundError:

@@ -15,8 +15,8 @@ class LaminateOptimize_execute:
     """测试用例执行步骤"""
 
     def __init__(self,testCase_attribute,testCase_dict):
-        self.testCase_dict=testCase_dict  # 字典类型测试用例
         self.testCase_attribute = testCase_attribute  # 字典类型嵌套字典类型的控件属性方法
+        self.testCase_dict = testCase_dict  # 字典类型测试用例
         self.Message_type = testCase_dict["预期值信息类型"]
         self.ProjectPath = testCase_dict["被测程序文件地址"]
         self.UseCase_Number = self.testCase_dict["用例编号"]  # 取出预期值
@@ -39,15 +39,15 @@ class LaminateOptimize_execute:
         return self.actual_Text
 
 
-
-
 class Laminatedata_execute:
     """铺层数据库工具弹窗"""
 
-    def __init__(self, testdicts):
-        self.testdicts = testdicts
-        self.Message_type = testdicts["提示信息类型"]
-        self.source = testdicts["被测程序文件地址"]
+    def __init__(self,testCase_attribute,testCase_dict):
+        self.testCase_attribute = testCase_attribute  # 字典类型嵌套字典类型的控件属性方法
+        self.testCase_dict = testCase_dict  # 字典类型测试用例
+        self.Message_type = testCase_dict["预期值信息类型"]
+        self.ProjectPath = testCase_dict["被测程序文件地址"]
+        self.UseCase_Number = self.testCase_dict["用例编号"]  # 取出预期值
         self.actual_Text = None
 
 
@@ -56,29 +56,29 @@ class Laminatedata_execute:
         铺层数据库工具弹窗，选择文件文本框
         :return:
         """
-        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
+        pywin_openAProgram().execute_useCase_enterInto(self.testCase_dict)
         # 切入铺层数据库工具弹窗中
         module_window = BeingMeasured_popupWin("铺层数据库制作工具").menu_LetsGoTopopover()
+        # 切入铺层数据库工具弹窗中控件中
+        general_window,special_window_one = BeingMeasured_popupWin(None).Laminatedata_popUp(module_window)
         # 向被测模块输入数据
-        edit_list=ModuleControlOperation(module_window).Laminatedata_operation(self.testdicts)
+        OperatingControls(general_window,special_window_one,module_window).\
+            controlConsole(self.testCase_attribute, self.testCase_dict)
         # 获取实际值
-        if self.Message_type=="警告弹窗":
-            UseCase_Number = self.testdicts["用例编号"]  # 取出预期值
-            self.actual_Text=Warning_PopUp(aero_window).Warning_PopUp_TXT(UseCase_Number)
-            # 关闭警告窗口
-            Check_winControl("警告", "OK").popUp_Whether_close()
-        elif self.Message_type=="信息窗口":
-            self.actual_Text = Information_Win().acquire_HTML_TXT(self.source)
-        return self.actual_Text,edit_list
+        self.actual_Text = GetActual_Value(self.testCase_dict).ActualValue_controller()
+        return self.actual_Text
 
 
-class sizeInfo_1DXls_execute:
+class sizeInfo_1D2DXlsTemplate_execute:
     """尺寸信息--1D单元尺寸定义（模板）"""
 
-    def __init__(self, testdicts):
-        self.testdicts = testdicts
-        self.Message_type = testdicts["提示信息类型"]
-        self.source = testdicts["被测程序文件地址"]
+    def __init__(self, testCase_attribute,testCase_dict):
+        self.testCase_attribute = testCase_attribute  # 字典类型嵌套字典类型的控件属性方法
+        self.testCase_dict = testCase_dict  # 字典类型测试用例
+        self.Message_type = testCase_dict["预期值信息类型"]
+        self.ProjectPath = testCase_dict["被测程序文件地址"]
+        self.UseCase_Number = testCase_dict["用例编号"]  # 取出预期值
+        self.results_waitTime = testCase_dict["测试结果等到时间"]  # 取出预期值
         self.actual_Text = None
 
 
@@ -88,24 +88,15 @@ class sizeInfo_1DXls_execute:
         选择文件文本框
         :return:
         """
-        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(self.testdicts)
-        # 切换到尺寸定义工作栏
+        # 连接到被测程序，并且通过菜单栏打开被测模块
+        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(self.testCase_dict)
+        # 通过操作菜单栏，打开被测模块，然后切换到被测模块
         module_window = BeingMeasured_work(son_window).workField_sizeInfo()
-        ModuleControlOperation(module_window).sizeInfo_1DXls_operation( self.testdicts)
+        # 向被测模块输入数据
+        OperatingControls(module_window).controlConsole(self.testCase_attribute, self.testCase_dict)
         # 获取实际值
-        if self.Message_type == "警告弹窗":
-            UseCase_Number = testdicts["用例编号"]  # 取出预期值
-            self.actual_Text = Warning_PopUp(aero_window).Warning_PopUp_TXT(UseCase_Number)
-
-            # 关闭警告窗口
-            Check_winControl("警告", "OK").popUp_Whether_close()
-        elif self.Message_type == "信息窗口":
-            # expect_line = int(testdicts["预期结果行数"])
-            # actual_Text = ActualProcessing(aero_window).laminateOptimize(expect_line)
-            # 通过获取html文件里的内容获取”信息窗口“里的内容
-            self.actual_Text = Information_Win().acquire_HTML_TXT(self.source)
-        else:
-            print("没有获取实际的文本测试结果")
+        time.sleep(self.results_waitTime)
+        self.actual_Text = GetActual_Value(self.testCase_dict).ActualValue_controller()
         return self.actual_Text
 
 

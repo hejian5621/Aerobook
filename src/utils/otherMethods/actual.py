@@ -23,9 +23,10 @@ class GetActual_Value:
         获取实际值
         :return:
         """
+
         Message_type = self.testCase_dict["预期值信息类型"]
-        ProjectPath = self.testCase_dict["被测程序文件地址"]
         UseCase_Number = self.testCase_dict["用例编号"]  # 取出预期值
+        print("开始获取实际值,途径：", Message_type)
         if Message_type == "警告弹窗":  # 获取警告弹窗的文本信息（实际值）
             result= Warning_PopUp().Check_warning()
             if result:    # 如果警告弹窗存在
@@ -35,6 +36,7 @@ class GetActual_Value:
             else:
                 self.actual_Text="没有警告弹窗"
         elif Message_type == "信息窗口":  # 获取信息窗口的文本信息（实际值）
+            ProjectPath = self.testCase_dict["被测程序文件地址"]
             self.actual_Text = Information_Win().acquire_HTML_TXT(ProjectPath)
         else:
             import sys, os
@@ -56,11 +58,11 @@ class Warning_PopUp:
         检查警告弹窗是否存在
         :return:
         """
-        from pywinauto import findwindows
+        from pywinauto import findwindows,timings
         try:
-            app = Application().connect(title_re="警告")
+            app = Application().connect(title_re="警告",timeout=0.5)
             dlg_spec = app.window(title="警告")
-        except findwindows.ElementNotFoundError:
+        except (findwindows.ElementNotFoundError,timings.TimeoutError):
             return False
         else:
             return True

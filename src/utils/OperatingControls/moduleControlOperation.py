@@ -51,6 +51,7 @@ class OperatingControls:
                             dlg_spec.check()
                             dlg_spec.click()
                         elif ControlTypes == "按钮" and whetherpopup=="是":
+                            print("是否点击")
                             OperatingControls(dlg_spec).button_popUp(v1,location,v2)
                         else:
                             print("说明控件属性", __file__, sys._getframe().f_lineno)
@@ -149,21 +150,35 @@ class OperatingControls:
             self.dlg_spec = self.generalWin.Edit16
         elif str_Name == "路径Edit":
             self.dlg_spec = self.generalWin.路径Edit
-        elif str_Name == "Button3":
-            self.dlg_spec = self.generalWin.Button3
         elif str_Name == "CheckBox0":
             self.dlg_spec = self.generalWin.CheckBox0
         elif str_Name == "CheckBox1":
             self.dlg_spec = self.generalWin.CheckBox1
         elif str_Name == "CheckBox2":
             self.dlg_spec = self.generalWin.CheckBox2
+        elif str_Name == "Button":
+            self.dlg_spec = self.generalWin.Button
+
         elif str_Name == "Button1":
             self.dlg_spec = self.generalWin.Button1
         elif str_Name == "Button2":
             self.dlg_spec = self.generalWin.Button2
         elif str_Name == "Button3":
             self.dlg_spec = self.generalWin.Button3
-
+        elif str_Name == "Button4":
+            self.dlg_spec = self.generalWin.Button4
+        elif str_Name == "Button5":
+            self.dlg_spec = self.generalWin.Button5
+        elif str_Name == "Button6":
+            self.dlg_spec = self.generalWin.Button6
+        elif str_Name == "RadioButton":
+            self.dlg_spec = self.generalWin.RadioButton
+        elif str_Name == "RadioButton2":
+            self.dlg_spec = self.generalWin.RadioButton2
+        elif str_Name == "RadioButton3":
+            self.dlg_spec = self.generalWin.RadioButton3
+        elif str_Name == "RadioButton4":
+            self.dlg_spec = self.generalWin.RadioButton4
         else:
             print("str_Name:",str_Name)
             self.dlg_spec = self.generalWin[str_Name]
@@ -185,16 +200,16 @@ class OperatingControls:
         Popuptype = properties["弹窗类型"]
         nestPopup = properties["是否有嵌套弹窗"]
         Check_winControl(PopupTitle,self.generalWin).window_WhetherOpen()  # 判断预期窗口是否出现
-        if Popuptype=="路径弹框":  # 操作弹窗套件
+        if Popuptype=="路径弹窗":  # 操作弹窗套件
             closeName = properties["关闭弹窗按钮名称"]
             filename = properties["弹窗中输入文件名"]
-            parWin1_Dicti = {"窗口标题": PopupTitle, "关闭窗口控件名称": closeName,"地址": location, "文件夹输入内容": filename}
             # 判断有没有嵌套弹窗
             if nestPopup=="是":
                 examine= "检查"
                 nest_PopupTitle = properties["嵌套弹窗标题"]
                 nest_closeName = properties["嵌套弹窗关闭按钮名称"]
                 nestWin_Dicti = {"嵌套窗口标题": nest_PopupTitle, "嵌套控件名称": nest_closeName }
+            parWin1_Dicti = {"窗口标题": PopupTitle, "关闭窗口控件名称": closeName, "地址": location, "文件夹输入内容": filename}
             ControlOperationSuite(None).SelectFile_Popover(parWin1_Dicti, examine, nestWin_Dicti)
         else:
             print("没有弹窗类型", __file__, sys._getframe().f_lineno)
@@ -307,7 +322,6 @@ class ModuleControlOperation():
             # 点击关闭按钮
             self.dlg_spec.Button3.click()
             time.sleep(1)
-
 
 
     def loaddatabase_popUp_operation(self,dicti):

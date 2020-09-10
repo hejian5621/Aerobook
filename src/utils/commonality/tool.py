@@ -197,18 +197,13 @@ class  Check_winControl:
         while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
             result =None
             try:
-                Application().connect(title=self,timeout=0.5)
+                Application().connect(title=self.title)
             except findwindows.ElementAmbiguousError:  # 捕获如果有多个重复的弹窗的异常
                 break
             except (findwindows.ElementNotFoundError,timings.TimeoutError):  # 如果找不到弹窗
                 if (self.CircleInitial % 10) == 0:    #  如果循环次数数10的倍数，就再次点击按钮
                     self.triggerButton.click()
                 elif  self.CircleInitial==1 :    # 如果第一次链接不是，在点击一次
-                    self.triggerButton.click()
-            except findwindows.ElementNotFoundError or timings.TimeoutError:  # 如果找不到弹窗
-                if (self.CircleInitial % 10) == 0:  # 如果循环次数数10的倍数，就再次点击按钮
-                    self.triggerButton.click()
-                elif self.CircleInitial == 1:  # 如果第一次链接不是，在点击一次
                     self.triggerButton.click()
             else:
                 break                                 # 如果找到了弹窗就退出弹窗
@@ -247,7 +242,7 @@ class  Check_winControl:
         """
         while self.CircleInitial <= self.cycleIndex:
             try:
-                app = Application().connect(title=self.title, timeout=0.1)
+                app = Application().connect(title=self.title)
                 py_app = app.window(title=self.title)  # 切换到需要关闭的窗口
             except findwindows.ElementAmbiguousError:  # 捕获如果有多个重复的弹窗的异常
                 print("多个重复的弹窗", __file__, sys._getframe().f_lineno)

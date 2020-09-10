@@ -41,6 +41,15 @@ class BeingMeasured_popupWin:
         return self.popupWin
 
 
+    def Laminatedata_popUp(self,module_window):
+        """
+        铺层数据库制作工具弹窗
+        切换到控件实例
+        :return:
+        """
+        general_window=module_window.filepicker0
+        special_window_one=module_window.filepicker2
+        return general_window,special_window_one
 
 
 
