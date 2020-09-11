@@ -10,7 +10,7 @@ from src.utils.otherMethods.initialize import pywin_openAProgram
 
 testCase_attribute={"所在模块":"尺寸信息->一维单元尺寸定义（模板）"}
 
-aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(testCase_attribute)
+aero_window, son_window = pywin_openAProgram().menuOpen(testCase_attribute)
 
 print(1)
 # 切入铺层数据库工具弹窗中

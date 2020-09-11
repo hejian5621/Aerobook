@@ -8,20 +8,20 @@ import sys,os,time
 
 
 
-inModule="求解计算->求解计算"
-
 
 txet=r"F:\Aerobook\demo\pywin_ToFindControl"
 
-testdicts={}
-
-testdicts["所在模块"] = "尺寸信息->一维单元尺寸定义（模板）"
+testdicts ={"所在模块":"求解计算->求解计算"}
 
 
-aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
+aero_window, son_window = pywin_openAProgram().menuOpen(testdicts)
 
 
 dlg_spec=BeingMeasured_work(son_window).workField_general()
+
+
+dlg_spec.print_control_identifiers()
+
 
 # 属性更新对应的路径的文本框
 # dlg_spec.Edit.set_text(txet)
@@ -40,7 +40,7 @@ dlg_spec=BeingMeasured_work(son_window).workField_general()
 # time.sleep(2)
 
 # # 点击属性更新按钮
-# dlg_spec.属性更新Button.click()
+# dlg_spec.Button4.click()
 # time.sleep(2)
 #
 # # 点击求解计算按钮

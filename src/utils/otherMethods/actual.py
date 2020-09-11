@@ -38,6 +38,9 @@ class GetActual_Value:
         elif Message_type == "信息窗口":  # 获取信息窗口的文本信息（实际值）
             ProjectPath = self.testCase_dict["被测程序文件地址"]
             self.actual_Text = Information_Win().acquire_HTML_TXT(ProjectPath)
+        elif Message_type == "控件文本":  # 获取信息窗口的文本信息（实际值）
+            # 获取工况组合下拉框里的文本信息
+            self.actual_Text = localControl(self.instance).LocalControl_TXT()
         else:
             import sys, os
             print("该“%r”测试用例没有说实际值的获取途径" % UseCase_Number, __file__, sys._getframe().f_lineno)

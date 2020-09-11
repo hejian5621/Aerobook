@@ -5,7 +5,7 @@ import uiautomation
 from config.configurationFile import ProfileDataProcessing
 from src.utils.commonality.ExcelFile import read_excel
 import time,os
-
+from OperatingControls.enterModule import specialWay_OperatingControls
 
 
 
@@ -82,16 +82,13 @@ class pywin_openAProgram:
         """
         main_window = Application().connect(title_re="Aerobook v1.0.4", timeout=10)
         Aerobook_main = main_window.window(title_re=self.aero_title)
-        # Aero_window =  Application().connect(title_re=self.aero_title, timeout=10)  # 通过Aerobook标题连接Aerobook
-        # Aero1_window=Aero_window.window(title_re=self.aero_title).wait("exists", timeout=10, retry_interval=0.1)
-        # Aerobook_main.print_control_identifiers()
         return Aerobook_main
 
 
 
-    def execute_useCase_enterInto(self, testdicts):
+    def menuOpen(self, testdicts):
         """
-        在进行用例步骤操作时的初始化
+        在执行测试用例前，首先通过菜单栏打开被测模块
         链接Aercheck，并点击菜单按钮
         :param testdicts:
         :return:
@@ -104,6 +101,20 @@ class pywin_openAProgram:
         son_window = dlg_spec.child_window(title=self.aerocheck_title, class_name="wxWindowNR")
         son_window.menu_select(MenuOptions)# 点击菜单选项
         return aero_window,son_window
+
+
+    def menuOpen_switchingWin_UIA(self, testdicts,operationWindow):
+        """
+        在执行测试用例前，首先通过菜单栏打开被测模块
+        然后通过uiautomation框架中的方法切换窗口，针对工作栏
+        :return:
+        """
+        aero_window, son_window=pywin_openAProgram().menuOpen(testdicts)
+        specialWay_OperatingControls(operationWindow).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
+        return aero_window, son_window
+
+
+
 
 
 class UIA_link:
@@ -151,8 +162,8 @@ class execute_useCase_initialize:
         aero_window = pywin_openAProgram().entrance_subroutine_title()
         # 从Aerobook切换到子应用
         dlg_spec1 = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
-        dlg_spec2 = dlg_spec1.child_window(title=self.aerocheck_title, class_name="wxWindowNR")
-        return dlg_spec2
+        son_window = dlg_spec1.child_window(title=self.aerocheck_title, class_name="wxWindowNR")
+        return son_window
 
 
 
@@ -164,7 +175,7 @@ class execute_useCase_initialize:
         """
         from OperatingControls.enterModule import BeingMeasured_popupWin
         self.dict["所在模块"]="载荷信息->编辑工况"
-        pywin_openAProgram().execute_useCase_enterInto(self.dict)
+        pywin_openAProgram().menuOpen(self.dict)
         # 切换到编辑工况弹窗
         module_window = BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
         while True:
@@ -187,7 +198,7 @@ class execute_useCase_initialize:
         relativeAddress = path.location()  # 获取相对位置
         operationWindow="编辑材料许用值"
         self.dict["所在模块"]="材料信息->定义复合材料参数"
-        aero_window, son_window = pywin_openAProgram().execute_useCase_enterInto(self.dict)
+        aero_window, son_window = pywin_openAProgram().menuOpen(self.dict)
         specialWay_OperatingControls(operationWindow).uia_OperatingControls()
         module_window= BeingMeasured_work(son_window).workField_composite_information()
         dlg_spec=module_window.child_window(title="GridWindow", class_name="wxWindowNR")
@@ -237,26 +248,48 @@ class  module_initialize:
 
 
 
-    def sizeInformation(self):
+    def LaminatedataPopup(self):
         """
-        尺寸信息--一维单元尺寸定义、二维单元尺寸定义、一维单元尺寸定义（模板）、二维单元尺寸定义（模板）
+        尺寸信息--铺层数据库制作工具
         在测试尺寸信息模块时需要进行铺层数据库的制作
         :return:
         """
         from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import Laminatedata_execute
-        # 获取配置文件中项目的路径
-        ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()
-        site = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\模块初始化.xlsx",
-                  "表单名称": "一维二维单元尺寸定义（模块）", "初始行": 1,"初始列":1}
+        # 从Excel中获取测试用例
+        ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()   # 获取配置文件中项目的路径
+        site = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\自动化测试用例初始化.xlsx",
+                  "表单名称": "铺层数据库制作工具", "初始行": 1,"初始列":1}
         list_dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
-        for dicts in list_dicts:
-            if dicts["用例编号"] =="铺层数据库制作":
-                self.dict=  dicts
-        self.dict["被测程序文件地址"] = ProjectPath
-        Laminatedata_execute(self.dict).SelectFile( )  # 调用测试步骤
+        # 从Excel中获取控件操作属性
+        site1 = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\控件属性已经操作方法初始化.xlsx",
+                "表单名称": "铺层数据库制作工具弹窗", "初始行": 1, "初始列": 1}
+        list_dicts1 = read_excel(site1).readExcel_ControlProperties()  # 读取测试用例
+        for  dicts in list_dicts:
+            dicts["被测程序文件地址"] = ProjectPath
+            Laminatedata_execute(list_dicts1,dicts).SelectFile( )  # 调用测试步骤
 
 
 
+    def sizeInformation(self):
+        """
+        尺寸信息--一维单元尺寸定义（模板）、二维单元尺寸定义（模板）
+        在测试尺寸信息模块时需要进行铺层数据库的制作
+        :return:
+        """
+        from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import sizeInfo_1D2DXlsTemplate_execute
+        # 从Excel中获取测试用例
+        ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()   # 获取配置文件中项目的路径
+        site = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\自动化测试用例初始化.xlsx",
+                  "表单名称": "自动化一维二维单元尺寸定义（模板）", "初始行": 1,"初始列":1}
+        list_dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
+        # 从Excel中获取控件操作属性
+        site1 = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\控件属性已经操作方法初始化.xlsx",
+                "表单名称": "自动化一维二维单元尺寸定义（模板）", "初始行": 1, "初始列": 1}
+        list_dicts1 = read_excel(site1).readExcel_ControlProperties()  # 读取测试用例
+        for  dicts in list_dicts:
+            dicts["被测程序文件地址"] = ProjectPath
+            actual_Text=sizeInfo_1D2DXlsTemplate_execute(list_dicts1, dicts).SelectFile() # 调用测试步骤
+            print("actual_Text:",actual_Text)
 
 
 

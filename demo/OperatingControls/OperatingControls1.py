@@ -32,7 +32,7 @@ for dict in dicts2 :
     dict["被测程序文件地址"]= r"F:\Aerobook\src\testCase\projectFile\automateFile"
 
 
-    aero_window, module_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
+    aero_window, module_window = pywin_openAProgram().menuOpen(testdicts)
 
     # 通过操作菜单栏，打开被测模块，然后切换到被测模块
     module_window1=BeingMeasured_work( module_window).workField_general()

@@ -3,7 +3,8 @@ import time
 from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
 from tool import instrument,KeyboardMouse,Check_winControl
 import sys, os
-
+from OperatingControls.enterModule import BeingMeasured_popupWin
+from config.configurationFile import ProfileDataProcessing
 
 class OperatingControls:
     """操作控件"""
@@ -50,9 +51,13 @@ class OperatingControls:
                         elif ControlTypes == "按钮" and whetherpopup=="否":
                             dlg_spec.check()
                             dlg_spec.click()
-                        elif ControlTypes == "按钮" and whetherpopup=="是":
+                        elif ControlTypes == "按钮" and whetherpopup=="是"  :
                             print("是否点击")
                             OperatingControls(dlg_spec).button_popUp(v1,location,v2)
+                        elif  ControlTypes == "坐标--文本框":
+                            OperatingControls(dlg_spec).Coordinate_Textbox(v2,discern)
+                        elif ControlTypes == "坐标--点击":
+                            pass
                         else:
                             print("说明控件属性", __file__, sys._getframe().f_lineno)
                             os._exit(0)
@@ -98,8 +103,8 @@ class OperatingControls:
         :return:
         """
         if Controlmethod=="方式一":
-            # self.dlg_spec=self.generalWin[discern]
            self.dlg_spec= OperatingControls(self.generalWin).ExpressionAssembly(discern)
+           Check_winControl("警告", "OK").popUp_Whether_close()
         elif Controlmethod=="方式二":
             list1=discern.split("；")
             self.dlg_spec = self.generalWin.child_window(title=list1[0], class_name=list1[1])
@@ -158,7 +163,6 @@ class OperatingControls:
             self.dlg_spec = self.generalWin.CheckBox2
         elif str_Name == "Button":
             self.dlg_spec = self.generalWin.Button
-
         elif str_Name == "Button1":
             self.dlg_spec = self.generalWin.Button1
         elif str_Name == "Button2":
@@ -171,6 +175,16 @@ class OperatingControls:
             self.dlg_spec = self.generalWin.Button5
         elif str_Name == "Button6":
             self.dlg_spec = self.generalWin.Button6
+        elif str_Name == "Button7":
+            self.dlg_spec = self.generalWin.Button7
+        elif str_Name == "Button8":
+            self.dlg_spec = self.generalWin.Button8
+        elif str_Name == "Button9":
+            self.dlg_spec = self.generalWin.Button9
+        elif str_Name == "Button10":
+            self.dlg_spec = self.generalWin.Button10
+        elif str_Name == "Button11":
+            self.dlg_spec = self.generalWin.Button11
         elif str_Name == "RadioButton":
             self.dlg_spec = self.generalWin.RadioButton
         elif str_Name == "RadioButton2":
@@ -188,7 +202,7 @@ class OperatingControls:
 
     def button_popUp(self, properties,location, valu):
         """
-       文本框输入
+       套件操作
        :param  properties: 控件的属性
        :param  location: 项目存放路径
        :param  valu: 项目存放路径
@@ -196,11 +210,11 @@ class OperatingControls:
        """
         nestWin_Dicti ={}
         examine =None
-        PopupTitle=properties["弹窗标题"]
         Popuptype = properties["弹窗类型"]
-        nestPopup = properties["是否有嵌套弹窗"]
-        Check_winControl(PopupTitle,self.generalWin).window_WhetherOpen()  # 判断预期窗口是否出现
         if Popuptype=="路径弹窗":  # 操作弹窗套件
+            PopupTitle = properties["弹窗标题"]
+            nestPopup = properties["是否有嵌套弹窗"]
+            Check_winControl(PopupTitle, self.generalWin).window_WhetherOpen()  # 判断预期窗口是否出现
             closeName = properties["关闭弹窗按钮名称"]
             filename = properties["弹窗中输入文件名"]
             # 判断有没有嵌套弹窗
@@ -211,13 +225,30 @@ class OperatingControls:
                 nestWin_Dicti = {"嵌套窗口标题": nest_PopupTitle, "嵌套控件名称": nest_closeName }
             parWin1_Dicti = {"窗口标题": PopupTitle, "关闭窗口控件名称": closeName, "地址": location, "文件夹输入内容": filename}
             ControlOperationSuite(None).SelectFile_Popover(parWin1_Dicti, examine, nestWin_Dicti)
+        if Popuptype == "选择材料许用值曲线":  # 操作弹窗套件
+            ControlOperationSuite(None).select_AllowableCurve(valu)
         else:
             print("没有弹窗类型", __file__, sys._getframe().f_lineno)
             os._exit(0)
 
 
 
-
+    def Coordinate_Textbox(self, list_argument,discern):
+        """
+        坐标--文本框
+        通过点击坐标位置显示文本框，然后输入内容
+        选择材料许用值曲线
+        :return:
+        """
+        # 解析参数
+        list_AfterParsing=list_argument.split("；")
+        print("list_AfterParsing:",list_AfterParsing)
+        coord_X=int(list_AfterParsing[0])
+        coord_Y = int(list_AfterParsing[1])
+        valu=list_AfterParsing[2]
+        dlg1_spec = OperatingControls(self.generalWin).ExpressionAssembly(discern)
+        self.generalWin.double_click_input(coords=(coord_X, coord_Y), button="left")
+        Check_winControl(None, dlg1_spec).Verify_inputBox(valu)
 
 
 
@@ -803,56 +834,6 @@ class ModuleControlOperation():
 
 
 
-
-    def DefineAllowable_operation(self, dicti):
-        """
-        载荷信息--编辑工况
-        :return:
-        """
-        from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
-        param1 = dicti["拉伸对应增加按钮"]
-        param2 = dicti["压缩对应增加按钮"]
-        param3 = dicti["剪切对应增加按钮"]
-        param4 = dicti["在选择材料许用值曲线弹窗中"]
-        param5 = dicti["定义材料许用值选择结构单元按钮"]
-        param6 = dicti["定义材料许用值确认按钮"]
-        param7 = dicti["定义材料许用值关闭按钮"]
-        # self.dlg_spec.print_control_identifiers()
-        if param1 != "默认":
-            time.sleep(0.1)
-            # 拉伸对应增加按钮
-            dlg1_spec =self.dlg_spec.Button0
-            # 检查点击按钮后，应该打开的窗口是否打开
-            Check_winControl("选择材料许用值曲线", dlg1_spec).window_WhetherOpen()  # 判断预期窗口是否出现
-            testdicts = {"弹窗标题": "选择材料许用值曲线", "选择的值": param4}
-            ControlOperationSuite(None).select_AllowableCurve(testdicts)
-        if param2 != "默认":
-            time.sleep(0.1)
-            # 压缩对应增加按钮
-            dlg2_spec = self.dlg_spec.Button2
-            # 检查点击按钮后，应该打开的窗口是否打开
-            Check_winControl("选择材料许用值曲线", dlg2_spec).window_WhetherOpen()  # 判断预期窗口是否出现
-            testdicts = {"弹窗标题": "选择材料许用值曲线", "选择的值": param4}
-            ControlOperationSuite(None).select_AllowableCurve(testdicts)
-        if param3 != "默认":
-            time.sleep(0.1)
-            # 剪切对应增加按钮
-            dlg3_spec = self.dlg_spec.Button3
-            # 检查点击按钮后，应该打开的窗口是否打开
-            Check_winControl("选择材料许用值曲线", dlg3_spec).window_WhetherOpen()  # 判断预期窗口是否出现
-            testdicts = {"弹窗标题": "选择材料许用值曲线", "选择的值": param4}
-            ControlOperationSuite(None).select_AllowableCurve(testdicts)
-        if param5 != "默认":
-            time.sleep(0.5)
-            # 定义材料许用值选择结构单元按钮
-            self.dlg_spec.child_window(title="选择结构单元", class_name="Button").click()  # 点击“选择结构单元按钮”按钮
-            KeyboardMouse().selectionModel()  # 选择结构单元
-        if param6 != "默认":
-            time.sleep(0.1)
-            # 曲线坐标文本框，第三横行X竖行
-            self.dlg_spec.确认.click()
-            Check_winControl("编辑材料许用值曲线", "确认").popUp_Whether_close()
-            time.sleep(1)
 
 
 

@@ -14,7 +14,7 @@ testdicts={"所在模块":"载荷信息->编辑工况"}
 
 #
 #
-aero_window, module_window = pywin_openAProgram().execute_useCase_enterInto(testdicts)
+aero_window, module_window = pywin_openAProgram().menuOpen(testdicts)
 
 
 dlg_spec=BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
@@ -26,20 +26,16 @@ print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
 
 
-variable="RadioButton2"
 
-variable1="Edit2"
+# # # 勾选新建勾选框
+dlg_spec.RadioButton2.click()
+#
 
-
-# # 勾选新建勾选框
-dlg1_spec=dlg_spec[variable]
-
-dlg1_spec.click()
 
 #
 # # 在新建文本框中输入数据
-dlg2_spec=dlg_spec[variable1]
-dlg2_spec.set_text("all")
+dlg_spec.Edit2.set_text("all")
+
 #
 #
 # # 点击全部取消工况按钮
@@ -93,8 +89,8 @@ dlg2_spec.set_text("all")
 
 #
 #
-txt=dlg_spec.ComboBox.window_text()
-print("txt:",txt)
+# txt=dlg_spec.ComboBox.window_text()
+# print("txt:",txt)
 #
 # dlg_spec.print_control_identifiers()
 
@@ -104,7 +100,7 @@ print("txt:",txt)
 
 #
 # # 删除工况
-# dlg_spec.编辑工况Button.click()
+dlg_spec.编辑工况Button.click()
 
 
 
@@ -123,15 +119,3 @@ print("txt:",txt)
 # app = Application().connect(title_re="编辑工况")
 # dlg_spec = app.window(title="编辑工况")
 #
-#
-# while True:
-#     try:
-#         app = Application().connect(title_re="编辑工况")
-#         dlg_spec = app.window(title="编辑工况")
-#     except findwindows.ElementNotFoundError:
-#         print("接收到异常")
-#         break
-#     except:
-#         print("没有预料到的异常")
-#     else:
-#         print("没有异常")

@@ -6,7 +6,7 @@ from tool import instrument,Check_winControl
 from pywinauto import mouse
 from pykeyboard import PyKeyboard
 from pywinauto  import  findwindows
-
+from OperatingControls.enterModule import BeingMeasured_popupWin
 
 
 class  ControlOperationSuite:
@@ -36,7 +36,6 @@ class  ControlOperationSuite:
         location     =     parWin_Dicti["地址"]
         filename_content=  parWin_Dicti["文件夹输入内容"]
         try :
-            print("PopWinTitle",PopWinTitle)
             app = Application().connect(title=PopWinTitle,timeout=20)
             self.dlg_spec = app.window(title=PopWinTitle)  # 切换到选择文件弹窗窗口
         except findwindows.ElementNotFoundError:
@@ -190,37 +189,20 @@ class  ControlOperationSuite:
 
 
     """材料信息--定义复合材料参数--拉伸、压缩、剪切对应的增加按钮"""
-    def select_AllowableCurve(self,testdicts):
+    def select_AllowableCurve(self,list_argument):
         """
         材料信息--定义复合材料参数--拉伸、压缩、剪切对应的增加按钮
         选择材料许用值曲线
         :return:
         """
-        coord_X=None;coord_Y=None
-        from OperatingControls.enterModule import BeingMeasured_popupWin
-        from config.configurationFile import ProfileDataProcessing
-        popup_title =testdicts["弹窗标题"]
-        selective_value = testdicts["选择的值"]
-        # 获取配置文件中勾选行数的坐标
-        if selective_value=="第一行":
-            coord_X="coord1_X"
-            coord_Y="coord1_Y"
-        elif selective_value=="第二行":
-            coord_X = "coord2_X"
-            coord_Y = "coord2_Y"
-        elif selective_value=="第三行":
-            coord_X = "coord3_X"
-            coord_Y = "coord3_Y"
-        else:
-            coord_X = "coord1_X"
-            coord_Y = "coord1_Y"
-        coordX = ProfileDataProcessing("coordinates", coord_X ).config_File()  # 横坐标
-        coordY = ProfileDataProcessing("coordinates",  coord_Y).config_File()  # 纵坐标
+        list_AfterParsing = list_argument.split(";")
+        coord_X = list_AfterParsing[0]
+        coord_Y = list_AfterParsing[1]
         # 连接“选择材料许用值曲线”弹窗
         app_window = BeingMeasured_popupWin("选择材料许用值曲线").menu_LetsGoTopopover()
         dlg_spec=app_window.child_window(title="GridWindow", class_name="wxWindowNR")
         # 勾选数据
-        dlg_spec.double_click_input(coords=(int(coordX), int(coordY)), button="left")
+        dlg_spec.double_click_input(coords=(int(coord_X), int(coord_Y)), button="left")
         # 数据勾选完毕点击“确认”按钮
         app_window.确认.click()
         # 检查“选择材料许用值曲线”窗口是否关闭

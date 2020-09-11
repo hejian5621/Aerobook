@@ -285,9 +285,10 @@ class  Check_winControl:
         验证输入框是否输入正确的数据，如果还没有输入就再次输入，一直到输入成功为止
         :return:
         """
+        print("data:",data)
         self.triggerButton.set_text(data)  # 文本框
         while self.CircleInitial<self.cycleIndex:
-            State = self.triggerButton.window_text()  # 返回勾选框的勾选状态
+            State = self.triggerButton.window_text()  # 返回输入的文本
             if State == data:  # 0 表示没有勾选上
                 break
             else:
