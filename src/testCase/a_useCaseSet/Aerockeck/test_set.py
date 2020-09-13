@@ -3,46 +3,41 @@
 
 
 # 铺层库优化工作栏
-
-import unittest,time,os
-from assertpy import assert_that
-from BeautifulReport import BeautifulReport
-from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import execute_step
 from ddt import ddt,data
-from src.utils.commonality.ExcelFile import read_excel
+import unittest
+from assertpy import assert_that
 from config.relative_location import  path
-from src.utils.otherMethods.dataFormatConversion import FormatConversion
-from tool import instrument
+from BeautifulReport import BeautifulReport
+import  time
+from utils.otherMethods.unittest_start_finish import Initializing
 
 
 
 
-
-
-
-
-
-
-class Test_Laminatedata(unittest.TestCase):
+@ddt
+class Test_test(unittest.TestCase):
         """铺层数据库制作"""
-        global number
-        number = 1
+        def __init__(self,*args):
+            unittest.TestCase.__init__(self, *args)
+            global  number
+            global global_UseCase_Name
+            global_UseCase_Name=None
+            number=0
+
+
+
+
 
 
         def setUp(self):
             """用例执行前的初始化
                1、首先把需要的文件和模型复制一份出来
             """
-            global  number
-            # if number ==1:
-            #     instrument().delFile()
-            #     instrument().copyFile()
-
-
-
-
-
-
+            global  number ;global  global_UseCase_Name
+            print("测试开始")
+            print("global_UseCase_Name:",global_UseCase_Name)
+            real_UseCase_Name="Test_test"
+            number,global_UseCase_Name =Initializing().initialize_globalVariable(number,global_UseCase_Name,real_UseCase_Name)
 
 
 
@@ -51,64 +46,121 @@ class Test_Laminatedata(unittest.TestCase):
             """用例执行完后收尾
                            1、首先把复制的文件夹删除
             """
+            print("tearDown运行第”%r" % number)
             print("测试结束")
 
 
-
-        # # 测试用例Excel文件的相关信息
-        # site1 = [{"详细地址": "src\\testCase\\c_useCase_file\\Aerocheck\\铺层库优化工具.xlsx", "表单名称": "最大铺层数", "初始行": 1}]
-        # list_dicts = []
-        # for site in site1:
-        #     dicts1 = read_excel(site).readExcel_testCase()  # 读取测试用例
-        #     ar_testdicts = FormatConversion().RemoveSubscript(dicts1)
-        #     list_dicts = list_dicts + ar_testdicts
-        #
-        # @data(*list_dicts)  # 参数化参数用例
-        # @unittest.skip(u"无条件跳过此用例")
-        # def test_1(self, testdicts):
-        #     """铺层库优化工作栏，最大铺层数文本框测试用例"""
-        #     expect_result = testdicts["预期结果提示信息"]  # 取出预期值
-        #     actual_result = execute_step().textbox(testdicts)  # 调用测试步骤
-        #     # 断言测试结果
-        #     assert_that(expect_result).is_equal_to(actual_result)
-
-
-
-        def test_1(self):
+        list_dicts=[{"测试点":"b","c":"d"},{"测试点":"2","3":"4"},{"测试点":"6","7":"8"},{"测试点":"10","11":"12"}]
+        @data(*list_dicts)  # 参数化参数用例
+        def test_1(self,list):
             global number
+            print("list:",list)
             expect_result = 1
-            actual_result = 1
-            # 断言测试结果
-            assert_that(expect_result).is_equal_to(actual_result)
+            actual_result = 2
+            print("test_1运行第”%r"%number)
+            # number=number+1
+            # # 断言测试结果
+            # assert_that(expect_result).is_equal_to(actual_result)
 
 
         def test_2(self):
             global number
             expect_result = 1
-            actual_result = 1
+            actual_result = 2
+            print("test_2运行第”%r" % number)
             # 断言测试结果
-            assert_that(expect_result).is_equal_to(actual_result)
+            # assert_that(expect_result).is_equal_to(actual_result)
 
 
         def test_3(self):
             global number
             expect_result = 1
             actual_result = 1
+            print("test_3运行第”%r" % number)
             # 断言测试结果
-            assert_that(expect_result).is_equal_to(actual_result)
+            # assert_that(expect_result).is_equal_to(actual_result)
+
+
+@ddt
+class Test_test111(unittest.TestCase):
+        """铺层数据库制作"""
+        def __init__(self, *args):
+            unittest.TestCase.__init__(self, *args)
+            global_UseCase_Name = 1
+
+
+
+
+        def setUp(self):
+            """用例执行前的初始化
+               1、首先把需要的文件和模型复制一份出来
+            """
+            global number;global global_UseCase_Name
+            print("")
+            print("global_UseCase_Name:", global_UseCase_Name)
+            real_UseCase_Name = "Test_test111"
+            number1,global_UseCase_Name=Initializing().initialize_globalVariable(number, global_UseCase_Name, real_UseCase_Name)
+            print("number=",number1)
+            global_UseCase_Name = real_UseCase_Name
+            number=number1
+            print("number222", number)
+            print("")
+
+
+        def tearDown(self):
+            """用例执行完后收尾
+                           1、首先把复制的文件夹删除
+            """
+            global number
+            print("tearDown运行第”%r" % number)
+            print("测试结束")
+
+
+        list_dicts=[{"测试点":"20","21":"22"},{"测试点":"23","24":"25"},{"测试点":"26","27":"28"},{"测试点":"29","30":"31"}]
+        @data(*list_dicts)  # 参数化参数用例
+        def test_1(self,list):
+            global number
+            print("list:",list)
+            expect_result = 1
+            actual_result = 2
+            print("Test_test1test_1运行第”%r"%number)
+            # # 断言测试结果
+            # assert_that(expect_result).is_equal_to(actual_result)
+
+
+        def test_2(self):
+            global number
+            expect_result = 1
+            actual_result = 1
+            print("test_2运行第”%r" % number)
+            # 断言测试结果
+            # assert_that(expect_result).is_equal_to(actual_result)
+
+
+        def test_3(self):
+            global number
+            expect_result = 1
+            actual_result = 1
+            print("test_3运行第”%r" % number)
+            # 断言测试结果
+            # assert_that(expect_result).is_equal_to(actual_result)
 
 
 
 
 
 
-
-
-
-
+#
+# if __name__ == '__main__':
+#     unittest.main()
 
 
 if __name__ == '__main__':
-    unittest.main()
-
+    suite = unittest.TestSuite()
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_test))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_test111))
+    file_name=time.strftime("%Y%m%d%H%M%S")+"铺层库优化测试报告"    # 测试报告名称
+    relativeAddress = path.location()
+    logPath = relativeAddress+"report//Aerocheck//laminateOptimize_testReport//" # 测试报告保存地址
+    result = BeautifulReport(suite).report(filename=file_name,log_path=logPath,description="铺层库优化工作栏")
 

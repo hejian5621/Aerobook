@@ -159,13 +159,14 @@ class folderFile_dispose:
         :param list_filename:
         :return:
         """
-        # 拼接文件名和路径
-        for path1 in list_filename:  # 取出文件路径
-            list_path = self.sourceDir + "\\" + path1
-            my_file = Path(list_path)
-            if my_file.is_file():  # 先检查文件是否存在
-                # 指定的文件存在，就删除
-                os.remove(list_path)
+        if  list_filename:
+            # 拼接文件名和路径
+            for path1 in list_filename:  # 取出文件路径
+                list_path = self.sourceDir + "\\" + path1
+                my_file = Path(list_path)
+                if my_file.is_file():  # 先检查文件是否存在
+                    # 指定的文件存在，就删除
+                    os.remove(list_path)
 
 
 """检查窗口或者控件，是否存在"""

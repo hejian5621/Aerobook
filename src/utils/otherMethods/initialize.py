@@ -173,7 +173,9 @@ class execute_useCase_initialize:
         :return:
 
         """
+        from tool import folderFile_dispose, Check_winControl
         from OperatingControls.enterModule import BeingMeasured_popupWin
+        Check_winControl("编辑工况", "关闭").popUp_Whether_close()
         self.dict["所在模块"]="载荷信息->编辑工况"
         pywin_openAProgram().menuOpen(self.dict)
         # 切换到编辑工况弹窗
@@ -184,6 +186,7 @@ class execute_useCase_initialize:
                 module_window.编辑工况Button.click()
             else:
                 break
+        Check_winControl("编辑工况", "关闭").popUp_Whether_close()
 
 
     def clear_AllowableCurve(self):
