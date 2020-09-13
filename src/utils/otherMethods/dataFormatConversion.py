@@ -85,6 +85,15 @@ class FormatConversion:
 
 
 
+    def str_dicti(self):
+        """
+        拼接数据类型，用于读取读取Excel表格用例
+        :return:
+        """
+
+
+
+
 # a1 =["a","b","c","d","e","f","g","h","j","k"]
 # b1 =["a","b","c","d","e","f"]
 # c1=FormatConversion().GetLatestData(a1,b1)

@@ -49,7 +49,7 @@ class BeingMeasured_popupWin:
         """
         general_window=module_window.filepicker0
         special_window_one=module_window.filepicker2
-        return general_window,special_window_one
+        return special_window_one,general_window
 
 
 

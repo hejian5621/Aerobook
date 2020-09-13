@@ -10,6 +10,8 @@ from pywinauto  import findwindows,timings
 import re
 from os import listdir
 from pathlib import Path
+from src.utils.commonality.ExcelFile import read_excel
+from src.utils.otherMethods.dataFormatConversion import FormatConversion
 
 
 
@@ -471,6 +473,53 @@ class ProgressBar:
 
 
 
+class UseCase_parameterization:
+    """用例参数化"""
 
+    def __init__(self):
+        self.list_dict_site=[]
+        self.location = None
 
+    def parameterization_location(self, moduleName,list_tableName):
+        """
+        获取读取电子表格的路径和相关参数
+        :return:
+        """
+        location=None
+        if moduleName=="铺层信息--铺层库优化工作栏测试用例":
+            location = ProfileDataProcessing("testCase", "LaminateOptimize").config_File()
+        elif moduleName=="铺层信息--铺层数据库制作工具弹窗":
+            location = ProfileDataProcessing("testCase", "LaminatedataPopup").config_File()
+        elif moduleName=="尺寸信息--一维二维单元尺寸定义（模板）":
+            location = ProfileDataProcessing("testCase", "sizeInfo_1D2DXls").config_File()
+        elif moduleName == "求解计算--求解计算":
+            location = ProfileDataProcessing("testCase", "solveCalculation").config_File()
+        elif moduleName == "载荷信息--载荷数据库制作工具弹窗":
+            location = ProfileDataProcessing("testCase", "loaddatabase_popUp").config_File()
+        elif moduleName == "载荷信息--编辑工况":
+            location = ProfileDataProcessing("testCase", "editWorkingCondition").config_File()
+        elif moduleName == "材料信息--定义复合材料参数":
+            location = ProfileDataProcessing("testCase", "compositeMaterial").config_File()
+        elif moduleName == "复材结构强度校核--复合材料强度校核":
+             location= ProfileDataProcessing("testCase", "CompoundStrengthCheck").config_File()
+        else:
+            print("没有地址", __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        if list_tableName:
+            for tableName in list_tableName:
+                dict_site={"详细地址": location,"表单名称": tableName, "初始行": 1,"初始列":1}
+                self.list_dict_site.append(dict_site)
+        return self.list_dict_site
 
+    def parameterization_data(self,moduleName,list_tableName,):
+        """
+         用例参数化
+        :return:
+        """
+        list_dict=UseCase_parameterization().parameterization_location(moduleName,list_tableName)
+        print("list_dict:",list_dict)
+        for site in list_dict:
+            dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
+            ar_testdicts = FormatConversion().RemoveSubscript(dicts)
+            self.list_dict_site = self.list_dict_site + ar_testdicts
+        return self.list_dict_site

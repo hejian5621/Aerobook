@@ -102,7 +102,6 @@ class finish_clear:
         if actual_result:  # 如果实际值不为空
             expect_result = expect_result.strip()  # 去掉预期值，前后的空格
             actual_result = actual_result.strip()  # 去掉实际值，前后的空格
-        if "删除文件名列表" in dictSet:
-            list_filePath = dictSet["删除文件名列表"]
-            folderFile_dispose(ProjectPath).delfile(list_filePath)
         return  expect_result,actual_result
+
+

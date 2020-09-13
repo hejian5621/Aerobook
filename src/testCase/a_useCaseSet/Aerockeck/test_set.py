@@ -35,7 +35,7 @@ class Test_test(unittest.TestCase):
             """
             global  number ;global  global_UseCase_Name
             print("测试开始")
-            print("global_UseCase_Name:",global_UseCase_Name)
+            print("global_UseCase_Name11:",global_UseCase_Name)
             real_UseCase_Name="Test_test"
             number,global_UseCase_Name =Initializing().initialize_globalVariable(number,global_UseCase_Name,real_UseCase_Name)
 
@@ -50,7 +50,9 @@ class Test_test(unittest.TestCase):
             print("测试结束")
 
 
+        print("111")
         list_dicts=[{"测试点":"b","c":"d"},{"测试点":"2","3":"4"},{"测试点":"6","7":"8"},{"测试点":"10","11":"12"}]
+        print("list_dicts:", list_dicts)
         @data(*list_dicts)  # 参数化参数用例
         def test_1(self,list):
             global number
@@ -84,9 +86,12 @@ class Test_test(unittest.TestCase):
 @ddt
 class Test_test111(unittest.TestCase):
         """铺层数据库制作"""
+        global list_dicts
+        real_UseCase_Name = "Test_test111"
+
         def __init__(self, *args):
             unittest.TestCase.__init__(self, *args)
-            global_UseCase_Name = 1
+            list_dicts = 1
 
 
 
@@ -96,17 +101,21 @@ class Test_test111(unittest.TestCase):
                1、首先把需要的文件和模型复制一份出来
             """
             global number;global global_UseCase_Name
+
             print("")
             print("global_UseCase_Name:", global_UseCase_Name)
             real_UseCase_Name = "Test_test111"
             number1,global_UseCase_Name=Initializing().initialize_globalVariable(number, global_UseCase_Name, real_UseCase_Name)
             print("number=",number1)
             global_UseCase_Name = real_UseCase_Name
+            print("list_dicts11:", list_dicts)
             number=number1
             print("number222", number)
             print("")
 
 
+
+        print("222")
         def tearDown(self):
             """用例执行完后收尾
                            1、首先把复制的文件夹删除
@@ -115,8 +124,8 @@ class Test_test111(unittest.TestCase):
             print("tearDown运行第”%r" % number)
             print("测试结束")
 
-
-        list_dicts=[{"测试点":"20","21":"22"},{"测试点":"23","24":"25"},{"测试点":"26","27":"28"},{"测试点":"29","30":"31"}]
+        list_dicts = [{"测试点": "b", "c": "d"}, {"测试点": "2", "3": "4"}, {"测试点": "6", "7": "8"}, {"测试点": "10", "11": "12"}]
+        print("list_dicts:",list_dicts)
         @data(*list_dicts)  # 参数化参数用例
         def test_1(self,list):
             global number
