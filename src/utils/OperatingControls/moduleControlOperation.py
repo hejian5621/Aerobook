@@ -46,7 +46,7 @@ class OperatingControls:
                             if els == "拼接路径":   # 如果是路径文本框，就判断需不需要拼接路径
                                 v2=location+v2
                             Check_winControl(None, dlg_spec).Verify_inputBox(v2)
-                        elif ControlTypes=="勾选框":
+                        elif ControlTypes=="勾选框" or ControlTypes=="单选框":
                             Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
                         elif ControlTypes == "按钮" and whetherpopup=="否":
                             dlg_spec.check()

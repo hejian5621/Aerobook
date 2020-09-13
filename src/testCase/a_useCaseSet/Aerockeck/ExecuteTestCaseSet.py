@@ -676,7 +676,7 @@ class Test_editWorkingCondition(unittest.TestCase):
 
 """材料信息--定义复合材料参数"""
 @ddt
-# @unittest.skip(u"无条件跳过此用例")
+@unittest.skip(u"无条件跳过此用例")
 class Test_compositeMaterial(unittest.TestCase):
         """材料信息--定义复合材料参数"""
         global number
@@ -784,28 +784,31 @@ class Test_CompoundStrengthCheck(unittest.TestCase):
         number = 1
 
         def setUp(self):
-            global source;    global old_content ;global number
-            global messageType ;global actual_result
-            global UseCaseNumber ;global expect3_result
-            from src.utils.otherMethods.initialize import module_initialize
-            from tool import WindowTop
-            # 被系统置顶
-            WindowTop.EnumWindows("Aerobook v1.0.4")
-            # 初始化变量
-            source=None;old_content=None;messageType=None
-            actual_result=None; UseCaseNumber=None ;expect3_result=None
+            global ProjectPath  # 项目所在路径
+            global old_content  # 在执行用例前信息窗口中的文本信息，用于确定信息窗口中最新的文本
+            global messageType  # 预期值信息类型
+            global actual_result  # 实际值
+            global expect_result  # 预期结果
+            global testCase_attribute  # 控件属性方法
+            global number
+            actual_result = None
+            expect_result = None
+            messageType = None
             print("测试开始")
-            source = r"F:\Aerobook\src\testCase\projectFile\automateFile"
-            # 用例开始获取信息窗口对于的html里的内容
-            old_content = Information_Win().acquire_HTML_TXT(source)
-
-            # # 如果编辑工况弹窗没有关闭，就关闭
-            # if number==1:
-            #     # 清除所有的许用值曲线
-            #     module_initialize().clear_AllowableCurve()
-            # number =number+1
-
-
+            # 被测系统置顶
+            WindowTop.EnumWindows("Aerobook v1.0.4")
+            # 获取项目所在路径
+            ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()
+            # 用例在执行前，首先获取信息窗口的文本信息，用于获取最新的信息窗口文本信息
+            old_content = Information_Win().acquire_HTML_TXT(ProjectPath)
+            # 在用例执行第一次获取控件操作方法
+            # 在用例执行第一次，获取控件属性已经操作方法
+            if number == 1:
+                site1 = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\复材结构强度校核\自动化一维复合材料强度校核.xlsx",
+                         "表单名称": "控件属性已经操作方法", "初始行": 1, "初始列": 1}
+                testCase_attribute = read_excel(site1).readExcel_ControlProperties()  # 读取测试用例
+                print("值执行一次")
+            number = number + 1
 
 
 
@@ -813,55 +816,63 @@ class Test_CompoundStrengthCheck(unittest.TestCase):
 
         def tearDown(self):
             """用例执行完后收尾"""
-            global source;   global old_content
-            global messageType;   global actual_result
-            global UseCaseNumber;  global expect3_result
+            global ProjectPath  # 项目所在路径
+            global old_content  # 在执行用例前信息窗口中的文本信息，用于确定信息窗口中最新的文本
+            global messageType  # 预期值信息类型
+            global actual_result  # 实际值
+            global expect_result  # 预期结果
+            global testCase_attribute  # 控件属性方法
             # 收尾，判断有没有弹窗没有关闭，如果有就关闭
             Check_winControl("警告", "OK").popUp_Whether_close()
-            # 处理测试结果
-            if messageType == "信息窗口":    # 如果是对比信息窗口里的内容，就获取最新的内容
+            """取出Excel里面的值"""
+            """处理预期结果或实际结果，用以实际结果和预期结果文本对比"""
+            if messageType == "信息窗口":  # 如果预期值在信息窗口，就通过以下方法获取最新的信息窗口文本信息
                 actual_result = FormatConversion().GetLatestData(actual_result, old_content)
-            if type(actual_result)==list:  # 实际值如果是列表，就转化成字符串
+            # 格式化实际值跟预期值
+            if type(actual_result) == list:  # 实际值如果是列表，就转化成字符串
                 actual_result = ' '.join(actual_result)
-            if actual_result:   # 当实际值不为空的情况下
-                # 把实际值字符串根据换行符\n转化成列表，并去掉列表中的所有的空格
-                actual_result = FormatConversion().takeOut_space(actual_result)
-                expect3_result = FormatConversion().takeOut_space(expect3_result)
-            print("实际值：", actual_result)
-            print("预期值：", expect3_result)
-            #  # 断言测试结果
-            assert_that(expect3_result).is_equal_to(actual_result)
+            if actual_result:  # 如果实际值不为空
+                expect_result = expect_result.strip()  # 去掉预期值，前后的空格
+                actual_result = actual_result.strip()  # 去掉实际值，前后的空格
+            """实际值跟预期值对比（文本对比）"""
+            assert_that(expect_result).is_equal_to(actual_result)
             print("测试结束")
 
 
-        #
-        # # 测试用例Excel文件的相关信息
-        # # site1 = [{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\复材结构强度校核\自动化二维复合材料强度校核.xlsx","表单名称": "其他", "初始行": 1}]
-        # site1 =[{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\复材结构强度校核\自动化二维复合材料强度校核.xlsx","表单名称": "测试", "初始行": 1}]
-        # list_dicts1 = []
-        # if len(site1)>0:
-        #     for site in site1:
-        #         dicts1 = read_excel(site).readExcel_testCase()  # 读取测试用例
-        #         ar_testdicts1 = FormatConversion().RemoveSubscript(dicts1)
-        #         list_dicts1 = list_dicts1 + ar_testdicts1
-        # else:
-        #     list_dicts1=site1
-        #
-        # @unittest.skip(u"无条件跳过此用例")
-        # @data(*list_dicts1)  # 参数化参数用例
-        # def test_1(self, testdicts):
-        #     """复材结构强度校核--复合材料强度校核"""
-        #     global source;     global old_content
-        #     global messageType;  global actual_result
-        #     global UseCaseNumber;  global expect3_result
-        #     # 获取变量信息
-        #     messageType = testdicts["预期值信息类型"]
-        #     UseCaseNumber = testdicts["用例编号"]
-        #     testdicts["被测程序文件地址"] = source
-        #     expect3_result = testdicts["预期结果提示信息"]  # 取出预期值
-        #     print("开始执行用例：", UseCaseNumber)
-        #     actual_result= CompoundStrengthCheck(testdicts).二D_flow_test()  # 调用测试步骤
-        #     print("actual_result:",actual_result)
+
+        # 测试用例Excel文件的相关信息
+        # site1 = [{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\复材结构强度校核\自动化二维复合材料强度校核.xlsx","表单名称": "其他", "初始行": 1}]
+        site1 =[{"详细地址": r"src\testCase\c_useCase_file\Aerocheck\复材结构强度校核\自动化二维复合材料强度校核.xlsx","表单名称": "测试", "初始行": 1}]
+        list_dicts1 = []
+        if len(site1)>0:
+            for site in site1:
+                dicts1 = read_excel(site).readExcel_testCase()  # 读取测试用例
+                ar_testdicts1 = FormatConversion().RemoveSubscript(dicts1)
+                list_dicts1 = list_dicts1 + ar_testdicts1
+        else:
+            list_dicts1=site1
+
+        @unittest.skip(u"无条件跳过此用例")
+        @data(*list_dicts1)  # 参数化参数用例
+        def test_1(self, testCase_dict):
+            """复材结构强度校核--复合材料强度校核"""
+            global ProjectPath  # 项目所在路径
+            global old_content  # 在执行用例前信息窗口中的文本信息，用于确定信息窗口中最新的文本
+            global messageType  # 预期值信息类型
+            global actual_result  # 实际值
+            global expect_result  # 预期结果
+            global testCase_attribute  # 控件属性方法
+            global els  # 控件属性方法
+            print("testCase_dict:", testCase_dict)
+            print("testCase_attribute:", testCase_attribute)
+            UseCaseNumber = testCase_dict["用例编号"]
+            expect_result = testCase_dict["预期结果文本信息"]  # 取出Excel文件中的预期值
+            messageType = testCase_dict["预期值信息类型"]  # 取出提示信息载体类型
+            els = testCase_dict["其他"]  # 取出提示信息载体类型
+            testCase_dict["被测程序文件地址"] = ProjectPath
+            print("开始执行用例：", UseCaseNumber)
+            actual_result= CompoundStrengthCheck(testCase_dict).二D_flow_test()  # 调用测试步骤
+            print("actual_result:",actual_result)
 
 
 

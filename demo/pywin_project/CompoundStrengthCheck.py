@@ -73,7 +73,7 @@ while True:
 
 
 # 勾选2D静强度下的P1(major)
-dlg_spec2.CheckBox3.click()
+    dlg_spec2.CheckBox3.click()
 while True:
     State=dlg_spec2.CheckBox3.get_check_state()
     if State==0:
