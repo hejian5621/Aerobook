@@ -28,7 +28,7 @@ module_window.print_control_identifiers()
 
 # 选择路径按钮
 
-# module_window.Button.click()
+module_window.Button.click()
 
 # 选择路径文本框
 

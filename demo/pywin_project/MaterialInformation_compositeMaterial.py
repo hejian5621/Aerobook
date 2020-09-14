@@ -7,31 +7,28 @@ from OperatingControls.enterModule import BeingMeasured_popupWin,specialWay_Oper
 import uiautomation
 from pywinauto.application import Application
 import time
+from src.utils.OperatingControls.moduleControlOperation import OperatingControls
 
 
-#
-# testdicts={"所在模块":"材料信息->定义复合材料参数"}
-#
-#
-# operationWindow="定义材料许用值"
-#
-# son_window = execute_useCase_initialize().link_window()  # 链接被测程序
-# module_window = BeingMeasured_work(son_window).workField_composite_information() # 切换到被测模块
-#
-#
-# # 点击选项卡
-# aero_title = ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 从配置文件获取Aerobook窗口标题
-# Use = uiautomation.WindowControl(searchDepth=1, Name=aero_title)
-#
-# specialWay_OperatingControls(operationWindow).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
-#
-# module_window.print_control_identifiers()
+testCase_dict={"所在模块":"材料信息->定义复合材料参数"}
+
+
+operationWindow="编辑材料许用值"
+
+aero_window, son_window = pywin_openAProgram().menuOpen_switchingWin_UIA(testCase_dict,operationWindow)
+
+
+# 打开“编辑材料许用值曲线弹窗”弹框
 
 
 
-# dlg_spec.print_control_identifiers()
+# son_window.print_control_identifiers()
+
+dlg_spec= OperatingControls(son_window).ExpressionAssembly("Button1")
 
 
+
+dlg_spec.click()
 
 
 
@@ -39,7 +36,7 @@ import time
 """获取”编辑材料许用值“中的值"""
 
 # 点击创建材料需用值曲线
-# module_window.Button1.click()
+# son_window.Button1.click()
 
 
 """连接编辑材料许用值曲线弹框"""
@@ -48,9 +45,12 @@ dlg_spec3=BeingMeasured_popupWin("编辑材料许用值曲线").menu_LetsGoTopop
 
 dlg_spec3.print_control_identifiers()
 
+
+dlg1_spec= OperatingControls(dlg_spec3).ExpressionAssembly("Edit")
+
 # """编辑材料许用值曲线弹框中"""
 # # 曲线名称
-# dlg_spec3.Edit.set_text("aa")
+dlg1_spec.set_text("aa")
 
 
 # 确认

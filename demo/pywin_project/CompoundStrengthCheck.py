@@ -3,29 +3,32 @@
 
 from pywinauto.application import Application
 import time
+from src.utils.otherMethods.initialize import pywin_openAProgram
 from config.configurationFile import ProfileDataProcessing
 import uiautomation
 from tool import WindowTop
-
+from OperatingControls.enterModule import BeingMeasured_work
 
 
 
 WindowTop.EnumWindows("Aerobook v1.0.4")
 time.sleep(1)
-Aero_window = Application().connect(title_re="Aerobook v1.0.4").window(title="Aerobook v1.0.4")  # 通过Aerobook标题连接Aerobook
+# 连接到被测程序，并且通过菜单栏打开被测模块
 
-dlg_spec = Aero_window.scrolledpanelwxWindowNR2
+testCase_dict={"所在模块":"复材结构强度校核->复合材料强度校核"}
 
-# 被测系统置顶
+operationWindow="二维单元"
 
-# 点击选项卡
-aero_title = ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 从配置文件获取Aerobook窗口标题
-Use = uiautomation.WindowControl(searchDepth=1, Name=aero_title)
+# operationWindow="杆柱单元"
+
+aero_window, son_window = pywin_openAProgram().menuOpen_switchingWin_UIA(testCase_dict,operationWindow)
+
+#
+
+aero_window, son_window=BeingMeasured_work(son_window).workField_intensityCheck()
 
 
-
-
-
+aero_window.print_control_identifiers()
 
 
 
@@ -272,27 +275,107 @@ while True:
         break
 
 
+"""
+
+# 勾选曲板结构
+# aero_window.CheckBox15.click()
+# while True:
+#     State = aero_window.CheckBox15.get_check_state()
+#     if State == 0:
+#         aero_window.CheckBox15.click()
+#     else:
+#         break
+
+
+# 机身半径
+# aero_window.Edit1.set_text("0.35")
+
+
+# 在B值减缩系数文本框中输入数据
+aero_window.Edit2.set_text("0.25")
+
+
+# 宽度修正系数文本框
+aero_window.Edit3.set_text("0.25")
 
 # 勾选极值
-dlg_spec2.child_window(title="极  值", class_name="Button").click()
+# aero_window.极.click()
+# while True:
+#     State = aero_window.极.get_check_state()
+#     if State == 0:
+#         aero_window.极.click()
+#     else:
+#         break
+#
+#
+# # 勾选均值
+# aero_window.均.click()
+# while True:
+#     State = aero_window.均.get_check_state()
+#     if State == 0:
+#         aero_window.均.click()
+#     else:
+#         break
+
+
+# 在主承载方向组合框中选择单元坐标系
+aero_window.ComboBox0.select("全局坐标系")
 while True:
-    State = dlg_spec2.child_window(title="极  值", class_name="Button").get_check_state()
-    if State == 0:
-        dlg_spec2.child_window(title="极  值", class_name="Button").click()
-    else:
+    State = aero_window.ComboBox0.window_text()
+    print("State:",State)
+    if State == "全局坐标系":
         break
+    else:
+        aero_window.ComboBox0.select("全局坐标系")
 
 
-# 勾选均值
-dlg_spec2.RadioButton9.click()
+# aero_window.ComboBox0.select("单元坐标系")
+# while True:
+#     State = aero_window.ComboBox0.window_text()
+#     print("State:",State)
+#     if State == "单元坐标系":
+#         break
+#     else:
+#         aero_window.ComboBox0.select("单元坐标系")
+
+time.sleep(1)
+
+app=aero_window.ComboBox2
+
+print("使用方法",dir(app.wrapper_object()))
+State = aero_window.ComboBox2.window_text()
+print("State:",State)
+txt=app.selected_text()
+
+print("txt:",txt)
+aero_window.ComboBox2.select("Y轴")
 while True:
-    State = dlg_spec2.RadioButton9.get_check_state()
-    if State == 0:
-        dlg_spec2.RadioButton9.click()
-    else:
+    State = aero_window.ComboBox2.window_text()
+    if State == "Y轴":
         break
+    else:
+        aero_window.ComboBox2.select("Y轴")
 
-"""
+
+
+aero_window.ComboBox0.select("单元坐标系")
+while True:
+    State = aero_window.ComboBox0.window_text()
+    print("State:",State)
+    if State == "单元坐标系":
+        break
+    else:
+        aero_window.ComboBox0.select("单元坐标系")
+
+
+
+aero_window.参考方向ComboBox.select("Y轴")
+while True:
+    State = aero_window.参考方向ComboBox.window_text()
+    if State == "Y轴":
+        break
+    else:
+        aero_window.参考方向ComboBox.select("Y轴")
 """
 
 # 在主承载方向组合框中选择单元坐标系
@@ -391,16 +474,24 @@ dlg_spec2.B值减缩系数Edit.set_text("0.25")
 
 
 
+
+
+
+
+
+
+
+
+
+
 """ 进入一维单元工作栏"""
 
 #鼠标滑到最上面
 # open_module().menu_compositeMaterial(Aero_window,"杆柱单元")
 
-dlg_spec1=dlg_spec.复合材料强度校核_wx_SysTabCtl32
 
-dlg_spec2=dlg_spec1.panelwxWindowNR2
 
-dlg_spec2.print_control_identifiers()
+
 
 
 """
@@ -434,40 +525,60 @@ while True:
         dlg_spec2.CheckBox3.click()
     else:
         break
-
+"""
 # 勾选加筋板柱屈曲
 
-dlg_spec2.CheckBox4.click()
-while True:
-    State = dlg_spec2.CheckBox4.get_check_state()
-    if State == 0:
-        dlg_spec2.CheckBox4.click()
-    else:
-        break
+# aero_window.CheckBox4.click()
+# while True:
+#     State = aero_window.CheckBox4.get_check_state()
+#     if State == 0:
+#         aero_window.CheckBox4.click()
+#     else:
+#         break
 
-"""
+# 勾选极值
+
+# aero_window.极.click()
+# while True:
+#     State = aero_window.极.get_check_state()
+#     if State == 0:
+#         aero_window.极.click()
+#     else:
+#         break
+#
+#
+# #勾选均值
+#
+# aero_window.均.click()
+# while True:
+#     State = aero_window.均.get_check_state()
+#     if State == 0:
+#         aero_window.均.click()
+#     else:
+#         break
+
 
 # 勾选两边各取蒙皮宽度一半
-
-dlg_spec2.child_window(title="两边各取蒙皮宽度一半    ", class_name="Button").click()
-while True:
-    State = dlg_spec2.child_window(title="两边各取蒙皮宽度一半    ", class_name="Button").get_check_state()
-    if State == 0:
-        dlg_spec2.child_window(title="两边各取蒙皮宽度一半    ", class_name="Button").click()
-    else:
-        break
-
-
-time.sleep(0.5)
-# 勾选两边各取15倍蒙皮厚度
-
-dlg_spec2.RadioButton5.click()
-while True:
-    State = dlg_spec2.RadioButton5.get_check_state()
-    if State == 0:
-        dlg_spec2.RadioButton5.click()
-    else:
-        break
+#
+# aero_window.RadioButton5.click()
+# while True:
+#     State = aero_window.两边各取蒙皮宽度一半.get_check_state()
+#     if State == 0:
+#         aero_window.两边各取蒙皮宽度一半.click()
+#     else:
+#         break
+# #
+#
+# time.sleep(0.5)
+# # 勾选两边各取15倍蒙皮厚度
+#
+# dlg_spec2.RadioButton5.click()
+# while True:
+#     State = dlg_spec2.RadioButton5.get_check_state()
+#     if State == 0:
+#         dlg_spec2.RadioButton5.click()
+#     else:
+#         break
 
 
 
@@ -497,15 +608,7 @@ while True:
 
 time.sleep(0.5)
 
-# 勾选均值
 
-dlg_spec2.child_window(title="均  值", class_name="Button").click()
-while True:
-    State = dlg_spec2.child_window(title="均  值", class_name="Button").get_check_state()
-    if State == 0:
-        dlg_spec2.child_window(title="均  值", class_name="Button").click()
-    else:
-        break
 
 
 
@@ -526,20 +629,20 @@ dlg_spec2.Edit3.set_text("1.15")
 # 在B值减缩系数文本框中输入数据
 dlg_spec2.Edit4.set_text("1.15")
 
-
-
+"""
+# son_window.print_control_identifiers()
 # 点击选择结构单元按钮
-dlg_spec.child_window(title="选择结构单元", class_name="Button").click()
+# son_window.Button2.click()
 
 
 
 # 点击选择结构校核工况
-dlg_spec.child_window(title="...", class_name="Button").click()
+# son_window.Button0.click()
 
 
 # # 点击校核按钮
-dlg_spec.校核Button.click()
-"""
+# son_window.Button3.click()
+
 #
 # # 点击关闭按钮
 # dlg_spec.关闭.click()

@@ -47,9 +47,9 @@ class BeingMeasured_popupWin:
         切换到控件实例
         :return:
         """
-        general_window=module_window.filepicker0
-        special_window_one=module_window.filepicker2
-        return special_window_one,general_window
+        window_one=module_window.filepicker0
+        window_two=module_window.filepicker2
+        return window_one,window_two
 
 
 

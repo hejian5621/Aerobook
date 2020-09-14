@@ -89,7 +89,8 @@ print("使用方法",dir(dlg_spec6.wrapper_object()))
 
 
 
-
+导出python包名  pip freeze > requirements.txt
+安装导出的python包     pip install -r requirements.txt
 
 
 

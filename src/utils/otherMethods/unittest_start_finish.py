@@ -4,7 +4,7 @@ from src.utils.otherMethods.actual import Information_Win
 from src.utils.commonality.ExcelFile import read_excel
 from tool import folderFile_dispose,Check_winControl
 from src.utils.otherMethods.initialize import execute_useCase_initialize
-
+from utils.commonality.tool import UseCase_parameterization
 
 class Initializing:
     """用例执行前需要做的操作"""
@@ -16,12 +16,14 @@ class Initializing:
     def controller(self,dictSet ):
         """
         控制方法
-        dict={"全局参数":"","全局用例集名称":"","当前用例集名称":"","删除文件名列表":[],"详细地址":"","关闭弹窗":[]}
+        dict={"全局参数":"","全局用例集名称":"","当前用例集名称":"","删除文件名列表":[],"详细地址":"","关闭弹窗":[],"控件属性已经操作方法":testCase_attribute}
         :return:
         """
         number=dictSet["全局参数"]
         global_UseCase_Name = dictSet["全局用例集名称"]
         real_UseCase_Name = dictSet["当前用例集名称"]
+        self.testCase_attribute = dictSet["控件属性已经操作方法"]
+        "控件属性已经操作方法"
         # 在运行每一个用例集之前初始化全局变量参数
         number,global_Name = Initializing().initialize_globalVariable(number, global_UseCase_Name, real_UseCase_Name)
         # 被测系统置顶
@@ -36,14 +38,14 @@ class Initializing:
             folderFile_dispose(ProjectPath).delfile(list_filePath)
         # 在用例执行第一次，获取控件属性已经操作方法
         if number == 1:
-            if "详细地址" in dictSet:
-                location  = dictSet["详细地址"]
-                site1 = {"详细地址": location ,"表单名称": "控件属性已经操作方法", "初始行": 1, "初始列": 1}
-                self.testCase_attribute = read_excel(site1).readExcel_ControlProperties()  # 读取测试用例
-            if real_UseCase_Name=="Test_editWorkingCondition":
+            tableName=["控件属性已经操作方法"]
+            site = UseCase_parameterization().parameterization_location(real_UseCase_Name, tableName)
+            site=site[0]
+            self.testCase_attribute = read_excel(site).readExcel_ControlProperties()  # 读取测试用例
+            if real_UseCase_Name=="载荷信息--编辑工况":
                 # 清除所有的包络工况
                 execute_useCase_initialize().clear_editWorkingCondition()
-            if real_UseCase_Name == "Test_compositeMaterial":
+            if real_UseCase_Name == "材料信息--定义复合材料参数":
                 # 清除所有的许用值曲线
                 execute_useCase_initialize().clear_AllowableCurve()
         if "关闭弹窗" in dictSet: # 关闭没有关闭的弹窗
@@ -84,10 +86,12 @@ class finish_clear:
         messageType=dictSet["预期值信息类型"]
         actual_result = dictSet["实际值"]
         expect_result = dictSet["预期值"]
+
         """ 收尾，如果有警告弹框就关掉"""
         if "关闭弹窗" in dictSet:  # 关闭没有关闭的弹窗
             list_CloseWindows = dictSet["关闭弹窗"]
             for CloseWindows in list_CloseWindows:
+                print("进入关闭弹窗")
                 title = CloseWindows[0]
                 button_name = CloseWindows[1]
                 Check_winControl(title, button_name).popUp_Whether_close()

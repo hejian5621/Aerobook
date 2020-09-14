@@ -298,14 +298,16 @@ class  Check_winControl:
                 self.triggerButton.set_text(data)
             self.CircleInitial = self.CircleInitial + 1
 
+
     def Verify_dropDownBox(self,data):
         """
-        验证输入框是否输入正确的数据，如果还没有输入就再次输入，一直到输入成功为止
+        选择下拉框
         :return:
         """
+        print("参考方向：",data)
         self.triggerButton.select(data)  # 下拉框
         while self.CircleInitial < self.cycleIndex:
-            State = self.triggerButton.window_text()  # 返回勾选框的勾选状态
+            State = self.triggerButton.window_text()  # 是否选择预期数据
             if State == data:  # 0 表示没有勾选上
                 break
             else:
@@ -500,8 +502,10 @@ class UseCase_parameterization:
             location = ProfileDataProcessing("testCase", "editWorkingCondition").config_File()
         elif moduleName == "材料信息--定义复合材料参数":
             location = ProfileDataProcessing("testCase", "compositeMaterial").config_File()
-        elif moduleName == "复材结构强度校核--复合材料强度校核":
-             location= ProfileDataProcessing("testCase", "CompoundStrengthCheck").config_File()
+        elif moduleName == "复材结构强度校核--复合材料强度校核1D":
+             location= ProfileDataProcessing("testCase", "CompoundStrengthCheck_1D").config_File()
+        elif moduleName == "复材结构强度校核--复合材料强度校核2D":
+            location = ProfileDataProcessing("testCase", "CompoundStrengthCheck_2D").config_File()
         else:
             print("没有地址", __file__, sys._getframe().f_lineno)
             os._exit(0)
@@ -510,6 +514,7 @@ class UseCase_parameterization:
                 dict_site={"详细地址": location,"表单名称": tableName, "初始行": 1,"初始列":1}
                 self.list_dict_site.append(dict_site)
         return self.list_dict_site
+
 
     def parameterization_data(self,moduleName,list_tableName,):
         """
