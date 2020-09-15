@@ -195,14 +195,15 @@ class  ControlOperationSuite:
         选择材料许用值曲线
         :return:
         """
-        list_AfterParsing = list_argument.split(";")
-        coord_X = list_AfterParsing[0]
-        coord_Y = list_AfterParsing[1]
+        list_AfterParsing = list_argument.split("；")
+        print("list_AfterParsing:",list_AfterParsing)
+        coord_X = int(list_AfterParsing[0])
+        coord_Y = int(list_AfterParsing[1])
         # 连接“选择材料许用值曲线”弹窗
         app_window = BeingMeasured_popupWin("选择材料许用值曲线").menu_LetsGoTopopover()
         dlg_spec=app_window.child_window(title="GridWindow", class_name="wxWindowNR")
         # 勾选数据
-        dlg_spec.double_click_input(coords=(int(coord_X), int(coord_Y)), button="left")
+        dlg_spec.double_click_input(coords=(coord_X, coord_Y), button="left")
         # 数据勾选完毕点击“确认”按钮
         app_window.确认.click()
         # 检查“选择材料许用值曲线”窗口是否关闭

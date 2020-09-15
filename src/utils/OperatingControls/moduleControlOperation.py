@@ -1,8 +1,8 @@
 # 铺层库优化工作栏，对应Aerobook路径：铺层信息--》铺层库优化
-import time
+import time,sys, os
 from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
-from tool import instrument,KeyboardMouse,Check_winControl
-import sys, os
+from tool import KeyboardMouse,Check_winControl
+
 
 
 class OperatingControls:
@@ -25,51 +25,61 @@ class OperatingControls:
         :param argument: 控件的存在参数
         :return:
         """
-        print("进入操作控件函数")
+        print("\033[0;34m 《进入操作控件函数开始操作控件》")
         location = argument["被测程序文件地址"]
         els = argument["其他"]
-        for k1,v1 in Silverlight.items():   # 取出被操作控件的名称
-            for k2,v2 in argument.items():  # 取出被操作控件的名称
-                if k1 == k2:
-                    # 当两个名称相等的时候
-                    if v2 !="默认" :   # 当控件不等于默认（默认代表不用操作控件）
-                        ControlTypes =v1["控件类型"]
-                        ControlInstance = v1["所操作实例"]
-                        Controlmethod = v1["唯一标识方法"]
-                        discern = v1["唯一标识"]
-                        waitingTime = v1["操作控件后等待时间"]
-                        whetherpopup = v1["是否有弹窗出现"]
-                        WindowInstance=OperatingControls(self.window_one,self.window_two,self.window_three).\
-                            OperationControlInstance(ControlInstance)  # 获取操作控件实例
-                        dlg_spec = OperatingControls(WindowInstance).IdentificationMethod(Controlmethod,discern)  # 获取操作控件实例
-                        if ControlTypes=="文本框":   # 当控件是文本框的时候
-                            if els == "拼接路径":   # 如果是路径文本框，就判断需不需要拼接路径
-                                v2=location+v2
-                            Check_winControl(None, dlg_spec).Verify_inputBox(v2)
-                        elif ControlTypes=="勾选框" or ControlTypes=="单选框":
-                            Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
-                        elif ControlTypes == "按钮" and whetherpopup=="否":
-                            print("开始点击”%r“按钮"%k1)
-                            dlg_spec.check()
-                            dlg_spec.click()
-                        elif ControlTypes == "按钮" and whetherpopup=="是"  :  # 操作套件
-                            OperatingControls(dlg_spec).button_popUp(v1,location,v2)
-                        elif  ControlTypes == "坐标--文本框":
-                            OperatingControls(dlg_spec).Coordinate_Textbox(v2,discern)
-                        elif ControlTypes == "坐标--点击":
-                            pass
-                        elif ControlTypes == "下拉框":
-                            Check_winControl(None, dlg_spec).Verify_dropDownBox(v2)
-                        else:
-                            print("说明控件属性", __file__, sys._getframe().f_lineno)
-                            os._exit(0)
-                        time.sleep(waitingTime)
+        for ControlsName, ControlProperties in Silverlight.items():  # 循环取出控件
+            operational = argument[ControlsName]
+            if operational != "默认":  # 当控件不等于默认（默认代表不用操作控件）
+                ControlTypes = ControlProperties["控件类型"]
+                ControlInstance = ControlProperties["所操作实例"]
+                Controlmethod = ControlProperties["唯一标识方法"]
+                discern = ControlProperties["唯一标识"]
+                waitingTime = ControlProperties["操作控件后等待时间"]
+                whetherpopup = ControlProperties["是否有弹窗出现"]
+                WindowInstance = OperatingControls(self.window_one, self.window_two, self.window_three). \
+                    OperationControlInstance(ControlInstance)  # 获取操作控件实例
+                dlg_spec = OperatingControls(WindowInstance). \
+                    IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
+                if ControlTypes == "文本框":  # 当控件是文本框的时候
+                    if els == "拼接路径":  # 如果是路径文本框，就判断需不需要拼接路径
+                        operational = location + operational
+                    Check_winControl(None, dlg_spec).Verify_inputBox(operational)
+                    print("在控件”%r“文本框中输入：%r" % (ControlsName, operational))
+                elif ControlTypes == "勾选框" or ControlTypes == "单选框":
+                    Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
+                    print("控件”%r“成功勾选" % ControlsName)
+                elif ControlTypes == "按钮" and whetherpopup == "否":
+                    dlg_spec.click()
+                    print("控件”%r“按钮点击成功" % ControlsName)
+                elif ControlTypes == "按钮" and whetherpopup == "是":  # 操作套件
+                    OperatingControls(dlg_spec).button_popUp(operational, location, operational)
+                    PopupTitle = operational["弹窗标题"]
+                    print("控件”%r“按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle))
+                elif ControlTypes == "坐标--文本框":
+                    OperatingControls(WindowInstance).Coordinate_Textbox(operational, discern)
+                    print("控件”%r“坐标选择正确，并且在文本框中正确输入数据" % ControlsName)
+                elif ControlTypes == "坐标--点击":
+                    pass
+                elif ControlTypes == "下拉框":
+                    Check_winControl(None, dlg_spec).Verify_dropDownBox(operational)
+                    print("控件”%r“下拉框选择成功选择数据" % ControlsName)
+                else:
+                    print("说明控件属性", __file__, sys._getframe().f_lineno)
+                    os._exit(0)
+                time.sleep(waitingTime)
+            else:
+                print("不操作控件“%r”：%r" % (ControlsName,operational))
+        print("控件操作完成 \033[0m")
+        print(" ")
+
+
 
 
 
     def OperationControlInstance(self,ControlInstance):
         """
-        获取操作控件的实例
+        获取操作控件的窗口
         :return:
         """
         if ControlInstance=="窗口一":
@@ -101,7 +111,7 @@ class OperatingControls:
 
     def IdentificationMethod(self,Controlmethod,discern):
         """
-        唯一标识的操作方法
+        因为从电子表格获取的控件标识字符串，拼接在操作控件的时候会报错，暂时还没有找到原因，暂时使用该方法拼接操作方法
         :return:
         """
         if Controlmethod=="方式一":
@@ -123,7 +133,6 @@ class OperatingControls:
         :param str_Name:
         :return:
         """
-        print("str_Name:",str_Name)
         if str_Name=="Edit":
             self.dlg_spec=self.window_one.Edit
         elif str_Name=="Edit2":
@@ -295,6 +304,8 @@ class OperatingControls:
             parWin1_Dicti = {"窗口标题": PopupTitle, "关闭窗口控件名称": closeName, "地址": location, "文件夹输入内容": filename}
             ControlOperationSuite(None).SelectFile_Popover(parWin1_Dicti, examine, nestWin_Dicti)
         elif Popuptype == "选择材料许用值曲线":  # 操作弹窗套件
+            PopupTitle = properties["弹窗标题"]
+            Check_winControl(PopupTitle, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
             ControlOperationSuite(None).select_AllowableCurve(valu)
         elif Popuptype == "选择校核工况":  # 操作弹窗套件
             Check_winControl("选择校核工况", self.window_one).window_WhetherOpen()  # 判断选择校核工况是否出现
@@ -308,9 +319,6 @@ class OperatingControls:
             os._exit(0)
 
 
-
-
-
     def Coordinate_Textbox(self, list_argument,discern):
         """
         坐标--文本框
@@ -322,7 +330,9 @@ class OperatingControls:
         list_AfterParsing=list_argument.split("；")
         print("list_AfterParsing:",list_AfterParsing)
         coord_X=int(list_AfterParsing[0])
+        print("coord_X:", coord_X)
         coord_Y = int(list_AfterParsing[1])
+        print("coord_Y:",  coord_Y)
         valu=list_AfterParsing[2]
         dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(discern)
         self.window_one.double_click_input(coords=(coord_X, coord_Y), button="left")
@@ -330,430 +340,11 @@ class OperatingControls:
 
 
 
-class ModuleControlOperation():
-    """工作栏控件操作"""
-
-    def __init__(self,dlg_spec):
-        """
-        :param dlg_spec:
-        """
-        self.dlg_spec=dlg_spec
-
-
-    def editAllowable_operation(self,dicti):
-        """
-        材料信息--定义复合材料参数
-        :return:
-        """
-        param1 = dicti["编辑材料许用值-创建材料许用值按钮"]
-        param2 = dicti["编辑材料许用值关闭按钮"]
-        # self.dlg_spec.print_control_identifiers()
-        if param1 != "默认":
-           time.sleep(0.1)
-           # 在编辑材料许用值窗口中点击“创建材料许用值按”钮
-           dlg1_spec=self.dlg_spec.child_window(title="创建材料许用值曲线", class_name="Button")
-           # 检查点击按钮后，弹窗是否出现
-           Check_winControl("编辑材料许用值曲线", dlg1_spec).window_WhetherOpen()  # 判断预期窗口是否出现
-        if param2 != "默认":
-            time.sleep(0.1)
-            # 在编辑材料许用值窗口中点击“创建材料许用值按”钮
-            self.dlg_spec.关闭.click()
-
-
-
-    def editAllowable_CurvePopupWin_operation(self,dicti):
-        """
-        载荷信息--编辑工况
-        :return:
-        """
-        param1 = dicti["曲线名称文本框"]
-        param2 = dicti["曲线坐标文本框，第一横行X竖行"]
-        param3 = dicti["曲线坐标文本框，第一横行Y竖行"]
-        param4 = dicti["曲线坐标文本框，第二横行X竖行"]
-        param5 = dicti["曲线坐标文本框，第二横行Y竖行"]
-        param6 = dicti["曲线坐标文本框，第三横行X竖行"]
-        param7 = dicti["曲线坐标文本框，第三横行Y竖行"]
-        param8 = dicti["曲线坐标文本框，第四横行X竖行"]
-        param9 = dicti["曲线坐标文本框，第四横行Y竖行"]
-        param10 = dicti["编辑材料许用值曲线确认按钮"]
-        param11 = dicti["编辑材料许用值曲线关闭按钮"]
-        # 切换到网格窗口中
-        dlg_spec = self.dlg_spec.child_window(title="GridWindow", class_name="wxWindowNR")
-        # self.dlg_spec.print_control_identifiers()
-        if param1 != "默认":
-           time.sleep(0.1)
-           # 向曲线名称文本框中输入数据
-           self.dlg_spec.Edit2.set_text(param1)
-        if param2 != "默认":
-            time.sleep(0.1)
-            # 曲线坐标文本框，第一横行X竖行
-            dlg_spec.double_click_input(coords = (40, 20),button ="left")
-            dlg_spec.Edit.set_text(param2)
-        if param3 != "默认" :
-            time.sleep(0.1)
-            # 曲线坐标文本框，第一横行Y竖行
-            dlg_spec.double_click_input(coords=(180, 20), button="left")
-            dlg_spec.Edit.set_text(param3)
-        if param4 != "默认" :
-            time.sleep(0.1)
-            # 曲线坐标文本框，第二横行X竖行
-            dlg_spec.double_click_input(coords = (40, 40),button ="left")
-            dlg_spec.Edit.set_text(param4)
-        if param5 != "默认":
-            time.sleep(0.5)
-            # 曲线坐标文本框，第二横行Y竖行
-            dlg_spec.double_click_input(coords = (180, 40),button ="left")
-            dlg_spec.Edit.set_text(param5)
-        if param6 != "默认":
-            time.sleep(0.1)
-            # 曲线坐标文本框，第三横行X竖行
-            dlg_spec.click_input(coords = (40, 60),double = True)
-            dlg_spec.Edit.set_text(param6)
-        if param7 != "默认":
-            time.sleep(0.1)
-            # 曲线坐标文本框，第三横行Y竖行
-            dlg_spec.double_click_input(coords = (180, 60),button ="left")
-            dlg_spec.Edit.set_text(param7)
-        if param8 != "默认":
-            time.sleep(0.1)
-            # 曲线坐标文本框，第四横行X竖行
-            dlg_spec.double_click_input(coords=(40, 80), button="left")
-            dlg_spec.Edit.set_text(param8)
-        if param9 != "默认":
-            time.sleep(0.1)
-            # 曲线坐标文本框，第四横行Y竖行
-            dlg_spec.double_click_input(coords=(180, 80), button="left")
-            dlg_spec.Edit.set_text(param9)
-        if param10 != "默认":
-            time.sleep(0.5)
-            # 编辑材料许用值曲线确认按钮
-            Check_winControl("编辑材料许用值曲线", "确认").popUp_Whether_close()
-        if param11 != "默认":
-            time.sleep(0.1)
-            # 编辑材料许用值曲线关闭按钮
-            self.dlg_spec.关闭.click()
 
 
 
 
 
 
-    def CompoundStrengthCheck_2D_operation(self,testdicts,work_window):
-        """
-        操作复合强度校核--》二维单元工作栏内的控件
-        :return:
-        """
-        param1  = testdicts["2D静强度勾选框"]
-        param2  = testdicts["VonMises勾选框"]
-        param3  = testdicts["P1“major”勾选框"]
-        param4  = testdicts["P3“minor”勾选框"]
-        param5  = testdicts["X向勾选框"]
-        param6  = testdicts["Y向勾选框"]
-        param7  = testdicts["XY向勾选框"]
-        param8  = testdicts["耦合应变勾选框"]
-        param9  = testdicts["简支压缩勾选框"]
-        param10 = testdicts["简支剪切勾选框"]
-        param11 = testdicts["弯剪复合失稳勾选框"]
-        param12 = testdicts["压剪复合失稳“单轴压”勾选框"]
-        param13 = testdicts["简支压缩“双轴压”勾选框"]
-        param14 = testdicts["压剪复合失稳“双轴压”勾选框"]
-        param15 = testdicts["曲板勾选框"]
-        param16 = testdicts["机身半径文本框"]
-        param17 = testdicts["机身蒙皮单选框"]
-        param18 = testdicts["翼盒蒙皮单选框"]
-        param19 = testdicts["梁腹板单选框"]
-        param20 = testdicts["其他单选框"]
-        param21 = testdicts["B值减缩系数文本框"]
-        param22 = testdicts["坐标系下拉框"]
-        param23 = testdicts["参考方向下拉框"]
-        param24 = testdicts["宽度修正系数下拉框"]
-        param25 = testdicts["宽度修正系数对应的文本框"]
-        param26 = testdicts["蒙皮计算宽度方法一单选框"]
-        param27 = testdicts["蒙皮计算宽度方法二单选框"]
-        param28 = testdicts["蒙皮计算宽度方法三单选框"]
-        param29 = testdicts["载荷类型单选框均值"]
-        param30 = testdicts["载荷类型单选框极值"]
-        param31 = testdicts["选择校核工况按钮"]
-        param32 = testdicts["选择结构单元"]
-        param33 = testdicts["校核按钮"]
-        param34 = testdicts["关闭按钮"]
-        if param1 != "默认":
-            time.sleep(0.1)
-            # 2D静强度勾选框
-            dlg1_spec=self.dlg_spec.CheckBox0
-            Check_winControl(None,dlg1_spec).Verify_CheckBox_Status()
-        if param2 != "默认" and param1 != "默认":
-            time.sleep(0.1)
-            # VonMises勾选框
-            dlg2_spec = self.dlg_spec.CheckBox2
-            Check_winControl(None,dlg2_spec).Verify_CheckBox_Status()
-        if param3 != "默认" and param1 != "默认":
-            time.sleep(0.1)
-            # P1(major)勾选框
-            dlg3_spec = self.dlg_spec.CheckBox3
-            Check_winControl(None, dlg3_spec).Verify_CheckBox_Status()
-        if param4 != "默认" and param1 != "默认":
-            time.sleep(0.1)
-            # P3(minor)勾选框
-            dlg4_spec = self.dlg_spec.CheckBox4
-            Check_winControl(None, dlg4_spec).Verify_CheckBox_Status()
-        if param5 != "默认" and param1 != "默认":
-            time.sleep(0.1)
-            # X向勾选框
-            dlg5_spec = self.dlg_spec.CheckBox5
-            Check_winControl(None, dlg5_spec).Verify_CheckBox_Status()
-        if param6 != "默认"and param1 != "默认":
-            time.sleep(0.1)
-            # Y向勾选框
-            dlg6_spec = self.dlg_spec.CheckBox6
-            Check_winControl(None, dlg6_spec).Verify_CheckBox_Status()
-        if param7 != "默认"  and param1 != "默认":
-            time.sleep(0.1)
-            # XY向勾选框
-            dlg7_spec = self.dlg_spec.CheckBox7
-            Check_winControl(None, dlg7_spec).Verify_CheckBox_Status()
-        if param8 != "默认"  and param1 != "默认":
-            time.sleep(0.1)
-            # 耦合应变勾选框
-            dlg8_spec = self.dlg_spec.CheckBox8
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param9 != "默认" and param1 != "默认":
-            time.sleep(0.1)
-            # 简支压缩勾选框
-            dlg8_spec = self.dlg_spec.CheckBox9
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param10 != "默认":
-            time.sleep(0.1)
-            # 简支剪切勾选框
-            dlg8_spec = self.dlg_spec.CheckBox10
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param11 != "默认":
-            time.sleep(0.1)
-            # 弯剪复合失稳勾选框
-            dlg8_spec = self.dlg_spec.CheckBox11
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param12 != "默认":
-            time.sleep(0.1)
-            # 压剪复合失稳（单轴压）勾选框
-            dlg8_spec = self.dlg_spec.CheckBox12
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param13 != "默认":
-            time.sleep(0.1)
-            # 简支压缩（双轴压）勾选框
-            dlg8_spec = self.dlg_spec.CheckBox13
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param14 != "默认":
-            time.sleep(0.1)
-            # 压剪复合失稳（双轴压）勾选框
-            dlg8_spec = self.dlg_spec.CheckBox14
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param15 != "默认":
-            time.sleep(0.1)
-            # 曲板勾选框
-            dlg8_spec = self.dlg_spec.CheckBox15
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param16 != "默认":
-            time.sleep(0.1)
-            # 机身半径文本框
-            dlg8_spec = self.dlg_spec.机身半径Edit
-            Check_winControl(None, dlg8_spec).Verify_inputBox(param16)
-        if param17 != "默认":
-            time.sleep(0.1)
-            # 机身蒙皮单选框
-            dlg8_spec = self.dlg_spec.RadioButton1
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param18 != "默认":
-            time.sleep(0.1)
-            # 翼盒蒙皮单选框
-            dlg8_spec = self.dlg_spec.RadioButton2
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param19 != "默认":
-            time.sleep(0.1)
-            # 梁腹板单选框
-            dlg8_spec = self.dlg_spec.RadioButton3
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param20 != "默认":
-            time.sleep(0.1)
-            # 其他单选框
-            dlg8_spec = self.dlg_spec.RadioButton4
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param21 != "默认":
-            time.sleep(0.1)
-            # B值减缩系数文本框
-            dlg8_spec = self.dlg_spec.B值减缩系数Edit
-            Check_winControl(None, dlg8_spec).Verify_inputBox( param21)
-        if param22 != "默认":
-            time.sleep(0.1)
-            # 坐标系下拉框
-            dlg8_spec = self.dlg_spec.ComboBox0
-            Check_winControl(None, dlg8_spec).Verify_dropDownBox(param22)
-        if param23 != "默认":
-            time.sleep(0.1)
-            # 参考方向下拉框
-            dlg8_spec = self.dlg_spec.ComboBox2
-            Check_winControl(None, dlg8_spec).Verify_dropDownBox(param23)
-        if param24 != "默认":
-            time.sleep(0.1)
-            # 宽度修正系数下拉框
-            dlg8_spec = self.dlg_spec.ComboBox3
-            Check_winControl(None, dlg8_spec).Verify_dropDownBox(param24)
-        if param25 != "默认":
-            time.sleep(0.1)
-            # 宽度修正系数对应的文本框
-            dlg8_spec = self.dlg_spec.Edit3
-            Check_winControl(None, dlg8_spec).Verify_inputBox(param25)
-        if param26 != "默认":
-            time.sleep(0.1)
-            # 蒙皮计算宽度方法一单选框
-            dlg8_spec = self.dlg_spec.RadioButton6
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param27 != "默认":
-            time.sleep(0.1)
-            # 蒙皮计算宽度方法二单选框
-            dlg8_spec = self.dlg_spec.RadioButton7
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param28 != "默认":
-            time.sleep(0.1)
-            # 蒙皮计算宽度方法三单选框
-            dlg8_spec = self.dlg_spec.RadioButton8
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param29 != "默认":
-            time.sleep(0.1)
-            # 载荷类型单选框均值
-            dlg8_spec = self.dlg_spec.RadioButton9
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param30 != "默认":
-            time.sleep(0.1)
-            # 载荷类型单选框极值
-            dlg8_spec = self.dlg_spec.child_window(title="极  值", class_name="Button")
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param31 != "默认":
-            time.sleep(0.1)
-            # 选择校核工况按钮
-            dlg8_spec = work_window.child_window(title="...", class_name="Button")
-            Check_winControl("选择校核工况", dlg8_spec).window_WhetherOpen()  # 判断预期窗口是否出现
-            ControlOperationSuite(None).select_workingCondition()  # 选择组合工况
-        if param32 != "默认":
-            # 选择结构单元
-            work_window.child_window(title="选择结构单元", class_name="Button").click()  # 点击“选择结构单元按钮”按钮
-            time.sleep(0.3)
-            KeyboardMouse().selectionModel()  # 选择结构单元
-        if param33 != "默认":
-            time.sleep(0.1)
-            # 校核按钮
-            work_window.校核Button.click()
-            time.sleep(5)
-        if param34 != "默认":
-            time.sleep(0.1)
-            # 关闭按钮
-            work_window.关闭.click()
 
 
-
-    def CompoundStrengthCheck_1D_operation(self,testdicts,work_window):
-        """
-        操作复合强度校核--》二维单元工作栏内的控件
-        :return:
-        """
-        param1  = testdicts["1D静强度勾选框"]
-        param2  = testdicts["局部失稳勾选框"]
-        param3  = testdicts["压损勾选框"]
-        param4  = testdicts["加筋板柱屈曲勾选框"]
-        param5  = testdicts["两边各取蒙皮宽度一半单选框"]
-        param6  = testdicts["两边各取15倍蒙皮厚度单选框"]
-        param7  = testdicts["端部支持系数文本框"]
-        param8  = testdicts["刚度比勾选框"]
-        param9  = testdicts["上限文本框"]
-        param10 = testdicts["下限文本框"]
-        param11 = testdicts["B值减缩系数文本框"]
-        param12 = testdicts["载荷类型单选框均值"]
-        param13 = testdicts["载荷类型单选框极值"]
-        param14 = testdicts["选择校核工况按钮"]
-        param15 = testdicts["选择结构单元"]
-        param16 = testdicts["校核按钮"]
-        param17 = testdicts["关闭按钮"]
-        if param1 != "默认":
-            time.sleep(0.1)
-            # 1D静强度勾选框
-            dlg1_spec=self.dlg_spec.CheckBox0
-            Check_winControl(None, dlg1_spec).Verify_CheckBox_Status()
-        if param2 != "默认":
-            time.sleep(0.1)
-            # 局部失稳勾选框
-            dlg2_spec = self.dlg_spec.CheckBox2
-            Check_winControl(None, dlg2_spec).Verify_CheckBox_Status()
-        if param3 != "默认":
-            time.sleep(0.1)
-            # 压损勾选框
-            dlg3_spec = self.dlg_spec.CheckBox3
-            Check_winControl(None, dlg3_spec).Verify_CheckBox_Status()
-        if param4 != "默认" :
-            time.sleep(0.1)
-            # 加筋板柱屈曲勾选框
-            dlg4_spec = self.dlg_spec.CheckBox4
-            Check_winControl(None, dlg4_spec).Verify_CheckBox_Status()
-        if param5 != "默认" and param4 != "默认":
-            time.sleep(0.1)
-            # 两边各取蒙皮宽度一半单选框
-            dlg5_spec = self.dlg_spec.child_window(title="两边各取蒙皮宽度一半    ", class_name="Button")
-            Check_winControl(None, dlg5_spec).Verify_CheckBox_Status()
-        if param6 != "默认"and param4 != "默认":
-            time.sleep(0.1)
-            # 两边各取15倍蒙皮厚度单选框
-            dlg6_spec = self.dlg_spec.RadioButton5
-            Check_winControl(None, dlg6_spec).Verify_CheckBox_Status()
-        if param7 != "默认"  and param4 != "默认":
-            time.sleep(0.1)
-            # 端部支持系数文本框
-            dlg8_spec = self.dlg_spec.Edit0
-            Check_winControl(None, dlg8_spec).Verify_inputBox(param7)
-        if param8 != "默认":
-            time.sleep(0.1)
-            # 刚度比勾选框
-            dlg8_spec = self.dlg_spec.CheckBox5
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param9 != "默认" and param1 != "默认":
-            time.sleep(0.1)
-            # 上限文本框
-            dlg8_spec = self.dlg_spec.Edit2
-            Check_winControl(None, dlg8_spec).Verify_inputBox(param9)
-        if param10 != "默认":
-            time.sleep(0.1)
-            # 下限文本框
-            dlg8_spec = self.dlg_spec.Edit3
-            Check_winControl(None, dlg8_spec).Verify_inputBox(param10)
-        if param11 != "默认":
-            time.sleep(0.1)
-            # B值减缩系数文本框
-            dlg8_spec = self.dlg_spec.Edit4
-            Check_winControl(None, dlg8_spec).Verify_inputBox(param11)
-        if param12 != "默认":
-            time.sleep(0.1)
-            # 载荷类型单选框均值
-            dlg8_spec = self.dlg_spec.child_window(title="均  值", class_name="Button")
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param13 != "默认":
-            time.sleep(0.1)
-            # 载荷类型单选框极值
-            dlg8_spec = self.dlg_spec.child_window(title="极  值", class_name="Button")
-            Check_winControl(None, dlg8_spec).Verify_CheckBox_Status()
-        if param14 != "默认":
-            time.sleep(0.1)
-            # 选择校核工况按钮
-            dlg8_spec = work_window.child_window(title="...", class_name="Button")
-            Check_winControl("选择校核工况", dlg8_spec).window_WhetherOpen()  # 判断预期窗口是否出现
-            ControlOperationSuite(None).select_workingCondition()  # 选择组合工况
-        if param15 != "默认":
-            # 选择结构单元
-            work_window.child_window(title="选择结构单元", class_name="Button").click()  # 点击“选择结构单元按钮”按钮
-            time.sleep(0.3)
-            KeyboardMouse().selectionModel()  # 选择结构单元
-        if param16 != "默认":
-            time.sleep(0.1)
-            # 校核按钮
-            work_window.校核Button.click()
-            time.sleep(5)
-        if param17 != "默认":
-            time.sleep(0.1)
-            # 关闭按钮
-            work_window.关闭.click()

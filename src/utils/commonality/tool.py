@@ -288,7 +288,6 @@ class  Check_winControl:
         验证输入框是否输入正确的数据，如果还没有输入就再次输入，一直到输入成功为止
         :return:
         """
-        print("data:",data)
         self.triggerButton.set_text(data)  # 文本框
         while self.CircleInitial<self.cycleIndex:
             State = self.triggerButton.window_text()  # 返回输入的文本
@@ -304,7 +303,6 @@ class  Check_winControl:
         选择下拉框
         :return:
         """
-        print("参考方向：",data)
         self.triggerButton.select(data)  # 下拉框
         while self.CircleInitial < self.cycleIndex:
             State = self.triggerButton.window_text()  # 是否选择预期数据
@@ -488,7 +486,7 @@ class UseCase_parameterization:
         :return:
         """
         location=None
-        if moduleName=="铺层信息--铺层库优化工作栏测试用例":
+        if moduleName=="铺层信息--铺层库优化工作栏":
             location = ProfileDataProcessing("testCase", "LaminateOptimize").config_File()
         elif moduleName=="铺层信息--铺层数据库制作工具弹窗":
             location = ProfileDataProcessing("testCase", "LaminatedataPopup").config_File()

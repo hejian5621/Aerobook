@@ -1,11 +1,13 @@
+import win32gui, win32con
+hwnd = win32gui.FindWindow(None, "Aerobook v1.0.4")
 
-from utils.commonality.tool import UseCase_parameterization
+print(win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE))
+#
+#
+# win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0,0,800,600, win32con.SWP_SHOWWINDOW)
+#
+#
+# print(win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE))
 
 
-source="求解计算--求解计算"
-
-Name=["属性更新选择路径"]
-
-ultimately_TXT = UseCase_parameterization().parameterization_data(source, Name)
-
-print("ultimately_TXT:",ultimately_TXT)
+# HWND GetForegroundWindow( void)

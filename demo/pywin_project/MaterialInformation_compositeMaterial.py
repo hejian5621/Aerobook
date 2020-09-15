@@ -8,27 +8,30 @@ import uiautomation
 from pywinauto.application import Application
 import time
 from src.utils.OperatingControls.moduleControlOperation import OperatingControls
-
+from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
 
 testCase_dict={"所在模块":"材料信息->定义复合材料参数"}
 
 
-operationWindow="编辑材料许用值"
+operationWindow="定义材料许用值"
 
 aero_window, son_window = pywin_openAProgram().menuOpen_switchingWin_UIA(testCase_dict,operationWindow)
 
 
-# 打开“编辑材料许用值曲线弹窗”弹框
+window_one = BeingMeasured_work(son_window).workField_composite_information()
+#
+# # 打开“编辑材料许用值曲线弹窗”弹框
+#
+#
+#
+window_one.print_control_identifiers()
 
-
-
-# son_window.print_control_identifiers()
-
-dlg_spec= OperatingControls(son_window).ExpressionAssembly("Button1")
-
-
-
-dlg_spec.click()
+window_one.Button5.click()
+#
+# dlg_spec= OperatingControls(window_one).ExpressionAssembly("Button1")
+#
+#
+# dlg_spec.click()
 
 
 
@@ -39,18 +42,20 @@ dlg_spec.click()
 # son_window.Button1.click()
 
 
-"""连接编辑材料许用值曲线弹框"""
-dlg_spec3=BeingMeasured_popupWin("编辑材料许用值曲线").menu_LetsGoTopopover()
+# """连接编辑材料许用值曲线弹框"""
+# dlg_spec3=BeingMeasured_popupWin("编辑材料许用值曲线").menu_LetsGoTopopover()
+#
+#
+# dlg_spec3.print_control_identifiers()
+#
+#
+# dlg1_spec= OperatingControls(dlg_spec3).ExpressionAssembly("Edit")
 
 
-dlg_spec3.print_control_identifiers()
-
-
-dlg1_spec= OperatingControls(dlg_spec3).ExpressionAssembly("Edit")
 
 # """编辑材料许用值曲线弹框中"""
 # # 曲线名称
-dlg1_spec.set_text("aa")
+# dlg1_spec.set_text("aa")
 
 
 # 确认
@@ -90,12 +95,34 @@ dlg1_spec.set_text("aa")
 
 # # 在曲线文本框中输入内容
 # dlg_spec3.Edit2.set_text("sa")
+
+# list1="40；20；0"
+# list2="180；20；450"
+# coords_x=int(list1[0])
+# print("coords_x:",coords_x)
+# coords_y=int(list1[1])
+# print("coords_y:",coords_y)
+# valu=list1[2]
+# print("valu:",valu)
+#
+#
 #
 # # 切换到网格窗口
 # dlg_spec5=dlg_spec3.child_window(title="GridWindow", class_name="wxWindowNR")
+
+
+
+# OperatingControls(dlg_spec5).Coordinate_Textbox(list1,"Edit")
+
+# OperatingControls(dlg_spec5).Coordinate_Textbox(list2,"Edit")
+valu="150；10；第一行"
+
+# ControlOperationSuite(None).select_AllowableCurve(valu)
+
+
 # # 在第一行,X轴
-# dlg_spec5.double_click_input(coords = (40, 20),button ="left")
-# dlg_spec5.Edit.set_text("0")
+# dlg_spec5.double_click_input(coords = (coords_x, coords_y),button ="left")
+# dlg_spec5.Edit.set_text(valu)
 #
 # # # 在第一行,Y轴
 # dlg_spec5.double_click_input(coords = (180, 20),button ="left")

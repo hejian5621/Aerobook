@@ -85,12 +85,6 @@ class FormatConversion:
 
 
 
-    def str_dicti(self):
-        """
-        拼接数据类型，用于读取读取Excel表格用例
-        :return:
-        """
-
 
 
 

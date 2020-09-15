@@ -93,13 +93,15 @@ class pywin_openAProgram:
         :param testdicts:
         :return:
         """
-        # 通过Aerobook标题链接Aerobook进行，并切换到Aerobook窗口
+        # 通过Aerobook标题链接Aerobook进程，并切换到Aerobook窗口
         aero_window = pywin_openAProgram().entrance_subroutine_title()
-        # 进行菜单栏操作
-        MenuOptions = testdicts["所在模块"]  # 取出菜单栏操作路径
+        # 切换到菜单栏
         dlg_spec = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
         son_window = dlg_spec.child_window(title=self.aerocheck_title, class_name="wxWindowNR")
-        son_window.menu_select(MenuOptions)# 点击菜单选项
+        MenuOptions = testdicts["所在模块"]  # 取出菜单栏操作路径
+        son_window.menu_select(MenuOptions) # 点击菜单选项
+        print("通过菜单栏正常打开被测模块")
+        print(" ")
         return aero_window,son_window
 
 
@@ -257,19 +259,44 @@ class  module_initialize:
         在测试尺寸信息模块时需要进行铺层数据库的制作
         :return:
         """
-        from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import Laminatedata_execute
+        from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import UseCase_step
         # 从Excel中获取测试用例
-        ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()   # 获取配置文件中项目的路径
-        site = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\自动化测试用例初始化.xlsx",
-                  "表单名称": "铺层数据库制作工具", "初始行": 1,"初始列":1}
-        list_dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
-        # 从Excel中获取控件操作属性
-        site1 = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\控件属性已经操作方法初始化.xlsx",
-                "表单名称": "铺层数据库制作工具弹窗", "初始行": 1, "初始列": 1}
-        list_dicts1 = read_excel(site1).readExcel_ControlProperties()  # 读取测试用例
-        for  dicts in list_dicts:
-            dicts["被测程序文件地址"] = ProjectPath
-            Laminatedata_execute(list_dicts1,dicts).SelectFile( )  # 调用测试步骤
+        ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()  # 获取配置文件中项目的路径
+        testCase_attribute= {
+            '选择铺层Excel文件文本框': {'控件类型': '文本框', '唯一标识': 'Edit', '唯一标识方法': '方式一', '所操作实例': '窗口一',
+                            '操作控件后等待时间': 0.0, '是否有弹窗出现': '否', '弹窗标题': '无', '弹窗中输入文件名': '无', '弹窗类型': '无',
+                            '关闭弹窗按钮名称': '无', '是否有嵌套弹窗': '否', '嵌套弹窗标题': '无', '嵌套弹窗类型': '无', '嵌套弹窗关闭按钮名称': '无'},
+             '铺层数据保存路径文本框': {'控件类型': '文本框', '唯一标识': 'Edit2', '唯一标识方法': '方式一', '所操作实例': '窗口二',
+                             '操作控件后等待时间': 0.0, '是否有弹窗出现': '否', '弹窗标题': '无', '弹窗中输入文件名': '无', '弹窗类型': '无',
+                             '关闭弹窗按钮名称': '无', '是否有嵌套弹窗': '否', '嵌套弹窗标题': '无', '嵌套弹窗类型': '无', '嵌套弹窗关闭按钮名称': '无'},
+            '选择铺层Excel文件按钮': {'控件类型': '按钮', '唯一标识': 'Button1', '唯一标识方法': '方式一', '所操作实例': '窗口一', '操作控件后等待时间': 0.0,
+                              '是否有弹窗出现': '是', '弹窗标题': '选择Excel铺层文件', '弹窗中输入文件名': 'PlyLibDb_352_541.xlsx',
+                              '弹窗类型': '路径弹窗', '关闭弹窗按钮名称': '打开', '是否有嵌套弹窗': '否', '嵌套弹窗标题': '无', '嵌套弹窗类型': '无', '嵌套弹窗关闭按钮名称': '无'},
+            '铺层数据库保存路径按钮': {'控件类型': '按钮', '唯一标识': 'Button2', '唯一标识方法': '方式一', '所操作实例': '窗口二', '操作控件后等待时间': 0.0,
+                            '是否有弹窗出现': '是', '弹窗标题': '选择铺层数据库保存路径', '弹窗中输入文件名': 'plylib.db', '弹窗类型': '路径弹窗', '关闭弹窗按钮名称': '保存',
+                            '是否有嵌套弹窗': '是', '嵌套弹窗标题': '确认另存为', '嵌套弹窗类型': '警告弹窗', '嵌套弹窗关闭按钮名称': '是'},
+            '模板文件按钮': {'控件类型': '按钮', '唯一标识': 'Button3', '唯一标识方法': '方式一', '所操作实例': '窗口三', '操作控件后等待时间': 5.0, '是否有弹窗出现': '否',
+                       '弹窗标题': '无', '弹窗中输入文件名': '无', '弹窗类型': '无', '关闭弹窗按钮名称': '无', '是否有嵌套弹窗': '无', '嵌套弹窗标题': '无', '嵌套弹窗类型': '无',
+                       '嵌套弹窗关闭按钮名称': '无'},
+            '开始制作按钮': {'控件类型': '按钮', '唯一标识': 'Button4', '唯一标识方法': '方式一', '所操作实例': '窗口三', '操作控件后等待时间': 1.0,
+                       '是否有弹窗出现': '否', '弹窗标题': '无', '弹窗中输入文件名': '无', '弹窗类型': '无', '关闭弹窗按钮名称': '无', '是否有嵌套弹窗': '无',
+                       '嵌套弹窗标题': '无', '嵌套弹窗类型': '无', '嵌套弹窗关闭按钮名称': '无'},
+            '关闭按钮': {'控件类型': '按钮', '唯一标识': 'Button5', '唯一标识方法': '方式一', '所操作实例': '窗口三',
+                     '操作控件后等待时间': 0.0, '是否有弹窗出现': '否', '弹窗标题': '无', '弹窗中输入文件名': '无', '弹窗类型': '无',
+                     '关闭弹窗按钮名称': '无', '是否有嵌套弹窗': '无', '嵌套弹窗标题': '无', '嵌套弹窗类型': '无', '嵌套弹窗关闭按钮名称': '无'}}
+
+        testCase_dict ={'用例编号': 'pck001', '测试点': '铺层数据库制作', '所在模块': '铺层信息->铺层数据库制作工具',
+                        '选择铺层Excel文件文本框': r'\PlyLibDb_352_541.xlsx', '铺层数据保存路径文本框': r'\plylib.db',
+                        '选择铺层Excel文件按钮': '默认', '铺层数据库保存路径按钮': '默认', '模板文件按钮': '默认',
+                        '开始制作按钮': '点击', '关闭按钮': '默认', '预期结果文本信息': '铺层数据库制作已完成!', '用例状态': '执行',
+                        '预期值信息类型': '信息窗口', '操作窗口标题': '铺层数据库制作工具', '操作子窗口标题': '铺层数据库制作工具',
+                        '初始化级别': '整个被测模块', '测试结果等待时间': 3.0, '其他': '拼接路径', '用例集名称': '铺层信息--铺层数据库制作工具弹窗',
+                        '被测程序文件地址': r'F:\Aerobook\src\testCase\projectFile\automateFile'}
+
+
+        actual_result = UseCase_step(testCase_attribute, testCase_dict). \
+            Perform_useCase_Steps()  # 铺层信息--铺层库优化工作栏测试用例
+
 
 
 
@@ -291,8 +318,9 @@ class  module_initialize:
         list_dicts1 = read_excel(site1).readExcel_ControlProperties()  # 读取测试用例
         for  dicts in list_dicts:
             dicts["被测程序文件地址"] = ProjectPath
-            actual_Text=sizeInfo_1D2DXlsTemplate_execute(list_dicts1, dicts).SelectFile() # 调用测试步骤
-            print("actual_Text:",actual_Text)
+            actual_result = UseCase_step(testCase_attribute, testCase_dict). \
+                Perform_useCase_Steps()  # 铺层信息--铺层库优化工作栏测试用例
+            print("actual_Text:",actual_result)
 
 
 

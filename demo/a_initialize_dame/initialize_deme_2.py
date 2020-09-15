@@ -7,7 +7,7 @@ module_initialize().LaminatedataPopup()
 
 # 一维单元尺寸定义（模板）
 # 铺层数据制作工具
-module_initialize().sizeInformation()
+# module_initialize().sizeInformation()
 
 # 二维单元尺寸定义（模板）
 

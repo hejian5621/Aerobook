@@ -5,6 +5,11 @@ from src.utils.commonality.ExcelFile import read_excel
 from tool import folderFile_dispose,Check_winControl
 from src.utils.otherMethods.initialize import execute_useCase_initialize
 from utils.commonality.tool import UseCase_parameterization
+import time
+
+
+
+
 
 class Initializing:
     """用例执行前需要做的操作"""
@@ -15,39 +20,32 @@ class Initializing:
 
     def controller(self,dictSet ):
         """
-        控制方法
+          在执行用例前需要要准备的操作
         dict={"全局参数":"","全局用例集名称":"","当前用例集名称":"","删除文件名列表":[],"详细地址":"","关闭弹窗":[],"控件属性已经操作方法":testCase_attribute}
+        :param dictSet:
         :return:
         """
+        WindowTop.EnumWindows("Aerobook v1.0.4")     # 把被测系统页面置顶
         number=dictSet["全局参数"]
         global_UseCase_Name = dictSet["全局用例集名称"]
         real_UseCase_Name = dictSet["当前用例集名称"]
         self.testCase_attribute = dictSet["控件属性已经操作方法"]
-        "控件属性已经操作方法"
         # 在运行每一个用例集之前初始化全局变量参数
         number,global_Name = Initializing().initialize_globalVariable(number, global_UseCase_Name, real_UseCase_Name)
-        # 被测系统置顶
-        WindowTop.EnumWindows("Aerobook v1.0.4")
         # 获取项目所在路径
         ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()
         # 用例在执行前，首先获取信息窗口的文本信息，用于获取最新的信息窗口文本信息
         old_content = Information_Win().acquire_HTML_TXT(ProjectPath)
-        # 用例执行前，删除相关文件
-        if "删除文件名列表" in dictSet :
+        if "删除文件名列表" in dictSet : # 用例执行前，删除相关文件
             list_filePath = dictSet["删除文件名列表"]
             folderFile_dispose(ProjectPath).delfile(list_filePath)
-        # 在用例执行第一次，获取控件属性已经操作方法
-        if number == 1:
+        if number == 1:  # 在执行该模块第一条用例前执行下面操作
             tableName=["控件属性已经操作方法"]
             site = UseCase_parameterization().parameterization_location(real_UseCase_Name, tableName)
             site=site[0]
-            self.testCase_attribute = read_excel(site).readExcel_ControlProperties()  # 读取测试用例
+            self.testCase_attribute = read_excel(site).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
             if real_UseCase_Name=="载荷信息--编辑工况":
-                # 清除所有的包络工况
-                execute_useCase_initialize().clear_editWorkingCondition()
-            if real_UseCase_Name == "材料信息--定义复合材料参数":
-                # 清除所有的许用值曲线
-                execute_useCase_initialize().clear_AllowableCurve()
+                execute_useCase_initialize().clear_editWorkingCondition()    # 清除所有的包络工况
         if "关闭弹窗" in dictSet: # 关闭没有关闭的弹窗
             list_CloseWindows = dictSet["关闭弹窗"]
             for CloseWindows in list_CloseWindows:
@@ -55,6 +53,7 @@ class Initializing:
                 button_name=CloseWindows[1]
                 Check_winControl(title, button_name).popUp_Whether_close()
         return number,global_Name,ProjectPath,old_content,self.testCase_attribute
+
 
 
     def initialize_globalVariable(self,reset_arg,global_UseCase_Name,real_UseCase_Name):
@@ -86,12 +85,10 @@ class finish_clear:
         messageType=dictSet["预期值信息类型"]
         actual_result = dictSet["实际值"]
         expect_result = dictSet["预期值"]
-
         """ 收尾，如果有警告弹框就关掉"""
         if "关闭弹窗" in dictSet:  # 关闭没有关闭的弹窗
             list_CloseWindows = dictSet["关闭弹窗"]
             for CloseWindows in list_CloseWindows:
-                print("进入关闭弹窗")
                 title = CloseWindows[0]
                 button_name = CloseWindows[1]
                 Check_winControl(title, button_name).popUp_Whether_close()
