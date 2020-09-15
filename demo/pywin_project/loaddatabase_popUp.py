@@ -35,7 +35,7 @@ module_window.print_control_identifiers()
 
 # 开始制作按钮
 
-# module_window.Button3.click()
+module_window.Button3.click()
 
 
 # 关闭按钮

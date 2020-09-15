@@ -52,13 +52,13 @@ class pywin_openAProgram:
         # 点击请求授权按钮
         son_window=app_window.child_window(title="本地授权",
                                            auto_id="groupBox_local", control_type="System.Windows.Forms.GroupBox")
-        son_window.window(title="请求授权").wait("exists", timeout=10, retry_interval=0.1).click()
+        son_window.window(title="请求授权").wait("exists", timeout=10, retry_interval=0.1).click_input()
         succeed_window=Application().connect(title_re=r'成功',timeout=10)
         succeed1_window=succeed_window.window(title_re=r'成功')
         # succeed1_window.print_control_identifiers()
-        succeed1_window.child_window(title="确定").wait("exists", timeout=10, retry_interval=0.1).click()  # 点击确定按钮
+        succeed1_window.child_window(title="确定").wait("exists", timeout=10, retry_interval=0.1).click_input()  # 点击确定按钮
         # 切回到Aerobook平台启动器窗口并点击运行按钮
-        app_window.window(title=r'运行').wait("exists", timeout=10, retry_interval=0.1).click()
+        app_window.window(title=r'运行').wait("exists", timeout=10, retry_interval=0.1).click_input()
 
 
 
@@ -137,7 +137,7 @@ class UIA_link:
         # 连接Aerobook控制台窗口进程
         Use = uiautomation.WindowControl(searchDepth=1, Name=self.aero_title )
         # 点击子应用，进入子应用
-        Use.Control(searchDepth=4,Name=childApp_Title).Click()
+        Use.Control(searchDepth=4,Name=childApp_Title).click_input()
         return Use
 
 
@@ -185,7 +185,7 @@ class execute_useCase_initialize:
         while True:
             txt = module_window.ComboBox.window_text()
             if txt:
-                module_window.编辑工况Button.click()
+                module_window.编辑工况Button.click_input()
             else:
                 break
         Check_winControl("编辑工况", "关闭").popUp_Whether_close()

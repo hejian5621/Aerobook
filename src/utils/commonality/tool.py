@@ -195,7 +195,7 @@ class  Check_winControl:
         :param event_button: 触发的按钮操作
         :return:
         """
-        self.triggerButton.click()    # 点击触发弹窗的按钮
+        self.triggerButton.click_input()()    # 点击触发弹窗的按钮
         # 判断弹窗是否弹窗，如果没有弹出，就继续点击
         while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
             result =None
@@ -205,9 +205,9 @@ class  Check_winControl:
                 break
             except (findwindows.ElementNotFoundError,timings.TimeoutError):  # 如果找不到弹窗
                 if (self.CircleInitial % 10) == 0:    #  如果循环次数数10的倍数，就再次点击按钮
-                    self.triggerButton.click()
+                    self.triggerButton.click_input()
                 elif  self.CircleInitial==1 :    # 如果第一次链接不是，在点击一次
-                    self.triggerButton.click()
+                    self.triggerButton.click_input()
             else:
                 break                                 # 如果找到了弹窗就退出弹窗
             if self.CircleInitial == (self.cycleIndex + 1):
@@ -255,7 +255,7 @@ class  Check_winControl:
                 break
             else:     # 如果没有异常执行下面的代码，说明窗口并没有关闭
                 if py_app[self.triggerButton].exists():  # 如果控件存在
-                    py_app[self.triggerButton].click()
+                    py_app[self.triggerButton].click_input()
                 else:
                     print("没有找到关闭窗口的按钮", __file__, sys._getframe().f_lineno)
                     os._exit(0)
@@ -272,11 +272,11 @@ class  Check_winControl:
         确认勾选框是否勾选，如果没有勾选，就勾选
         :return:
         """
-        self.triggerButton.click()  # 勾选勾选框
+        self.triggerButton.click_input()  # 勾选勾选框
         while self.CircleInitial<self.cycleIndex:
             State=self.triggerButton.get_check_state()   # 返回勾选框的勾选状态
             if State==0:  # 0 表示没有勾选上
-                self.triggerButton.click()
+                self.triggerButton.click_input()
             else:
                 break
             self.CircleInitial = self.CircleInitial + 1

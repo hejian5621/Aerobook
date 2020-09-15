@@ -50,7 +50,7 @@ class  ControlOperationSuite:
             dlg_spec4 = dlg_spec3.child_window(class_name="msctls_progress32")  # 切换到选择文件弹窗中的地址栏
             dlg_spec5 = dlg_spec4.child_window(class_name="Breadcrumb Parent")
             dlg_spec6 = dlg_spec5.Toolbar
-            dlg_spec6.click()    # 点击地址栏，让地址栏输入框显示出来
+            dlg_spec6.click_input()()    # 点击地址栏，让地址栏输入框显示出来
             dlg_spec4.Edit.set_text(location)     # 在地址栏输入地址
             send_keys('{ENTER}')   # 点击回车键
             self.dlg_spec["Edit"].set_text(filename_content)   # 在文件名中输入内容
@@ -205,7 +205,7 @@ class  ControlOperationSuite:
         # 勾选数据
         dlg_spec.double_click_input(coords=(coord_X, coord_Y), button="left")
         # 数据勾选完毕点击“确认”按钮
-        app_window.确认.click()
+        app_window.确认.click_input()()
         # 检查“选择材料许用值曲线”窗口是否关闭
         Check_winControl("选择材料许用值曲线", "确认").popUp_Whether_close()
 

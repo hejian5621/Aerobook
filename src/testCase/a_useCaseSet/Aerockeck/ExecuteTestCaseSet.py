@@ -11,7 +11,7 @@ from utils.commonality.tool import UseCase_parameterization
 
 """铺层信息--铺层库优化工作栏测试用例"""
 @ddt
-@unittest.skip(u"暂时不执行")
+# @unittest.skip(u"暂时不执行")
 class Test_LaminateOptimize(unittest.TestCase):
     """铺层库优化工作栏测试用例"""
     global real_UseCase_Name
@@ -155,8 +155,8 @@ class Test_LaminatedataPopup(unittest.TestCase):
 
 
 
-        # Name = ["铺层库制作弹窗", "选择铺层Excel文件", "铺层数据保存路径文本框"]
-        Name = ["测试"]
+        Name = ["铺层库制作弹窗", "选择铺层Excel文件", "铺层数据保存路径文本框"]
+        # Name = ["测试"]
         real_UseCase_Name = "铺层信息--铺层数据库制作工具弹窗"
         list_dicts = UseCase_parameterization().parameterization_data(real_UseCase_Name, Name)
         @data(*list_dicts)  # 参数化参数用例
@@ -183,7 +183,7 @@ class Test_LaminatedataPopup(unittest.TestCase):
 
 """尺寸信息--一维二维单元尺寸定义（模板）"""
 @ddt
-# @unittest.skip(u"暂时不执行")
+@unittest.skip(u"暂时不执行")
 class Test_sizeInfo_1D2DXls(unittest.TestCase):
         """尺寸信息--一维二维单元尺寸定义（模板）"""
         global real_UseCase_Name
@@ -262,7 +262,7 @@ class Test_sizeInfo_1D2DXls(unittest.TestCase):
 
 """求解计算--求解计算"""
 @ddt
-# @unittest.skip(u"暂时不执行")
+@unittest.skip(u"暂时不执行")
 class Test_solveCalculation(unittest.TestCase):
         """求解计算--求解计算"""
         global real_UseCase_Name

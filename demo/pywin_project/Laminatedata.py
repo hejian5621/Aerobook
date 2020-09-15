@@ -35,4 +35,16 @@ module_window.print_control_identifiers()
 
 # 模板文件按钮
 
-module_window.Button3.click()
+# dlg_spec=module_window.Button3.click()
+
+
+
+dlg_spec=module_window.Button2
+
+print("使用方法",dir(dlg_spec.wrapper_object()))
+
+# dlg_spec.click()
+
+dlg_spec.click_input()
+#
+# print("txt:",txt)

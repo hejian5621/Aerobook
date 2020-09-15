@@ -50,7 +50,7 @@ class OperatingControls:
                     Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
                     print("控件”%r“成功勾选" % ControlsName)
                 elif ControlTypes == "按钮" and whetherpopup == "否":
-                    dlg_spec.click()
+                    dlg_spec.click_input()
                     print("控件”%r“按钮点击成功" % ControlsName)
                 elif ControlTypes == "按钮" and whetherpopup == "是":  # 操作套件
                     OperatingControls(dlg_spec).button_popUp(operational, location, operational)
@@ -312,7 +312,7 @@ class OperatingControls:
             ControlOperationSuite(None).select_workingCondition()
         elif Popuptype == "选择结构单元":  # 操作弹窗套件
             time.sleep(0.3)
-            self.window_one.click()
+            self.window_one.click_input()
             KeyboardMouse().selectionModel()  # 选择结构单元
         else:
             print("被操作的套件名称不存在,套件名称为：",Popuptype, __file__, sys._getframe().f_lineno)

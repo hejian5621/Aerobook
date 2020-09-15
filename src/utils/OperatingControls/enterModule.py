@@ -134,6 +134,6 @@ class specialWay_OperatingControls:
         Use = uiautomation.WindowControl(searchDepth=1, Name=self.aero_title)  # 连接Aerobook窗口
         # 点击切换窗口按钮
         app1 = Use.Control(searchDepth=7, Name=self.cut_winName)
-        app1.Click()
+        app1.click_input()
 
 
