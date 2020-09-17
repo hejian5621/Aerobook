@@ -1,33 +1,18 @@
+import win32con
+from win32gui import PyMakeBuffer, SendMessage, PyGetBufferAddressAndLen, PyGetString
 
+length = 10000
 
-from src.utils.otherMethods.initialize import programInitialization
-from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
-from config.configurationFile import ProfileDataProcessing
-from tool import instrument
-from config.relative_location import path
-from pywinauto.application import Application
-import uiautomation
+hWnd=68214
+hWnd=68302
 
+buf = PyMakeBuffer(length)
+length2 = SendMessage(hWnd, win32con.WM_GETTEXT, length, buf)+1
+print(length2)
+buf = PyMakeBuffer(length2)
+print('get: ', SendMessage(hWnd, win32con.WM_GETTEXT, length2, buf))
 
+address, length = PyGetBufferAddressAndLen(buf)
+text = PyGetString(address, length)
 
-
-
-
-
-
-
-# # 读取配置文档信息里的Aerobook和Aerocheck窗口的标题
-# aero_title = ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 从配置文件获取Aerobook窗口标题
-# aerocheck_title = ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
-#
-#
-# app=Application().connect(title=aero_title) # 通过exe打开程序
-# py_app=app.window(title=aero_title)
-# # 连接应用程序，并切换到进入模型树
-# # 独立显示底部蒙皮
-# ControlOperationSuite(py_app).pywin_ShowSkinSeparately()
-
-
-
-
-ControlOperationSuite(None).select_workingCondition()
+print('text: ', text)

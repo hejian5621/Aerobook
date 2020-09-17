@@ -1,19 +1,9 @@
-import win32api
-import win32gui
 
-def resolution():  # 获取屏幕分辨率
-    return win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
+import win32gui,time
 
-# 调用getWindowName类获取护眼宝窗口信息赋值给wname，返回一个矩形窗口四个坐标
-def get_window_info():
-    handle = win32gui.FindWindow(0, "警告")  # 获取窗口句柄
-    if handle == 0:
-         print('end', '提示：请打开护眼宝\n')
-        #return None
-    else:
-        return win32gui.GetWindowRect(handle)
-# 启动
-if __name__ == "__main__":
-    screen_resolution =resolution()
-    window_size = get_window_info()
-    print(window_size)
+
+hwnd=win32gui.FindWindow(None,"Aerobook v1.0.5")
+print ('hwnd:',hwnd)
+time.sleep(1)
+win32gui.EnableWindow(hwnd,True)
+win32gui.SetForegroundWindow(hwnd)
