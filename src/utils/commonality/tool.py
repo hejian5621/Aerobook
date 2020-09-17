@@ -195,7 +195,7 @@ class  Check_winControl:
         :param event_button: 触发的按钮操作
         :return:
         """
-        self.triggerButton.click_input()()    # 点击触发弹窗的按钮
+        self.triggerButton.click_input()   # 点击触发弹窗的按钮
         # 判断弹窗是否弹窗，如果没有弹出，就继续点击
         while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
             result =None
@@ -291,9 +291,10 @@ class  Check_winControl:
         self.triggerButton.set_text(data)  # 文本框
         while self.CircleInitial<self.cycleIndex:
             State = self.triggerButton.window_text()  # 返回输入的文本
-            if State == data:  # 0 表示没有勾选上
+            if str(State) == str(data):  # 0
                 break
             else:
+                print("循环次数")
                 self.triggerButton.set_text(data)
             self.CircleInitial = self.CircleInitial + 1
 
@@ -303,14 +304,23 @@ class  Check_winControl:
         选择下拉框
         :return:
         """
+        print("data:",data)
         self.triggerButton.select(data)  # 下拉框
         while self.CircleInitial < self.cycleIndex:
             State = self.triggerButton.window_text()  # 是否选择预期数据
-            if State == data:  # 0 表示没有勾选上
+            if str(State) == str(data):  #
                 break
             else:
                 self.triggerButton.select(data)
             self.CircleInitial = self.CircleInitial + 1
+
+
+    def Verify_dropDownBox_change(self,data):
+        """
+        选择下拉框
+        :return:
+        """
+        self.triggerButton.select(data)  # 下拉框
 
 
 """窗口置顶"""
@@ -504,6 +514,10 @@ class UseCase_parameterization:
              location= ProfileDataProcessing("testCase", "CompoundStrengthCheck_1D").config_File()
         elif moduleName == "复材结构强度校核--复合材料强度校核2D":
             location = ProfileDataProcessing("testCase", "CompoundStrengthCheck_2D").config_File()
+        elif moduleName == "尺寸信息--1D单元尺寸定义":
+            location = ProfileDataProcessing("testCase", "SizeDefinition_1D").config_File()
+        elif moduleName == "尺寸信息--2D单元尺寸定义":
+            location = ProfileDataProcessing("testCase", "SizeDefinition_2D").config_File()
         else:
             print("没有地址", __file__, sys._getframe().f_lineno)
             os._exit(0)

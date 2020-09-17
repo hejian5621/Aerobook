@@ -11,11 +11,13 @@ class OperatingControls:
 
 
 
-    def __init__(self,window_one,window_two=None,window_three =None):
+    def __init__(self,window_one,window_two=None,window_three =None,window_four =None):
         self.window_one=window_one
         self.window_two = window_two
         self.window_three = window_three
+        self.window_four = window_four
         self.dlg_spec=None
+        self.list_AfterParsing=None
 
 
     def controlConsole(self,Silverlight,argument ):
@@ -26,10 +28,12 @@ class OperatingControls:
         :return:
         """
         print("\033[0;34m 《进入操作控件函数开始操作控件》")
+        print(" ")
         location = argument["被测程序文件地址"]
         els = argument["其他"]
         for ControlsName, ControlProperties in Silverlight.items():  # 循环取出控件
             operational = argument[ControlsName]
+            print("开始操作控件：%r 值：%r" % (ControlsName, operational))
             if operational != "默认":  # 当控件不等于默认（默认代表不用操作控件）
                 ControlTypes = ControlProperties["控件类型"]
                 ControlInstance = ControlProperties["所操作实例"]
@@ -37,7 +41,8 @@ class OperatingControls:
                 discern = ControlProperties["唯一标识"]
                 waitingTime = ControlProperties["操作控件后等待时间"]
                 whetherpopup = ControlProperties["是否有弹窗出现"]
-                WindowInstance = OperatingControls(self.window_one, self.window_two, self.window_three). \
+                Control_mode = ControlProperties["唯一标识方法"]
+                WindowInstance = OperatingControls(self.window_one, self.window_two, self.window_three,self.window_four). \
                     OperationControlInstance(ControlInstance)  # 获取操作控件实例
                 dlg_spec = OperatingControls(WindowInstance). \
                     IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
@@ -48,29 +53,38 @@ class OperatingControls:
                     print("在控件”%r“文本框中输入：%r" % (ControlsName, operational))
                 elif ControlTypes == "勾选框" or ControlTypes == "单选框":
                     Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
-                    print("控件”%r“成功勾选" % ControlsName)
+                    print("控件%r成功勾选" % ControlsName)
                 elif ControlTypes == "按钮" and whetherpopup == "否":
                     dlg_spec.click_input()
                     print("控件”%r“按钮点击成功" % ControlsName)
                 elif ControlTypes == "按钮" and whetherpopup == "是":  # 操作套件
-                    OperatingControls(dlg_spec).button_popUp(operational, location, operational)
-                    PopupTitle = operational["弹窗标题"]
-                    print("控件”%r“按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle))
-                elif ControlTypes == "坐标--文本框":
-                    OperatingControls(WindowInstance).Coordinate_Textbox(operational, discern)
-                    print("控件”%r“坐标选择正确，并且在文本框中正确输入数据" % ControlsName)
-                elif ControlTypes == "坐标--点击":
-                    pass
+                    OperatingControls(dlg_spec).button_popUp(ControlProperties, location, operational)
+                    PopupTitle = ControlProperties["弹窗标题"]
+                    print("控件%r按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle))
+                elif ControlTypes == "坐标--单击--文本框":
+                    OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
+                    print("控件%r坐标选择正确，并且在文本框中正确输入数据" % ControlsName)
+                elif ControlTypes == "坐标--双击--弹窗套件":
+                    OperatingControls(WindowInstance).coord_dblclick_popUp(ControlProperties,operational)
+                    print("控件%r操作成功" % ControlsName)
+                elif ControlTypes == "坐标--三击--文本框":
+                    OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
+                    print("控件%r操作成功" % ControlsName)
                 elif ControlTypes == "下拉框":
-                    Check_winControl(None, dlg_spec).Verify_dropDownBox(operational)
-                    print("控件”%r“下拉框选择成功选择数据" % ControlsName)
+                    if Control_mode=="方式二":
+                        Check_winControl(None, dlg_spec).Verify_dropDownBox_change(operational)
+                    else:
+                        Check_winControl(None, dlg_spec).Verify_dropDownBox(operational)
+                    print("控件%r下拉框选择数据成功" % ControlsName)
                 else:
                     print("说明控件属性", __file__, sys._getframe().f_lineno)
                     os._exit(0)
                 time.sleep(waitingTime)
             else:
                 print("不操作控件“%r”：%r" % (ControlsName,operational))
+            print(" ")
         print("控件操作完成 \033[0m")
+        print(" ")
         print(" ")
 
 
@@ -100,6 +114,12 @@ class OperatingControls:
             else:
                 print("传过来的实例为空", __file__, sys._getframe().f_lineno)
                 os._exit(0)
+        elif ControlInstance == "窗口四":
+            if self.window_four:
+                return self.window_four
+            else:
+                print("传过来的实例为空", __file__, sys._getframe().f_lineno)
+                os._exit(0)
         else:
             if self.window_one:
                 return self.window_one
@@ -114,12 +134,18 @@ class OperatingControls:
         因为从电子表格获取的控件标识字符串，拼接在操作控件的时候会报错，暂时还没有找到原因，暂时使用该方法拼接操作方法
         :return:
         """
+        if "；" in discern:   # 解析参数
+            self.list_AfterParsing = discern.split("；")
+            discern=self.list_AfterParsing[-1]
         if Controlmethod=="方式一":
            self.dlg_spec= OperatingControls(self.window_one).ExpressionAssembly(discern)
            Check_winControl("警告", "OK").popUp_Whether_close()
         elif Controlmethod=="方式二":
-            list1=discern.split("；")
-            self.dlg_spec = self.window_one.child_window(title=list1[0], class_name=list1[1])
+            title_n=self.list_AfterParsing[0]
+            className = self.list_AfterParsing[1]
+            print("title_n:",title_n)
+            print("className :", className )
+            self.dlg_spec = self.window_one.child_window(title=title_n, class_name=className)
         else:
             print("没有唯一标识的操作方法", __file__, sys._getframe().f_lineno)
             os._exit(0)
@@ -278,35 +304,36 @@ class OperatingControls:
 
 
 
-    def button_popUp(self, properties,location, valu):
+    def button_popUp(self, ControlProperties,location, operational):
         """
        套件操作
-       :param  properties: 控件的属性
+       :param  ControlProperties: 控件的属性
        :param  location: 项目存放路径
-       :param  valu: 项目存放路径
+       :param  operational:
        :return:
        """
         nestWin_Dicti ={}
         examine =None
-        Popuptype = properties["弹窗类型"]
+        Popuptype = ControlProperties["弹窗类型"]
         if Popuptype=="路径弹窗":  # 操作弹窗套件
-            PopupTitle = properties["弹窗标题"]
-            nestPopup = properties["是否有嵌套弹窗"]
+            PopupTitle = ControlProperties["弹窗标题"]
+            nestPopup = ControlProperties["是否有嵌套弹窗"]
             Check_winControl(PopupTitle, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
-            closeName = properties["关闭弹窗按钮名称"]
-            filename = properties["弹窗中输入文件名"]
+            closeName = ControlProperties["关闭弹窗按钮名称"]
+            filename = ControlProperties["弹窗中输入文件名"]
             # 判断有没有嵌套弹窗
             if nestPopup=="是":
                 examine= "检查"
-                nest_PopupTitle = properties["嵌套弹窗标题"]
-                nest_closeName = properties["嵌套弹窗关闭按钮名称"]
+                nest_PopupTitle = ControlProperties["嵌套弹窗标题"]
+                nest_closeName = ControlProperties["嵌套弹窗关闭按钮名称"]
                 nestWin_Dicti = {"嵌套窗口标题": nest_PopupTitle, "嵌套控件名称": nest_closeName }
             parWin1_Dicti = {"窗口标题": PopupTitle, "关闭窗口控件名称": closeName, "地址": location, "文件夹输入内容": filename}
             ControlOperationSuite(None).SelectFile_Popover(parWin1_Dicti, examine, nestWin_Dicti)
         elif Popuptype == "选择材料许用值曲线":  # 操作弹窗套件
-            PopupTitle = properties["弹窗标题"]
+            PopupTitle = ControlProperties["弹窗标题"]
+            str_coord = ControlProperties["唯一标识"]
             Check_winControl(PopupTitle, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
-            ControlOperationSuite(None).select_AllowableCurve(valu)
+            ControlOperationSuite(None).select_AllowableCurve(str_coord)
         elif Popuptype == "选择校核工况":  # 操作弹窗套件
             Check_winControl("选择校核工况", self.window_one).window_WhetherOpen()  # 判断选择校核工况是否出现
             ControlOperationSuite(None).select_workingCondition()
@@ -319,32 +346,77 @@ class OperatingControls:
             os._exit(0)
 
 
-    def Coordinate_Textbox(self, list_argument,discern):
+    def coord_click_textbox(self,ControlProperties,argument):
         """
         坐标--文本框
         通过点击坐标位置显示文本框，然后输入内容
         选择材料许用值曲线
+        :param argument: 在文本框输入的参数
+        :param  ControlProperties: 控件属性
         :return:
         """
-        # 解析参数
-        list_AfterParsing=list_argument.split("；")
-        print("list_AfterParsing:",list_AfterParsing)
-        coord_X=int(list_AfterParsing[0])
-        print("coord_X:", coord_X)
-        coord_Y = int(list_AfterParsing[1])
-        print("coord_Y:",  coord_Y)
-        valu=list_AfterParsing[2]
-        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(discern)
+        discern = ControlProperties["唯一标识"]
+        ControlTypes = ControlProperties["控件类型"]
+        if ControlTypes=="坐标--单击--文本框":
+            self.dlg_spec=OperatingControls(self.window_one).coord_dblclick(discern)
+        elif ControlTypes=="坐标--三击--文本框":
+            self.dlg_spec = OperatingControls(self.window_one).coord_Threeclick(discern)
+        Check_winControl(None, self.dlg_spec).Verify_inputBox(argument)
+
+
+
+
+    def coord_dblclick_popUp(self,ControlProperties,argument):
+        """
+        根据坐标找到需要操作的控件，并且双击鼠标，操作套件
+        :return:
+        """
+        discern = ControlProperties["唯一标识"]
+        Popup_type =ControlProperties["弹窗类型"]
+        ControlTypes = ControlProperties["控件类型"]
+        OperatingControls(self.window_one).coord_dblclick(discern)
+        if Popup_type=="选择铺层库信息":
+            ControlOperationSuite(None).select_Laminatedata(argument)
+        else:
+            print("没有弹窗类型：", Popup_type, __file__, sys._getframe().f_lineno)
+            os._exit(0)
+
+
+
+
+    def coord_dblclick(self,sole_logo):
+        """
+        根据坐标找到需要操作的控件，并且双击鼠标
+        :return:
+        """
+        if "；" in sole_logo:
+            self.list_AfterParsing = sole_logo.split("；")
+        else:
+            print("唯一标识不能解析出坐标：", sole_logo, __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        coord_X = int(self.list_AfterParsing[0])
+        coord_Y = int(self.list_AfterParsing[1])
+        sole = self.list_AfterParsing[2]
+        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
         self.window_one.double_click_input(coords=(coord_X, coord_Y), button="left")
-        Check_winControl(None, dlg1_spec).Verify_inputBox(valu)
+        return dlg1_spec
 
 
-
-
-
-
-
-
-
-
+    def coord_Threeclick(self,sole_logo):
+        """
+        根据坐标找到需要操作的控件，并且三击鼠标
+        :return:
+        """
+        if "；" in sole_logo:
+            self.list_AfterParsing = sole_logo.split("；")
+        else:
+            print("唯一标识不能解析出坐标：", sole_logo, __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        coord_X = int(self.list_AfterParsing[0])
+        coord_Y = int(self.list_AfterParsing[1])
+        sole = self.list_AfterParsing[2]
+        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
+        self.window_one.click_input(coords=(coord_X, coord_Y), button="left")
+        self.window_one.double_click_input(coords=(coord_X, coord_Y), button="left")
+        return dlg1_spec
 

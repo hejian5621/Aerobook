@@ -50,7 +50,7 @@ class  ControlOperationSuite:
             dlg_spec4 = dlg_spec3.child_window(class_name="msctls_progress32")  # 切换到选择文件弹窗中的地址栏
             dlg_spec5 = dlg_spec4.child_window(class_name="Breadcrumb Parent")
             dlg_spec6 = dlg_spec5.Toolbar
-            dlg_spec6.click_input()()    # 点击地址栏，让地址栏输入框显示出来
+            dlg_spec6.click()   # 点击地址栏，让地址栏输入框显示出来
             dlg_spec4.Edit.set_text(location)     # 在地址栏输入地址
             send_keys('{ENTER}')   # 点击回车键
             self.dlg_spec["Edit"].set_text(filename_content)   # 在文件名中输入内容
@@ -84,7 +84,7 @@ class  ControlOperationSuite:
             app.window(title="项目设置").maximize()  # 项目弹窗最大化
         except findwindows.ElementNotFoundError:
             import sys, os
-            print("没有找到“%r“窗口" % PopWinTitle, __file__, sys._getframe().f_lineno)
+            print("没有找到“项目设置“窗口", __file__, sys._getframe().f_lineno)
             os._exit(0)
         else:
             x = int(ProfileDataProcessing("commonality", "coord1_x").config_File()) # 从配置文件获取鼠标点击坐标
@@ -92,8 +92,8 @@ class  ControlOperationSuite:
             mouse.click(button='left', coords= (x, y) )  # 点击有限元模型路径对应的文本框，显示出文本框
             DetailedPath = source + "\Htail.fem"
             self.dlg_spec.Edit.wait("exists", timeout=60, retry_interval=1).set_text(DetailedPath)  # 在有限元模型路径对应的文本框中输入数据
+            self.dlg_spec.click()
             Check_winControl("项目设置", "完成").nest_popUpWindows("警告", "OK")  # 检查嵌套弹窗是否关闭
-
 
 
     """PYWIN独立显示蒙皮"""
@@ -189,13 +189,13 @@ class  ControlOperationSuite:
 
 
     """材料信息--定义复合材料参数--拉伸、压缩、剪切对应的增加按钮"""
-    def select_AllowableCurve(self,list_argument):
+    def select_AllowableCurve(self,str_coord):
         """
         材料信息--定义复合材料参数--拉伸、压缩、剪切对应的增加按钮
         选择材料许用值曲线
         :return:
         """
-        list_AfterParsing = list_argument.split("；")
+        list_AfterParsing = str_coord.split("；")
         print("list_AfterParsing:",list_AfterParsing)
         coord_X = int(list_AfterParsing[0])
         coord_Y = int(list_AfterParsing[1])
@@ -232,5 +232,33 @@ class  ControlOperationSuite:
             dlg3_spec = dlg_spec.新建工况组合Button
             Check_winControl(None, dlg3_spec).Verify_CheckBox_Status()  # 点击工况组合选中工况组合
             Check_winControl("选择校核工况", "确认").popUp_Whether_close()
+
+
+    """尺寸信息--1D尺寸定义--选择铺层库信息"""
+    def select_Laminatedata(self,line):
+        """
+        尺寸信息--1D尺寸定义--选择铺层库信息
+        :return:
+        """
+        try:
+            app = Application().connect(title="选择铺层库信息",timeout=20)
+            self.dlg_spec = app.window(title="选择铺层库信息")  # 切换到选择文件弹窗窗口
+        except findwindows.ElementNotFoundError:
+            import sys, os
+            print("没有找到“选择铺层库信息“窗口"% __file__, sys._getframe().f_lineno)
+        else:
+            dlg_spec=self.dlg_spec.child_window(title="GridWindow", class_name="wxWindowNR")  # 切换到网格窗口
+            if line=="第一行":
+                dlg_spec.double_click_input(coords=(150, 10), button="left")  # 选择第一行数据
+            elif line=="第二行":
+                dlg_spec.double_click_input(coords=(150, 30), button="left")  # 选择第一行数据
+            elif line=="第三行":
+                dlg_spec.double_click_input(coords=(150, 50), button="left")  # 选择第一行数据
+            elif line=="第三行":
+                dlg_spec.double_click_input(coords=(150, 50), button="left")  # 选择第一行数据
+            else:
+                dlg_spec.double_click_input(coords=(150, 70), button="left")  # 选择第一行数据
+            # self.dlg_spec.print_control_identifiers()
+            self.dlg_spec.Button0.click_input()
 
 

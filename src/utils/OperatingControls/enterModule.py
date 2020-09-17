@@ -59,6 +59,10 @@ class  BeingMeasured_work:
     def __init__(self,son_window):
         self.workField = son_window.scrolledpanelwxWindowNR2   # 切换到被测工作
         self.workField_son=None
+        self.window_one = None
+        self.window_two = None
+        self.window_three = None
+        self.window_four = None
 
 
 
@@ -110,8 +114,42 @@ class  BeingMeasured_work:
         return self.workField_son,self.workField
 
 
+    def workField_SizeDefinition_1D(self):
+        """
+        进入尺寸信息->一维单元尺寸定义
+        :return:
+        """
+        # 获取窗口一
+        dlg_spec = self.workField.截面形状_wx_SysTabCtl321
+        self.window_one = dlg_spec.panelwxWindowNR0
+        # 获取窗口二
+        dlg2_spec = self.window_one.grid1
+        self.window_two = dlg2_spec.GridWindowwxWindowNR0
+        # 获取窗口三
+        dlg3_spec = self.workField.复合材料_wx_SysTabCtl32
+        dlg4_spec =dlg3_spec.panelwxWindowNR1
+        dlg5_spec = dlg4_spec.gridwxWindowNR
+        self.window_three = dlg5_spec.wxWindowNR6
+        # 获取窗口四
+        dlg6_spec = self.workField.复合材料_wx_SysTabCtl32
+        dlg7_spec = dlg6_spec.panel5
+        self.window_four = dlg7_spec.GridWindow2
+        return self.window_one,self.window_two,self.window_three,self.window_four
 
 
+
+    def workField_SizeDefinition_2D(self):
+        """
+        进入尺寸信息->二维单元尺寸定义
+        :return:
+        """
+        # 获取窗口一
+        dlg_spec = self.workField.截面形状_wx_SysTabCtl321
+        self.window_one = dlg_spec.panelwxWindowNR0
+        # 获取窗口二
+        work4 = self.window_one.复合材料_wx_SysTabCtl32
+        self.window_two = work4.wxWindowNR6
+        return self.window_one,self.window_two
 
 
 class specialWay_OperatingControls:
@@ -134,6 +172,6 @@ class specialWay_OperatingControls:
         Use = uiautomation.WindowControl(searchDepth=1, Name=self.aero_title)  # 连接Aerobook窗口
         # 点击切换窗口按钮
         app1 = Use.Control(searchDepth=7, Name=self.cut_winName)
-        app1.click_input()
+        app1.Click()
 
 

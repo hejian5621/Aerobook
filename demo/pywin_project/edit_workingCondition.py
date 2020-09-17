@@ -12,8 +12,7 @@ from pywinauto import findwindows
 
 testdicts={"所在模块":"载荷信息->编辑工况"}
 
-#
-#
+
 aero_window, module_window = pywin_openAProgram().menuOpen(testdicts)
 
 

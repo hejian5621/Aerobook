@@ -1,4 +1,5 @@
-# 铺层库优化工作栏
+# Aerobook主流程测试用例
+
 import unittest,time
 from assertpy import assert_that
 from BeautifulReport import BeautifulReport
@@ -774,13 +775,13 @@ if __name__ == '__main__':
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_LaminateOptimize))
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_LaminatedataPopup))
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_sizeInfo_1D2DXls))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_loaddatabase_popUp))
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_solveCalculation))
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_editWorkingCondition))
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_compositeMaterial))
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_CompoundStrengthCheck1D))
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_CompoundStrengthCheck2D))
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(Test_loaddatabase_popUp))
-    file_name=time.strftime("%Y%m%d%H%M%S")+"铺层库优化测试报告"    # 测试报告名称
+    file_name=time.strftime("%Y%m%d%H%M%S")+"Aerocheck主流程测试报告"    # 测试报告名称
     relativeAddress = path.location()
     logPath = relativeAddress+"report//Aerocheck//laminateOptimize_testReport//" # 测试报告保存地址
     result = BeautifulReport(suite).report(filename=file_name,log_path=logPath,description="铺层库优化工作栏")

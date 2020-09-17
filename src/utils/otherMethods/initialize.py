@@ -137,7 +137,8 @@ class UIA_link:
         # 连接Aerobook控制台窗口进程
         Use = uiautomation.WindowControl(searchDepth=1, Name=self.aero_title )
         # 点击子应用，进入子应用
-        Use.Control(searchDepth=4,Name=childApp_Title).click_input()
+        Use.Control(searchDepth=4,Name=childApp_Title).Click()
+
         return Use
 
 

@@ -26,9 +26,10 @@ class UseCase_step:
         self.actual_Text = None
         self.aero_window = None
         self.son_window = None
-        self.window_one = None  # 通用
-        self.window_two = None  # 特殊一
-        self.window_three = None  # 特殊二
+        self.window_one = None  # 窗口一
+        self.window_two = None  # 窗口二
+        self.window_three = None  # 窗口三
+        self.window_four=None    # 窗口四
         self.example=None
 
 
@@ -62,11 +63,17 @@ class UseCase_step:
                 self.global_UseCase_Name == "复材结构强度校核--复合材料强度校核2D":
             specialWay_OperatingControls(self.operationWindow_son).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
             self.window_one, self.window_two=BeingMeasured_work(son_window).workField_intensityCheck()
+        elif self.global_UseCase_Name == "尺寸信息--1D单元尺寸定义":
+            self.window_one,self.window_two,self.window_three,self.window_four = BeingMeasured_work(son_window).\
+                workField_SizeDefinition_1D()
+        elif self.global_UseCase_Name == "尺寸信息--2D单元尺寸定义":
+            self.window_one,self.window_two = BeingMeasured_work(son_window).\
+                workField_SizeDefinition_2D()
         else:
             print("没有找到需要切换的窗口：%r"%self.global_UseCase_Name, __file__, sys._getframe().f_lineno)
             os._exit(0)
         # 操作控制
-        OperatingControls(self.window_one,  self.window_two, self.window_three). \
+        OperatingControls(self.window_one,  self.window_two, self.window_three,self.window_four). \
             controlConsole(self.testCase_attribute, self.testCase_dict)
         time.sleep(self.results_waitTime) # 实际值等待时间
         # 获取时间值实例
