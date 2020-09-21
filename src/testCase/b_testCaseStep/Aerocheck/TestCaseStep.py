@@ -41,7 +41,8 @@ class UseCase_step:
         # 连接到被测程序，并且通过菜单栏打开被测模块
         aero_window, son_window = pywin_openAProgram().menuOpen(self.testCase_dict)
         # 切换到被测模块窗口
-        if self.global_UseCase_Name == "铺层信息--铺层库优化工作栏" or self.global_UseCase_Name =="求解计算--求解计算" :
+        if self.global_UseCase_Name == "铺层信息--铺层库优化工作栏" or self.global_UseCase_Name =="求解计算--求解计算" or \
+            self.global_UseCase_Name =="紧固件强度校核--紧固件参数设置":
             self.window_one = BeingMeasured_work(son_window).workField_general()
         elif self.global_UseCase_Name == "尺寸信息--一维二维单元尺寸定义（模板）":
             self.window_one=BeingMeasured_work(son_window).workField_sizeInfo()
@@ -69,6 +70,11 @@ class UseCase_step:
         elif self.global_UseCase_Name == "尺寸信息--2D单元尺寸定义":
             self.window_one,self.window_two = BeingMeasured_work(son_window).\
                 workField_SizeDefinition_2D()
+        elif self.global_UseCase_Name == "紧固件强度校核--紧固件参数输入":
+            if self.operationWindow_son =="紧固件参数输入":
+                self.window_one = BeingMeasured_work(son_window).workField_general()
+            elif self.operationWindow_son =="编辑参数弹框":
+                self.window_one = BeingMeasured_work(son_window).workField_Open_EditArgument()
         else:
             print("没有找到需要切换的窗口：%r"%self.global_UseCase_Name, __file__, sys._getframe().f_lineno)
             os._exit(0)

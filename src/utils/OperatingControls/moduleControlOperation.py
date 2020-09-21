@@ -11,7 +11,7 @@ class OperatingControls:
 
 
 
-    def __init__(self,window_one,window_two=None,window_three =None,window_four =None):
+    def __init__(self,window_one=None,window_two=None,window_three =None,window_four =None):
         self.window_one=window_one
         self.window_two = window_two
         self.window_three = window_three
@@ -32,60 +32,67 @@ class OperatingControls:
         location = argument["被测程序文件地址"]
         els = argument["其他"]
         for ControlsName, ControlProperties in Silverlight.items():  # 循环取出控件
-            operational = argument[ControlsName]
-            print("开始操作控件：%r 值：%r" % (ControlsName, operational))
-            if operational != "默认":  # 当控件不等于默认（默认代表不用操作控件）
-                ControlTypes = ControlProperties["控件类型"]
-                ControlInstance = ControlProperties["所操作实例"]
-                Controlmethod = ControlProperties["唯一标识方法"]
-                discern = ControlProperties["唯一标识"]
-                waitingTime = ControlProperties["操作控件后等待时间"]
-                whetherpopup = ControlProperties["是否有弹窗出现"]
-                Control_mode = ControlProperties["唯一标识方法"]
-                WindowInstance = OperatingControls(self.window_one, self.window_two, self.window_three,self.window_four). \
-                    OperationControlInstance(ControlInstance)  # 获取操作控件实例
-                dlg_spec = OperatingControls(WindowInstance). \
-                    IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
-                if ControlTypes == "文本框":  # 当控件是文本框的时候
-                    if els == "拼接路径":  # 如果是路径文本框，就判断需不需要拼接路径
-                        operational = location + operational
-                    Check_winControl(None, dlg_spec).Verify_inputBox(operational)
-                    print("在控件”%r“文本框中输入：%r" % (ControlsName, operational))
-                elif ControlTypes == "勾选框" or ControlTypes == "单选框":
-                    Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
-                    print("控件%r成功勾选" % ControlsName)
-                elif ControlTypes == "按钮" and whetherpopup == "否":
-                    dlg_spec.click_input()
-                    print("控件”%r“按钮点击成功" % ControlsName)
-                elif ControlTypes == "按钮" and whetherpopup == "是":  # 操作套件
-                    OperatingControls(dlg_spec).button_popUp(ControlProperties, location, operational)
-                    PopupTitle = ControlProperties["弹窗标题"]
-                    print("控件%r按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle))
-                elif ControlTypes == "坐标--单击--文本框":
-                    OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
-                    print("控件%r坐标选择正确，并且在文本框中正确输入数据" % ControlsName)
-                elif ControlTypes == "坐标--双击--弹窗套件":
-                    OperatingControls(WindowInstance).coord_dblclick_popUp(ControlProperties,operational)
-                    print("控件%r操作成功" % ControlsName)
-                elif ControlTypes == "坐标--三击--文本框":
-                    OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
-                    print("控件%r操作成功" % ControlsName)
-                elif ControlTypes == "下拉框":
-                    if Control_mode=="方式二":
-                        Check_winControl(None, dlg_spec).Verify_dropDownBox_change(operational)
+            if ControlsName in argument:
+                operational = argument[ControlsName]
+                print("开始操作控件：%r 值：%r" % (ControlsName, operational))
+                if operational != "默认":  # 当控件不等于默认（默认代表不用操作控件）
+                    ControlTypes = ControlProperties["控件类型"]
+                    ControlInstance = ControlProperties["所操作实例"]
+                    Controlmethod = ControlProperties["唯一标识方法"]
+                    discern = ControlProperties["唯一标识"]
+                    waitingTime = ControlProperties["操作控件后等待时间"]
+                    whetherpopup = ControlProperties["是否有弹窗出现"]
+                    Control_mode = ControlProperties["唯一标识方法"]
+                    WindowInstance = OperatingControls(self.window_one, self.window_two, self.window_three,self.window_four). \
+                        OperationControlInstance(ControlInstance)  # 获取操作控件实例
+                    dlg_spec = OperatingControls(WindowInstance). \
+                        IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
+                    if ControlTypes == "文本框":  # 当控件是文本框的时候
+                        if els == "拼接路径":  # 如果是路径文本框，就判断需不需要拼接路径
+                            operational = location + operational
+                        Check_winControl(None, dlg_spec).Verify_inputBox(operational)
+                        print("在控件”%r“文本框中输入：%r" % (ControlsName, operational))
+                    elif ControlTypes == "勾选框" or ControlTypes == "单选框":
+                        Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
+                        print("控件%r成功勾选" % ControlsName)
+                    elif ControlTypes == "按钮" and whetherpopup == "否":
+                        dlg_spec.click_input()
+                        print("控件”%r“按钮点击成功" % ControlsName)
+                    elif ControlTypes == "按钮" and whetherpopup == "是":  # 操作套件
+                        OperatingControls(dlg_spec).button_popUp(ControlProperties, location, operational)
+                        PopupTitle = ControlProperties["弹窗标题"]
+                        print("控件%r按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle))
+                    elif ControlTypes == "坐标--单击--文本框":
+                        OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
+                        print("控件%r坐标选择正确，并且在文本框中正确输入数据" % ControlsName)
+                    elif ControlTypes == "坐标--双击--弹窗套件":
+                        OperatingControls(WindowInstance).coord_dblclick_popUp(ControlProperties,operational)
+                        print("控件%r操作成功" % ControlsName)
+                    elif ControlTypes == "坐标--三击--文本框":
+                        OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
+                        print("控件%r操作成功" % ControlsName)
+                    elif ControlTypes == "坐标--键盘--文本框":
+                        OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
+                        print("控件%r操作成功" % ControlsName)
+                    elif ControlTypes == "下拉框":
+                        if Control_mode=="方式二":
+                            Check_winControl(None, dlg_spec).Verify_dropDownBox_change(operational)
+                        else:
+                            Check_winControl(None, dlg_spec).Verify_dropDownBox(operational)
+                        print("控件%r下拉框选择数据成功" % ControlsName)
                     else:
-                        Check_winControl(None, dlg_spec).Verify_dropDownBox(operational)
-                    print("控件%r下拉框选择数据成功" % ControlsName)
+                        print("说明控件属性", __file__, sys._getframe().f_lineno)
+                        os._exit(0)
+                    time.sleep(waitingTime)
                 else:
-                    print("说明控件属性", __file__, sys._getframe().f_lineno)
-                    os._exit(0)
-                time.sleep(waitingTime)
+                    print("不操作控件“%r”：%r" % (ControlsName,operational))
+                    print(" ")
             else:
-                print("不操作控件“%r”：%r" % (ControlsName,operational))
+                print("不操作控件“%r”" %ControlsName)
+                print(" ")
+            print("控件操作完成 \033[0m")
             print(" ")
-        print("控件操作完成 \033[0m")
-        print(" ")
-        print(" ")
+            print(" ")
 
 
 
@@ -161,6 +168,8 @@ class OperatingControls:
         """
         if str_Name=="Edit":
             self.dlg_spec=self.window_one.Edit
+        if str_Name=="Edit1":
+            self.dlg_spec=self.window_one.Edit1
         elif str_Name=="Edit2":
             self.dlg_spec = self.window_one.Edit2
         elif str_Name=="Edit3":
@@ -287,6 +296,14 @@ class OperatingControls:
             self.dlg_spec = self.window_one.ComboBox4
         elif str_Name == "ComboBox5":
             self.dlg_spec = self.window_one.ComboBox5
+        elif str_Name == "GroupBox":
+            self.dlg_spec = self.window_one.ComboBox
+        elif str_Name == "GroupBox1":
+            self.dlg_spec = self.window_one.ComboBox1
+        elif str_Name == "GroupBox2":
+            self.dlg_spec = self.window_one.ComboBox2
+        elif str_Name == "GroupBox3":
+            self.dlg_spec = self.window_one.GroupBox3
         elif str_Name == "路径Edit":
             self.dlg_spec = self.window_one.路径Edit
         elif str_Name == "两边各取蒙皮宽度一半":
@@ -346,6 +363,8 @@ class OperatingControls:
             os._exit(0)
 
 
+
+
     def coord_click_textbox(self,ControlProperties,argument):
         """
         坐标--文本框
@@ -361,8 +380,13 @@ class OperatingControls:
             self.dlg_spec=OperatingControls(self.window_one).coord_dblclick(discern)
         elif ControlTypes=="坐标--三击--文本框":
             self.dlg_spec = OperatingControls(self.window_one).coord_Threeclick(discern)
-        Check_winControl(None, self.dlg_spec).Verify_inputBox(argument)
-
+        elif ControlTypes=="坐标--键盘--文本框":
+            OperatingControls(self.window_one).coord_keyboardInput(discern,argument)
+        else:
+            print("没有找到操作方法：", ControlTypes, __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        if ControlTypes !="坐标--键盘--文本框":
+            Check_winControl(None, self.dlg_spec).Verify_inputBox(argument)
 
 
 
@@ -389,14 +413,7 @@ class OperatingControls:
         根据坐标找到需要操作的控件，并且双击鼠标
         :return:
         """
-        if "；" in sole_logo:
-            self.list_AfterParsing = sole_logo.split("；")
-        else:
-            print("唯一标识不能解析出坐标：", sole_logo, __file__, sys._getframe().f_lineno)
-            os._exit(0)
-        coord_X = int(self.list_AfterParsing[0])
-        coord_Y = int(self.list_AfterParsing[1])
-        sole = self.list_AfterParsing[2]
+        coord_X, coord_Y, sole = OperatingControls().analysis_coord(sole_logo)  # 解析参数
         dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
         self.window_one.double_click_input(coords=(coord_X, coord_Y), button="left")
         return dlg1_spec
@@ -407,6 +424,41 @@ class OperatingControls:
         根据坐标找到需要操作的控件，并且三击鼠标
         :return:
         """
+        coord_X,coord_Y,sole = OperatingControls().analysis_coord(sole_logo)  # 解析参数
+        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
+        self.window_one.click_input(coords=(coord_X, coord_Y), button="left")
+        self.window_one.double_click_input(coords=(coord_X, coord_Y), button="left")
+        return dlg1_spec
+
+
+
+    def coord_keyboardInput(self, sole_logo,argument):
+        """
+        把鼠标移动到坐标位置，并点击，最后使用键盘输入
+        :param sole_logo:
+        :param argument:
+        :return:
+        """
+        from pywinauto.keyboard import send_keys
+        coord_X,coord_Y,sole = OperatingControls().analysis_coord(sole_logo)  # 解析参数
+        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
+        dlg1_spec.click_input(coords=(coord_X, coord_Y), button="left")
+        time.sleep(1)
+        argument=str(argument)
+        # 使用键盘向文本框中输入数据
+        send_keys(argument)  # 使用键盘强制输入数据
+
+
+
+
+
+
+
+    def analysis_coord(self,sole_logo):
+        """
+        移动坐标到指定的位置
+        :return:
+        """
         if "；" in sole_logo:
             self.list_AfterParsing = sole_logo.split("；")
         else:
@@ -415,8 +467,4 @@ class OperatingControls:
         coord_X = int(self.list_AfterParsing[0])
         coord_Y = int(self.list_AfterParsing[1])
         sole = self.list_AfterParsing[2]
-        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
-        self.window_one.click_input(coords=(coord_X, coord_Y), button="left")
-        self.window_one.double_click_input(coords=(coord_X, coord_Y), button="left")
-        return dlg1_spec
-
+        return coord_X,coord_Y,sole

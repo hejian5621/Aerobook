@@ -152,6 +152,25 @@ class  BeingMeasured_work:
         return self.window_one,self.window_two
 
 
+    def workField_Open_EditArgument(self):
+        """
+        紧固件强度校核--紧固件参数输入
+        打开编辑参数弹框,并返回窗口实例
+        :return:
+        """
+        from tool import Check_winControl
+        workField=self.workField.Button2
+        Check_winControl(None,workField).window_handle_WhetherOpen("#32770","Edit4")  # 编辑参数是否打开
+        import win32gui
+        hwnd = win32gui.FindWindow("#32770", None)  # 获取窗体的句柄
+        app = Application().connect(handle=hwnd, timeout=20)
+        dlg_spec = app.window(handle=hwnd)  # 切换到选择文件弹窗窗口
+        return dlg_spec
+
+
+
+
+
 class specialWay_OperatingControls:
     """特殊情况下的控件操作，一般是正常方法识别不了控件"""
 

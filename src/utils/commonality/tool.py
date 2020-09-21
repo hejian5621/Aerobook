@@ -66,6 +66,7 @@ class KeyboardMouse:
     def selectionModel(self):
         """
         在Aerobook--Aerocheck的图形区通过键盘和鼠标的操作方式选中全部的结构单元
+        选择结构单元
         """
         self.k.press_key(self.k.shift_key)   # 按下键盘上的shift键
         mouse.press(coords=(345, 167))   # 鼠标长按
@@ -176,7 +177,7 @@ class  Check_winControl:
     """检查窗口或者控件，是否存在"""
 
 
-    def __init__(self,title, triggerButton,cycleIndex=10,CircleInitial=1):
+    def __init__(self,title=None, triggerButton=None,cycleIndex=10,CircleInitial=1):
         self.title=title  # 窗口标题
         self.triggerButton = triggerButton  # 控制实体
         self.cycleIndex = cycleIndex    # 循环最终次数
@@ -214,6 +215,34 @@ class  Check_winControl:
                 print("%s窗口没有找到"%self.title, __file__, sys._getframe().f_lineno)
                 os._exit(0)
             self.CircleInitial=self.CircleInitial+1
+
+    # 检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现
+    def window_handle_WhetherOpen(self,handle,identification):
+        """
+        检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现
+        通过句柄判断弹窗是否存在
+        如果出现，程序正常运行
+        如果没有出现，程序停止运行
+        :param handle: 预期弹出弹窗的标题
+        :param identification: 触发的按钮操作
+        :return:
+        """
+        self.triggerButton.click_input()  # 点击触发弹窗的按钮
+        # 判断弹窗是否弹窗，如果没有弹出，就继续点击
+        while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
+            result = None
+            state=Check_winControl(handle).handle_popUp_exist(identification)
+            if state:
+                break
+            else:
+                if (self.CircleInitial % 10) == 0:  # 如果循环次数数10的倍数，就再次点击按钮
+                    self.triggerButton.click_input()
+                elif self.CircleInitial == 1:  # 如果第一次链接不是，在点击一次
+                    self.triggerButton.click_input()
+            if self.CircleInitial == (self.cycleIndex + 1):
+                print("%s窗口没有找到" % self.title, __file__, sys._getframe().f_lineno)
+                os._exit(0)
+            self.CircleInitial = self.CircleInitial + 1
 
 
 
@@ -267,6 +296,33 @@ class  Check_winControl:
 
 
 
+
+
+
+
+
+
+
+
+
+
+    def handle_popUp_exist(self,identification):
+        """
+        通过窗口的类名获取句柄，通句柄判断窗口是否存在
+        :return:
+        """
+        import win32gui
+        hwnd=win32gui.FindWindow(self.title,None)   # 获取窗体的句柄
+        app = Application().connect(handle=hwnd,timeout=20)
+        dlg_spec = app.window(handle=hwnd)  # 切换到选择文件弹窗窗口
+        if dlg_spec[identification].exists():
+            retur=True
+        else:
+            retur=False
+        return retur
+
+
+
     def Verify_CheckBox_Status(self):
         """
         确认勾选框是否勾选，如果没有勾选，就勾选
@@ -288,6 +344,7 @@ class  Check_winControl:
         验证输入框是否输入正确的数据，如果还没有输入就再次输入，一直到输入成功为止
         :return:
         """
+        print("向文本框内的输入的数据：",data)
         self.triggerButton.set_text(data)  # 文本框
         while self.CircleInitial<self.cycleIndex:
             State = self.triggerButton.window_text()  # 返回输入的文本
@@ -483,6 +540,7 @@ class ProgressBar:
 
 
 
+"""用例参数化"""
 class UseCase_parameterization:
     """用例参数化"""
 
@@ -518,6 +576,10 @@ class UseCase_parameterization:
             location = ProfileDataProcessing("testCase", "SizeDefinition_1D").config_File()
         elif moduleName == "尺寸信息--2D单元尺寸定义":
             location = ProfileDataProcessing("testCase", "SizeDefinition_2D").config_File()
+        elif moduleName == "紧固件强度校核--紧固件参数输入":
+            location = ProfileDataProcessing("testCase", "fastener_parameterInput").config_File()
+        elif moduleName == "紧固件强度校核--紧固件参数设置":
+            location = ProfileDataProcessing("testCase", "fastener_parameterSetting").config_File()
         else:
             print("没有地址", __file__, sys._getframe().f_lineno)
             os._exit(0)

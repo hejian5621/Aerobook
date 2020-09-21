@@ -1,18 +1,26 @@
-import win32con
-from win32gui import PyMakeBuffer, SendMessage, PyGetBufferAddressAndLen, PyGetString
 
-length = 10000
+from src.utils.OperatingControls.moduleControlOperation import OperatingControls
 
-hWnd=68214
-hWnd=68302
+from src.utils.otherMethods.initialize import pywin_openAProgram
 
-buf = PyMakeBuffer(length)
-length2 = SendMessage(hWnd, win32con.WM_GETTEXT, length, buf)+1
-print(length2)
-buf = PyMakeBuffer(length2)
-print('get: ', SendMessage(hWnd, win32con.WM_GETTEXT, length2, buf))
 
-address, length = PyGetBufferAddressAndLen(buf)
-text = PyGetString(address, length)
+testdicts={"所在模块":"紧固件强度校核->紧固件参数设置"}
+aero_window, module_window = pywin_openAProgram().menuOpen(testdicts)
 
-print('text: ', text)
+
+workField1 = module_window.scrolledpanelwxWindowNR2   # 切换到被测工作
+
+
+
+
+
+
+
+
+discern={"唯一标识":"150；30；GroupBox3","控件类型":"坐标--键盘--文本框"}
+
+
+
+arguments="20"
+
+OperatingControls(workField1).coord_click_textbox(discern,arguments)

@@ -8,6 +8,7 @@ from ddt import ddt,data
 from config.relative_location import  path
 from utils.otherMethods.unittest_start_finish import Initializing,finish_clear
 from utils.commonality.tool import UseCase_parameterization
+from config.configurationFile import ProfileDataProcessing
 
 
 """铺层信息--铺层库优化工作栏测试用例"""
@@ -43,7 +44,7 @@ class Test_LaminateOptimize(unittest.TestCase):
         print("测试开始")
         # 用例执行前，初始化测试结果相关的文件
         list_filePath = ["PlyLib_451.xlsx", "PlyLibDb_451.xlsx"]  # 在执行用例前需要删除的文件
-        real_UseCase_Name = "铺层信息--铺层库优化工作栏"      # 执行该用例模块的标识
+        real_UseCase_Name = ProfileDataProcessing("TestCase_moduleName", "UseCaseName_1").config_File() # 执行该用例模块的标识
         dictSet = {"全局参数": number, "全局用例集名称": global_UseCase_Name, "当前用例集名称": real_UseCase_Name,
                    "删除文件名列表": list_filePath,
                    "控件属性已经操作方法":testCase_attribute}
@@ -74,7 +75,7 @@ class Test_LaminateOptimize(unittest.TestCase):
     # Name=["最大铺层数","最小铺层数","铺层比","容差比","单层厚度","弹性模量E11(MPa)","弹性模量E22（MPa）","泊松比v12","剪切模量G12（MPa）"
     #     ,"层合板长度a(mm)","层合板宽度b(mm)","Mat8材料ID","数据库名称","路径文本框","Mat8材料ID","保存为铺层数据库和保存为Excel勾选框"]
     Name =["测试"]
-    real_UseCase_Name ="铺层信息--铺层库优化工作栏"
+    real_UseCase_Name = ProfileDataProcessing("TestCase_moduleName", "UseCaseName_1").config_File()  # 执行该用例模块的标识
     list_dicts=UseCase_parameterization().parameterization_data(real_UseCase_Name, Name)    # 读取测试用例
     @data(*list_dicts)    # 参数化参数用例
     def test_1(self,testCase_dict):
@@ -126,7 +127,8 @@ class Test_LaminatedataPopup(unittest.TestCase):
             global testCase_attribute  # 控件属性方法
             global global_UseCase_Name  # 实时用例集名称
             global number
-            real_UseCase_Name = "铺层信息--铺层数据库制作工具弹窗"
+            real_UseCase_Name = ProfileDataProcessing("TestCase_moduleName",
+                                                      "UseCaseName_2").config_File()  # 执行该用例模块的标识
             dictSet = {"全局参数": number, "全局用例集名称": global_UseCase_Name, "当前用例集名称": real_UseCase_Name
                        ,"关闭弹窗":[["铺层数据库制作工具", "关闭"]],"控件属性已经操作方法":testCase_attribute}
             number, global_UseCase_Name, ProjectPath, old_content, testCase_attribute = Initializing().controller(
@@ -158,7 +160,8 @@ class Test_LaminatedataPopup(unittest.TestCase):
 
         Name = ["铺层库制作弹窗", "选择铺层Excel文件", "铺层数据保存路径文本框"]
         # Name = ["测试"]
-        real_UseCase_Name = "铺层信息--铺层数据库制作工具弹窗"
+        real_UseCase_Name = ProfileDataProcessing("TestCase_moduleName",
+                                                  "UseCaseName_2").config_File()  # 执行该用例模块的标识
         list_dicts = UseCase_parameterization().parameterization_data(real_UseCase_Name, Name)
         @data(*list_dicts)  # 参数化参数用例
         def test_1(self, testCase_dict):
