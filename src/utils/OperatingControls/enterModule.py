@@ -168,6 +168,15 @@ class  BeingMeasured_work:
         return dlg_spec
 
 
+    def workField_fastener_parOptimization(self):
+        """
+        紧固件优化->紧固件参数优化
+        :return:
+        """
+        self.window_one = self.workField.child_window(title="panel", class_name="wxWindowNR")
+        return self.window_one
+
+
 
 
 

@@ -1,6 +1,6 @@
 import unittest
 from parameterized.parameterized import parameterized
-from BeautifulReport import BeautifulReport
+from GenerateTestReports import BeautifulReport
 
 class TestAdd(unittest.TestCase):
   ab=[]

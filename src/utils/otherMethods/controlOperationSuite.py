@@ -196,7 +196,6 @@ class  ControlOperationSuite:
         :return:
         """
         list_AfterParsing = str_coord.split("；")
-        print("list_AfterParsing:",list_AfterParsing)
         coord_X = int(list_AfterParsing[0])
         coord_Y = int(list_AfterParsing[1])
         # 连接“选择材料许用值曲线”弹窗
@@ -211,19 +210,19 @@ class  ControlOperationSuite:
 
 
     """在工作栏中选择工况"""
-    def select_workingCondition(self):
+    def select_workingCondition(self,title_name):
         """
         在工作栏中选择工况
         :return:
         """
-        app = Application().connect(title="选择校核工况",timeout=20)  # 连接校核工况弹窗
-        dlg_spec = app.window(title="选择校核工况")
+        app = Application().connect(title=title_name,timeout=20)  # 连接校核工况弹窗
+        dlg_spec = app.window(title=title_name)
         # dlg_spec.print_control_identifiers()
         txt=dlg_spec.ComboBox.window_text()  # 检查是否已经有工况组合
         if txt:  # 如果txt不为空，说明有工况组合数据
             dlg1_spec=dlg_spec.RadioButton2
             Check_winControl(None,dlg1_spec).Verify_CheckBox_Status()  # 点击工况组合选中工况组合
-            Check_winControl("选择校核工况","确认").popUp_Whether_close()
+            Check_winControl(title_name,"确认").popUp_Whether_close()
         else:  # 如果txt为空，说明没有工况组合数据，就增加数据
             dlg1_spec = dlg_spec.RadioButton3
             Check_winControl(None,dlg1_spec).Verify_CheckBox_Status()  # 点击工况组合选中工况组合
@@ -231,7 +230,7 @@ class  ControlOperationSuite:
             Check_winControl(None, dlg2_spec).Verify_inputBox("all")
             dlg3_spec = dlg_spec.新建工况组合Button
             Check_winControl(None, dlg3_spec).Verify_CheckBox_Status()  # 点击工况组合选中工况组合
-            Check_winControl("选择校核工况", "确认").popUp_Whether_close()
+            Check_winControl(title_name, "确认").popUp_Whether_close()
 
 
     """尺寸信息--1D尺寸定义--选择铺层库信息"""

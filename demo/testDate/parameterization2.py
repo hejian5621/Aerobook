@@ -1,7 +1,7 @@
 import xlrd
 import requests
 import unittest
-import BeautifulReport as bf
+import GenerateTestReports as bf
 import time
 import parameterized
 import json

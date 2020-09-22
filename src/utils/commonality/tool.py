@@ -546,6 +546,7 @@ class UseCase_parameterization:
 
     def __init__(self):
         self.list_dict_site=[]
+        self.list_testPoint=[]
         self.location = None
 
     def parameterization_location(self, moduleName,list_tableName):
@@ -554,15 +555,21 @@ class UseCase_parameterization:
         :return:
         """
         location=None
-        if moduleName=="铺层信息--铺层库优化工作栏":
+        if moduleName=="铺层信息--铺层库优化":
             location = ProfileDataProcessing("testCase", "LaminateOptimize").config_File()
-        elif moduleName=="铺层信息--铺层数据库制作工具弹窗":
+        elif moduleName=="铺层信息--铺层数据库制作工具":
             location = ProfileDataProcessing("testCase", "LaminatedataPopup").config_File()
-        elif moduleName=="尺寸信息--一维二维单元尺寸定义（模板）":
-            location = ProfileDataProcessing("testCase", "sizeInfo_1D2DXls").config_File()
+        elif moduleName == "尺寸信息--一维单元尺寸定义":
+            location = ProfileDataProcessing("testCase", "SizeDefinition_1D").config_File()
+        elif moduleName == "尺寸信息--二维单元尺寸定义":
+            location = ProfileDataProcessing("testCase", "SizeDefinition_2D").config_File()
+        elif moduleName=="尺寸信息--一维单元尺寸定义（模板）":
+            location = ProfileDataProcessing("testCase", "sizeInfo_1DXls").config_File()
+        elif moduleName=="尺寸信息--二维单元尺寸定义（模板）":
+            location = ProfileDataProcessing("testCase", "sizeInfo_2DXls").config_File()
         elif moduleName == "求解计算--求解计算":
             location = ProfileDataProcessing("testCase", "solveCalculation").config_File()
-        elif moduleName == "载荷信息--载荷数据库制作工具弹窗":
+        elif moduleName == "载荷信息--载荷数据库制作工具":
             location = ProfileDataProcessing("testCase", "loaddatabase_popUp").config_File()
         elif moduleName == "载荷信息--编辑工况":
             location = ProfileDataProcessing("testCase", "editWorkingCondition").config_File()
@@ -572,16 +579,16 @@ class UseCase_parameterization:
              location= ProfileDataProcessing("testCase", "CompoundStrengthCheck_1D").config_File()
         elif moduleName == "复材结构强度校核--复合材料强度校核2D":
             location = ProfileDataProcessing("testCase", "CompoundStrengthCheck_2D").config_File()
-        elif moduleName == "尺寸信息--1D单元尺寸定义":
-            location = ProfileDataProcessing("testCase", "SizeDefinition_1D").config_File()
-        elif moduleName == "尺寸信息--2D单元尺寸定义":
-            location = ProfileDataProcessing("testCase", "SizeDefinition_2D").config_File()
-        elif moduleName == "紧固件强度校核--紧固件参数输入":
+        elif moduleName == "紧固件强度校核--紧固件信息输入":
             location = ProfileDataProcessing("testCase", "fastener_parameterInput").config_File()
         elif moduleName == "紧固件强度校核--紧固件参数设置":
             location = ProfileDataProcessing("testCase", "fastener_parameterSetting").config_File()
+        elif moduleName == "紧固件强度校核--紧固件强度校核":
+            location = ProfileDataProcessing("testCase", "fastener_intensityCheck").config_File()
+        elif moduleName == "紧固件优化--紧固件参数优化":
+            location = ProfileDataProcessing("testCase", "fastener_parOptimization").config_File()
         else:
-            print("没有地址", __file__, sys._getframe().f_lineno)
+            print("没有地址:",moduleName, __file__, sys._getframe().f_lineno)
             os._exit(0)
         if list_tableName:
             for tableName in list_tableName:
@@ -590,15 +597,24 @@ class UseCase_parameterization:
         return self.list_dict_site
 
 
-    def parameterization_data(self,moduleName,list_tableName,):
+    def parameterization_data(self,list_dicti_argument):
         """
          用例参数化
         :return:
         """
-        list_dict=UseCase_parameterization().parameterization_location(moduleName,list_tableName)
-        print("list_dict:",list_dict)
-        for site in list_dict:
-            dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
-            ar_testdicts = FormatConversion().RemoveSubscript(dicts)
-            self.list_dict_site = self.list_dict_site + ar_testdicts
-        return self.list_dict_site
+        for dicti_argument in list_dicti_argument :
+            for  moduleName, tableName in dicti_argument.items():
+                # 获取读取电子表格的路径和相关参数
+                list_dict=UseCase_parameterization().parameterization_location(moduleName,tableName)
+                print("list_dict:",list_dict)
+                for site in list_dict:
+                    dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
+                    ar_testdicts = FormatConversion().RemoveSubscript(dicts)
+                    self.list_dict_site = self.list_dict_site + ar_testdicts
+        for dict_site in self.list_dict_site:
+            dict = {}
+            dict["测试点"] = dict_site["测试点"]
+            self.list_testPoint.append(dict)
+        return self.list_dict_site,self.list_testPoint
+
+

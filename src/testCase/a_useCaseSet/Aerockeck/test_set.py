@@ -1,15 +1,46 @@
 # 铺层数据库制作
+# 尺寸信息--1D2D尺寸定义
+
+from  BeautifulReport import BeautifulReport
+
+from config.relative_location import  path
 
 
 
 # 铺层库优化工作栏
 from ddt import ddt,data
 import unittest
-from assertpy import assert_that
-from config.relative_location import  path
-from BeautifulReport import BeautifulReport
-import  time
-from utils.otherMethods.unittest_start_finish import Initializing
+import os,shutil,win32con,time,os,sys
+
+
+
+
+list1=[]
+
+# 获取用例
+useCase1=[{"测试点":"1","所测模块":"2","c":"3"},{"测试点":"4","所测模块":"5","c":"6"}]
+useCase2=[{"测试点":"7","所测模块":"8","c":"9"},{"测试点":"10","所测模块":"11","c":"12"}]
+useCase3=[{"测试点":"13","所测模块":"14","c":"15"},{"测试点":"16","所测模块":"17","c":"18"}]
+
+
+list_dict_site = useCase1 + useCase2+useCase3
+
+# 取出每个用例的测试点
+
+for dict_site in list_dict_site:
+    dict={}
+    dict["测试点"]=dict_site["测试点"]
+    list1.append(dict)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -27,16 +58,20 @@ class Test_test(unittest.TestCase):
             global_UseCase_Name=None
             number=0
 
-        @classmethod
+
+
+
         def setUp(self):
             """用例执行前的初始化
                1、首先把需要的文件和模型复制一份出来
             """
             global  number ;global  global_UseCase_Name
-            print("测试开始")
-            real_UseCase_Name="Test_test"
-            number,global_UseCase_Name =Initializing().initialize_globalVariable(number,global_UseCase_Name,real_UseCase_Name)
-            print("list_dicts8888:", list_dicts)
+            # 取出测试模块
+            dict_site=list_dict_site [number]
+            number=number+1
+            print("dict_site:",dict_site)
+
+
 
 
 
@@ -48,115 +83,19 @@ class Test_test(unittest.TestCase):
 
 
 
-        list_dicts=[{"测试点":"b","c":"d"},{"测试点":"2","3":"4"}]
-        print("list_dicts111:", list_dicts)
-        @data(*list_dicts)  # 参数化参数用例
-        def test_1(self,list):
+
+
+        @data(*list1 )  # 参数化参数用例
+        def test_1(self,list2):
             global number
-            expect_result = 1
-            actual_result = 2
-
-
-
-        list_dicts1 = [{"测试点": "99", "88": "77"}, {"测试点": "66", "88": "33"}]
-        print("list_dicts222:", list_dicts1)
-        @data(*list_dicts)  # 参数化参数用例
-        def test_2(self,list):
-            global number
-            expect_result = 1
-            actual_result = 2
-            print("test_2运行第”%r" % number)
-            # 断言测试结果
-            # assert_that(expect_result).is_equal_to(actual_result)
-
-
-        def test_3(self):
-            global number
-            expect_result = 1
-            actual_result = 1
-            print("test_3运行第”%r" % number)
-            # 断言测试结果
-            # assert_that(expect_result).is_equal_to(actual_result)
-
-
-# @ddt
-# class Test_test111(unittest.TestCase):
-#         """铺层数据库制作"""
-#         global list_dicts
-#         real_UseCase_Name = "Test_test111"
-#
-#         def __init__(self, *args):
-#             unittest.TestCase.__init__(self, *args)
-#             list_dicts = 1
-#
-#
-#
-#
-#         def setUp(self):
-#             """用例执行前的初始化
-#                1、首先把需要的文件和模型复制一份出来
-#             """
-#             global number;global global_UseCase_Name
-#
-#             print("")
-#             print("global_UseCase_Name:", global_UseCase_Name)
-#             real_UseCase_Name = "Test_test111"
-#             number1,global_UseCase_Name=Initializing().initialize_globalVariable(number, global_UseCase_Name, real_UseCase_Name)
-#             print("number=",number1)
-#             global_UseCase_Name = real_UseCase_Name
-#             print("list_dicts11:", list_dicts)
-#             number=number1
-#             print("number222", number)
-#             print("")
-#
-#
-#
-#         print("222")
-#         def tearDown(self):
-#             """用例执行完后收尾
-#                            1、首先把复制的文件夹删除
-#             """
-#             global number
-#             print("tearDown运行第”%r" % number)
-#             print("测试结束")
-#
-#         list_dicts = [{"测试点": "b", "c": "d"}, {"测试点": "2", "3": "4"}, {"测试点": "6", "7": "8"}, {"测试点": "10", "11": "12"}]
-#         @data(*list_dicts)  # 参数化参数用例
-#         def test_1(self,list):
-#             global number
-#             print("list:",list)
-#             expect_result = 1
-#             actual_result = 2
-#             print("Test_test1test_1运行第”%r"%number)
-#             # # 断言测试结果
-#             # assert_that(expect_result).is_equal_to(actual_result)
-#
-#
-#         def test_2(self):
-#             global number
-#             expect_result = 1
-#             actual_result = 1
-#             print("test_2运行第”%r" % number)
-#             # 断言测试结果
-#             # assert_that(expect_result).is_equal_to(actual_result)
-#
-#
-#         def test_3(self):
-#             global number
-#             expect_result = 1
-#             actual_result = 1
-#             print("test_3运行第”%r" % number)
-#             # 断言测试结果
-#             # assert_that(expect_result).is_equal_to(actual_result)
+            print(list2["测试点"])
+            time.sleep(2)
 
 
 
 
 
 
-#
-# if __name__ == '__main__':
-#     unittest.main()
 
 
 if __name__ == '__main__':

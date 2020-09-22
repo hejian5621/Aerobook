@@ -2,7 +2,7 @@
 
 import unittest, time
 from assertpy import assert_that
-from BeautifulReport import BeautifulReport
+from GenerateTestReports import BeautifulReport
 from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import execute_step
 from ddt import ddt, data
 from src.utils.commonality.ExcelFile import read_excel

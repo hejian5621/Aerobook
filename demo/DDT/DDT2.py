@@ -3,7 +3,7 @@
 import unittest
 from assertpy import assert_that
 import time, os
-from BeautifulReport import BeautifulReport
+from GenerateTestReports import BeautifulReport
 from parameterized.parameterized import parameterized
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import execute_step

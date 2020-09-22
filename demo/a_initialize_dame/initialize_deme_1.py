@@ -34,8 +34,7 @@ aerocheck_title = ProfileDataProcessing("commonality", "AerocheckEdition").confi
 
 
 
-print("aero_title:",aero_title )
-print("aerocheck_title:",aerocheck_title)
+
 
 
 # 变量

@@ -86,12 +86,11 @@ class finish_clear:
         actual_result = dictSet["实际值"]
         expect_result = dictSet["预期值"]
         """ 收尾，如果有警告弹框就关掉"""
-        if "关闭弹窗" in dictSet:  # 关闭没有关闭的弹窗
-            list_CloseWindows = dictSet["关闭弹窗"]
-            for CloseWindows in list_CloseWindows:
-                title = CloseWindows[0]
-                button_name = CloseWindows[1]
-                Check_winControl(title, button_name).popUp_Whether_close()
+        list_CloseWindows = [["铺层数据库制作工具", "关闭"],["警告", "OK"],["错误", "确定"],["编辑工况", "关闭"]]
+        for CloseWindows in list_CloseWindows:
+            title = CloseWindows[0]
+            button_name = CloseWindows[1]
+            Check_winControl(title, button_name).popUp_Whether_close()
         """取出Excel里面的值"""
         """处理预期结果或实际结果，用以实际结果和预期结果文本对比"""
         if messageType == "信息窗口":  # 如果预期值在信息窗口，就通过以下方法获取最新的信息窗口文本信息

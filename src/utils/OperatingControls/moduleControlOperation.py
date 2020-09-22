@@ -166,9 +166,10 @@ class OperatingControls:
         :param str_Name:
         :return:
         """
+        print("str_Name:",str_Name)
         if str_Name=="Edit":
             self.dlg_spec=self.window_one.Edit
-        if str_Name=="Edit1":
+        elif str_Name=="Edit1":
             self.dlg_spec=self.window_one.Edit1
         elif str_Name=="Edit2":
             self.dlg_spec = self.window_one.Edit2
@@ -315,7 +316,7 @@ class OperatingControls:
         elif str_Name == "机身半径Edit":
             self.dlg_spec = self.window_one.机身半径Edit
         else:
-            print("str_Name:",str_Name)
+            print("没有找到唯一标识拼接方法:",str_Name)
             self.dlg_spec = self.window_one[str_Name]
         return self.dlg_spec
 
@@ -351,9 +352,9 @@ class OperatingControls:
             str_coord = ControlProperties["唯一标识"]
             Check_winControl(PopupTitle, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
             ControlOperationSuite(None).select_AllowableCurve(str_coord)
-        elif Popuptype == "选择校核工况":  # 操作弹窗套件
-            Check_winControl("选择校核工况", self.window_one).window_WhetherOpen()  # 判断选择校核工况是否出现
-            ControlOperationSuite(None).select_workingCondition()
+        elif Popuptype == "选择校核工况" or Popuptype == "选择优化工况":  # 操作弹窗套件
+            Check_winControl(Popuptype, self.window_one).window_WhetherOpen()  # 判断选择校核工况是否出现
+            ControlOperationSuite(None).select_workingCondition(Popuptype)
         elif Popuptype == "选择结构单元":  # 操作弹窗套件
             time.sleep(0.3)
             self.window_one.click_input()
