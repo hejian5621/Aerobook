@@ -59,6 +59,7 @@ class OperatingControls:
                         dlg_spec.click_input()
                         print("控件”%r“按钮点击成功" % ControlsName)
                     elif ControlTypes == "按钮" and whetherpopup == "是":  # 操作套件
+                        print("进入操作")
                         OperatingControls(dlg_spec).button_popUp(ControlProperties, location, operational)
                         PopupTitle = ControlProperties["弹窗标题"]
                         print("控件%r按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle))
@@ -80,6 +81,8 @@ class OperatingControls:
                         else:
                             Check_winControl(None, dlg_spec).Verify_dropDownBox(operational)
                         print("控件%r下拉框选择数据成功" % ControlsName)
+                    elif ControlTypes == "滚动鼠标":
+                        OperatingControls(dlg_spec).scrollMouse()
                     else:
                         print("说明控件属性", __file__, sys._getframe().f_lineno)
                         os._exit(0)
@@ -285,6 +288,12 @@ class OperatingControls:
             self.dlg_spec = self.window_one.RadioButton10
         elif str_Name == "RadioButton11":
             self.dlg_spec = self.window_one.RadioButton11
+        elif str_Name == "RadioButton12":
+            self.dlg_spec = self.window_one.RadioButton12
+        elif str_Name == "RadioButton13":
+            self.dlg_spec = self.window_one.RadioButton13
+        elif str_Name == "RadioButton14":
+            self.dlg_spec = self.window_one.RadioButton14
         elif str_Name == "ComboBox0":
             self.dlg_spec = self.window_one.ComboBox0
         elif str_Name == "ComboBox1":
@@ -305,6 +314,8 @@ class OperatingControls:
             self.dlg_spec = self.window_one.ComboBox2
         elif str_Name == "GroupBox3":
             self.dlg_spec = self.window_one.GroupBox3
+        elif str_Name == "Static15":
+            self.dlg_spec = self.window_one.Static15
         elif str_Name == "路径Edit":
             self.dlg_spec = self.window_one.路径Edit
         elif str_Name == "两边各取蒙皮宽度一半":
@@ -334,6 +345,7 @@ class OperatingControls:
         examine =None
         Popuptype = ControlProperties["弹窗类型"]
         if Popuptype=="路径弹窗":  # 操作弹窗套件
+            print("路径弹窗")
             PopupTitle = ControlProperties["弹窗标题"]
             nestPopup = ControlProperties["是否有嵌套弹窗"]
             Check_winControl(PopupTitle, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
@@ -469,3 +481,13 @@ class OperatingControls:
         coord_Y = int(self.list_AfterParsing[1])
         sole = self.list_AfterParsing[2]
         return coord_X,coord_Y,sole
+
+
+    def scrollMouse(self):
+        """
+        滚动鼠标
+        :return:
+        """
+        self.window_one.click_input()
+        import win32api, win32con
+        win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -500)  # 滚动鼠标

@@ -42,7 +42,9 @@ class UseCase_step:
         aero_window, son_window = pywin_openAProgram().menuOpen(self.testCase_dict)
         # 切换到被测模块窗口
         if self.UseCase_Name == "铺层信息--铺层库优化" or self.UseCase_Name =="求解计算--求解计算" or \
-            self.UseCase_Name =="紧固件强度校核--紧固件参数设置":
+            self.UseCase_Name =="紧固件强度校核--紧固件参数设置" or self.UseCase_Name == "材料信息--定义金属材料参数" or\
+             self.UseCase_Name == "金属结构强度校核--金属一维单元强度校核" or self.UseCase_Name == "金属结构强度校核--金属二维单元强度校核" or\
+                self.UseCase_Name == "金属结构强度校核--金属加筋板强度校核" or self.UseCase_Name == "金属结构强度校核--金属曲板后驱曲强度校核" :
             self.window_one = BeingMeasured_work(son_window).workField_general()
         elif self.UseCase_Name == "尺寸信息--一维单元尺寸定义（模板）" or self.UseCase_Name == "尺寸信息--二维单元尺寸定义（模板）":
             self.window_one=BeingMeasured_work(son_window).workField_sizeInfo()

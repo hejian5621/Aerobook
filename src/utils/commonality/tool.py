@@ -6,12 +6,12 @@ from aip import AipOcr
 import win32clipboard as wc
 import os,shutil,win32con,time,os,sys
 from pywinauto.application import Application
-from pywinauto  import findwindows,timings
 import re
 from os import listdir
 from pathlib import Path
 from src.utils.commonality.ExcelFile import read_excel
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
+from pywinauto import  findwindows
 
 
 
@@ -172,6 +172,15 @@ class folderFile_dispose:
                     os.remove(list_path)
 
 
+"""定义的异常类，用于主动抛出异常"""
+class MyException(Exception):
+    def __init__(self,name):
+        self.name = name
+
+
+
+
+
 """检查窗口或者控件，是否存在"""
 class  Check_winControl:
     """检查窗口或者控件，是否存在"""
@@ -190,31 +199,38 @@ class  Check_winControl:
     def window_WhetherOpen(self):
         """
         检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现
+        通过弹窗标题获取句柄
         如果出现，程序正常运行
         如果没有出现，程序停止运行
         :param title: 预期弹出弹窗的标题
         :param event_button: 触发的按钮操作
         :return:
         """
+        print("进入")
+        import win32gui
         self.triggerButton.click_input()   # 点击触发弹窗的按钮
         # 判断弹窗是否弹窗，如果没有弹出，就继续点击
         while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
-            result =None
             try:
-                Application().connect(title=self.title)
-            except findwindows.ElementAmbiguousError:  # 捕获如果有多个重复的弹窗的异常
+                time.sleep(3)
+                # 知识点：主动抛出异常，就是实例化一个异常类
+                print("弹窗", self.title)
+                hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
+                print("hwnd1:", hwnd)
+                if hwnd != 0:
+                    raise MyException("没有找到弹窗")  # 实例化一个异常,实例化的时候需要传参数
+                print("hwnd2:",hwnd)
+                print("弹窗已经打开",self.title)
+            except Exception as obj:  # 万能捕获，之前的可能捕获不到，这里添加Exception作为保底
                 break
-            except (findwindows.ElementNotFoundError,timings.TimeoutError):  # 如果找不到弹窗
-                if (self.CircleInitial % 10) == 0:    #  如果循环次数数10的倍数，就再次点击按钮
-                    self.triggerButton.click_input()
-                elif  self.CircleInitial==1 :    # 如果第一次链接不是，在点击一次
-                    self.triggerButton.click_input()
             else:
-                break                                 # 如果找到了弹窗就退出弹窗
-            if self.CircleInitial == (self.cycleIndex + 1):
-                print("%s窗口没有找到"%self.title, __file__, sys._getframe().f_lineno)
-                os._exit(0)
-            self.CircleInitial=self.CircleInitial+1
+                if (self.CircleInitial % 5) == 0:  # 如果循环次数数10的倍数，就再次点击按钮
+                    self.triggerButton.click_input()
+                elif self.CircleInitial == 1:  # 如果第一次链接不上，在点击一次
+                    self.triggerButton.click_input()
+            self.CircleInitial = self.CircleInitial + 1
+            print("")
+
 
     # 检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现
     def window_handle_WhetherOpen(self,handle,identification):
@@ -267,41 +283,43 @@ class  Check_winControl:
     def popUp_Whether_close(self, nest=None):
         """
         检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮
+        首先通过获取句柄的形式来判断是否有弹窗，因为以句柄的形式会快一点
         :param nest: 判断掉该方法是否在有嵌套弹窗的情况下
         :param nest_win: 控件操作方法
         :param nestWin_Dicti: 嵌套标题
         :return:
         """
+        import win32gui
         while self.CircleInitial <= self.cycleIndex:
             try:
-                app = Application().connect(title=self.title)
-                py_app = app.window(title=self.title)  # 切换到需要关闭的窗口
-            except findwindows.ElementAmbiguousError:  # 捕获如果有多个重复的弹窗的异常
-                print("多个重复的弹窗", __file__, sys._getframe().f_lineno)
-                os._exit(0)
-            except (findwindows.ElementNotFoundError,timings.TimeoutError): # 如果窗口不存在就退出循环
-                self.state="窗口已正常关闭"
+                hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
+                if hwnd == 0:
+                    raise MyException("没有找到弹窗")  # 实例化一个异常,实例化的时候需要传参数
+            except Exception as obj:  # 万能捕获，之前的可能捕获不到，这里添加Exception作为保底
+                self.state = "窗口已正常关闭"
                 break
-            else:     # 如果没有异常执行下面的代码，说明窗口并没有关闭
-                if py_app[self.triggerButton].exists():  # 如果控件存在
-                    py_app[self.triggerButton].click_input()
+            else:
+                try:
+                    app1=Application().connect(title_re=self.title)
+                    py_app1 = app1.window(title_re=self.title)
+                except findwindows.ElementAmbiguousError:
+                    app2 = Application().connect(handle=hwnd)
+                    py_app2 = app2.window(handle=hwnd)  # 切换到需要关闭的窗口
+                    if py_app2[self.triggerButton].exists():  # 如果控件存在
+                        py_app2[self.triggerButton].click()
+                    else:
+                        print("没有找到关闭窗口的按钮:", self.title, __file__, sys._getframe().f_lineno)
+                        os._exit(0)
+                except findwindows.ElementNotFoundError:
+                    break
                 else:
-                    print("没有找到关闭窗口的按钮", __file__, sys._getframe().f_lineno)
-                    os._exit(0)
-            self.CircleInitial = self.CircleInitial + 1
-            if self.CircleInitial == (self.cycleIndex + 1) and nest!="嵌套":
-                print("%s窗口没有关闭" % self.title, __file__, sys._getframe().f_lineno)
-                os._exit(0)
+                    if py_app1[self.triggerButton].exists():  # 如果控件存在
+                        py_app1[self.triggerButton].click_input()
+                    else:
+                        print("没有找到关闭窗口的按钮:",self.title, __file__, sys._getframe().f_lineno)
+                        os._exit(0)
+                self.CircleInitial = self.CircleInitial + 1
         return self.state
-
-
-
-
-
-
-
-
-
 
 
 
@@ -575,6 +593,8 @@ class UseCase_parameterization:
             location = ProfileDataProcessing("testCase", "editWorkingCondition").config_File()
         elif moduleName == "材料信息--定义复合材料参数":
             location = ProfileDataProcessing("testCase", "compositeMaterial").config_File()
+        elif moduleName == "材料信息--定义金属材料参数":
+            location = ProfileDataProcessing("testCase", "definitionMetalMaterial").config_File()
         elif moduleName == "复材结构强度校核--复合材料强度校核1D":
              location= ProfileDataProcessing("testCase", "CompoundStrengthCheck_1D").config_File()
         elif moduleName == "复材结构强度校核--复合材料强度校核2D":
@@ -587,6 +607,14 @@ class UseCase_parameterization:
             location = ProfileDataProcessing("testCase", "fastener_intensityCheck").config_File()
         elif moduleName == "紧固件优化--紧固件参数优化":
             location = ProfileDataProcessing("testCase", "fastener_parOptimization").config_File()
+        elif moduleName == "金属结构强度校核--金属一维单元强度校核":
+            location = ProfileDataProcessing("testCase", "metal_intensityCheck1D").config_File()
+        elif moduleName == "金属结构强度校核--金属二维单元强度校核":
+            location = ProfileDataProcessing("testCase", "metal_intensityCheck2D").config_File()
+        elif moduleName == "金属结构强度校核--金属加筋板强度校核":
+            location = ProfileDataProcessing("testCase", "metal_stiffenedPlate").config_File()
+        elif moduleName == "金属结构强度校核--金属曲板后驱曲强度校核":
+            location = ProfileDataProcessing("testCase", "metal_rearGuard").config_File()
         else:
             print("没有地址:",moduleName, __file__, sys._getframe().f_lineno)
             os._exit(0)
@@ -606,7 +634,6 @@ class UseCase_parameterization:
             for  moduleName, tableName in dicti_argument.items():
                 # 获取读取电子表格的路径和相关参数
                 list_dict=UseCase_parameterization().parameterization_location(moduleName,tableName)
-                print("list_dict:",list_dict)
                 for site in list_dict:
                     dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
                     ar_testdicts = FormatConversion().RemoveSubscript(dicts)
