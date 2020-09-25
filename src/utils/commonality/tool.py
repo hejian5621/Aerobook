@@ -74,8 +74,6 @@ class KeyboardMouse:
         self.k.release_key(self.k.shift_key) # 释放键盘上的shift键
 
 
-
-
 """图片处理"""
 class pictureProcessing:
     """图片处理"""
@@ -156,29 +154,36 @@ class folderFile_dispose:
             print('文件“%s“删除完毕' % self.sourceDir )
 
 
-    def delfile(self, list_filename):
+    def delfile(self, dict_testCase):
         """
         批量删除文件
-        :param list_filename:
+        :param dict_testCase:
         :return:
         """
-        if  list_filename:
-            # 拼接文件名和路径
-            for path1 in list_filename:  # 取出文件路径
-                list_path = self.sourceDir + "\\" + path1
-                my_file = Path(list_path)
-                if my_file.is_file():  # 先检查文件是否存在
-                    # 指定的文件存在，就删除
-                    os.remove(list_path)
-
-
+        if "清除文件" in dict_testCase:  # 用例执行前，删除相关文件
+            filePath_name = dict_testCase["清除文件"]
+            if filePath_name =="" or filePath_name =="默认":   # 如果“清除文件”的值等于空或者默认
+                pass
+            else:                                              # 如果“清除文件”的值不等于空或者默认
+                if "；" in filePath_name:
+                    list_filePath_name = filePath_name.split("；")
+                    # 拼接文件名和路径
+                    for path1 in list_filePath_name:  # 取出文件路径
+                        list_path = self.sourceDir + "\\" + path1
+                        my_file = Path(list_path)
+                        if my_file.is_file():  # 先检查文件是否存在
+                            # 指定的文件存在，就删除
+                            os.remove(list_path)
+                else:
+                    list_path = self.sourceDir + "\\" + filePath_name
+                    my_file = Path(list_path)
+                    if my_file.is_file():  # 先检查文件是否存在
+                        # 指定的文件存在，就删除
+                        os.remove(list_path)
 """定义的异常类，用于主动抛出异常"""
 class MyException(Exception):
     def __init__(self,name):
         self.name = name
-
-
-
 
 
 """检查窗口或者控件，是否存在"""
@@ -320,6 +325,45 @@ class  Check_winControl:
 
 
 
+    def Force_close_popUp(self):
+        """
+        强行关闭弹窗
+        :return:
+        """
+        import win32gui
+        while self.CircleInitial <= self.cycleIndex:
+            try:
+                hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
+                if hwnd == 0:                                 # 通过句柄判断窗口是否存在
+                    raise MyException("没有找到弹窗")           # 如果不存在就主动抛出异常
+            except Exception as obj:                          # 捕捉到异常
+                self.state = "窗口已正常关闭"                   # 用于有嵌套弹窗的情况
+                break                                          # 退出循环
+            else:
+                try:                                          # 根据标题在次连接弹窗
+                    app1 = Application().connect(title_re=self.title)
+                    py_app1 = app1.window(title_re=self.title)
+                except findwindows.ElementAmbiguousError:      # 抛出有多个相同标题的异常，就根据句柄一个一个的关闭弹窗
+                    app2 = Application().connect(handle=hwnd)
+                    py_app2 = app2.window(handle=hwnd)  # 切换到需要关闭的窗口
+                    if py_app2.exists():  # 如果控件存在
+                        py_app2.close()
+                    else:
+                        print("没有找到关闭窗口的按钮:", self.title, __file__, sys._getframe().f_lineno)
+                        os._exit(0)
+                except findwindows.ElementNotFoundError:
+                    break
+                else:
+                    if py_app1.exists():  # 如果控件存在
+                        py_app1.close()   # 强制关掉弹窗
+                    else:
+                        print("没有找到关闭窗口的按钮:", self.title, __file__, sys._getframe().f_lineno)
+                        os._exit(0)
+                self.CircleInitial = self.CircleInitial + 1
+        return self.state
+
+
+
     def handle_popUp_exist(self,identification):
         """
         通过窗口的类名获取句柄，通句柄判断窗口是否存在
@@ -359,6 +403,11 @@ class  Check_winControl:
         :return:
         """
         print("向文本框内的输入的数据：",data)
+        print(type(data))
+        if type(data) == float:
+            print("运行")
+            data = '{:g}'.format(data)
+        print("向文本框内的输入的数据：", data)
         self.triggerButton.set_text(data)  # 文本框
         while self.CircleInitial<self.cycleIndex:
             State = self.triggerButton.window_text()  # 返回输入的文本
@@ -398,7 +447,25 @@ class  Check_winControl:
 class WindowTop:
     """窗口置顶"""
 
-    def window_enum_callback(hwnd, wildcard):
+    def __init__(self,window_name):
+        self.window_name=window_name
+
+    def console(self,):
+        """
+
+        :return:
+        """
+        # 首先判断控件是否是最大化
+        main_window = Application().connect(title_re=self.window_name, timeout=10)
+        Aerobook_main = main_window.window(title_re=self.window_name)
+        WindowState=Aerobook_main.is_maximized()  # 判断窗口是否是最大化
+        if WindowState:  # 如果是
+            pass
+        else:            # 如果不是最大化
+            Aerobook_main.maximize()  # 窗口最大化
+        WindowTop(self.window_name).EnumWindows()  # 窗口置顶显示
+
+    def window_enum_callback(self,hwnd, wildcard):
         """
         窗口置顶
         :param hwnd:
@@ -415,9 +482,13 @@ class WindowTop:
             win32gui.SetForegroundWindow(hwnd)
 
 
-    def EnumWindows(window_name):
+    def EnumWindows(self):
         import win32gui
-        win32gui.EnumWindows(WindowTop.window_enum_callback, ".*%s.*" % window_name)  # 此处为你要设置的活动窗口名
+        win32gui.EnumWindows(WindowTop(None).window_enum_callback, ".*%s.*" % self.window_name)  # 此处为你要设置的活动窗口名
+
+
+
+
 
 
 """Html格式转化"""
@@ -553,7 +624,6 @@ class ProgressBar:
         print('percent: {:.0%}'.format(self.Entries /  self.amount), flush=True)
 
 
-
 """用例参数化"""
 class UseCase_parameterization:
     """用例参数化"""
@@ -563,58 +633,58 @@ class UseCase_parameterization:
         self.list_testPoint=[]
         self.location = None
 
-    def parameterization_location(self, moduleName,list_tableName):
+    def parameterization_location(self, sole_ModuleIdentifier,list_tableName):
         """
         获取读取电子表格的路径和相关参数
         :return:
         """
         location=None
-        if moduleName=="程序初始化用例":
+        if sole_ModuleIdentifier=="程序初始化用例":
             location = ProfileDataProcessing("testCase", "initializeUsecase").config_File()
-        elif moduleName=="铺层信息--铺层库优化":
+        elif sole_ModuleIdentifier=="铺层信息--铺层库优化":
             location = ProfileDataProcessing("testCase", "LaminateOptimize").config_File()
-        elif moduleName=="铺层信息--铺层数据库制作工具":
+        elif sole_ModuleIdentifier=="铺层信息--铺层数据库制作工具":
             location = ProfileDataProcessing("testCase", "LaminatedataPopup").config_File()
-        elif moduleName == "尺寸信息--一维单元尺寸定义":
+        elif sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义":
             location = ProfileDataProcessing("testCase", "SizeDefinition_1D").config_File()
-        elif moduleName == "尺寸信息--二维单元尺寸定义":
+        elif sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义":
             location = ProfileDataProcessing("testCase", "SizeDefinition_2D").config_File()
-        elif moduleName=="尺寸信息--一维单元尺寸定义（模板）":
+        elif sole_ModuleIdentifier=="尺寸信息--一维单元尺寸定义（模板）":
             location = ProfileDataProcessing("testCase", "sizeInfo_1DXls").config_File()
-        elif moduleName=="尺寸信息--二维单元尺寸定义（模板）":
+        elif sole_ModuleIdentifier=="尺寸信息--二维单元尺寸定义（模板）":
             location = ProfileDataProcessing("testCase", "sizeInfo_2DXls").config_File()
-        elif moduleName == "求解计算--求解计算":
+        elif sole_ModuleIdentifier == "求解计算--求解计算":
             location = ProfileDataProcessing("testCase", "solveCalculation").config_File()
-        elif moduleName == "载荷信息--载荷数据库制作工具":
+        elif sole_ModuleIdentifier == "载荷信息--载荷数据库制作工具":
             location = ProfileDataProcessing("testCase", "loaddatabase_popUp").config_File()
-        elif moduleName == "载荷信息--编辑工况":
+        elif sole_ModuleIdentifier == "载荷信息--编辑工况":
             location = ProfileDataProcessing("testCase", "editWorkingCondition").config_File()
-        elif moduleName == "材料信息--定义复合材料参数":
+        elif sole_ModuleIdentifier == "材料信息--定义复合材料参数":
             location = ProfileDataProcessing("testCase", "compositeMaterial").config_File()
-        elif moduleName == "材料信息--定义金属材料参数":
+        elif sole_ModuleIdentifier == "材料信息--定义金属材料参数":
             location = ProfileDataProcessing("testCase", "definitionMetalMaterial").config_File()
-        elif moduleName == "复材结构强度校核--复合材料强度校核1D":
+        elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核1D":
              location= ProfileDataProcessing("testCase", "CompoundStrengthCheck_1D").config_File()
-        elif moduleName == "复材结构强度校核--复合材料强度校核2D":
+        elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核2D":
             location = ProfileDataProcessing("testCase", "CompoundStrengthCheck_2D").config_File()
-        elif moduleName == "紧固件强度校核--紧固件信息输入":
+        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件信息输入":
             location = ProfileDataProcessing("testCase", "fastener_parameterInput").config_File()
-        elif moduleName == "紧固件强度校核--紧固件参数设置":
+        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件参数设置":
             location = ProfileDataProcessing("testCase", "fastener_parameterSetting").config_File()
-        elif moduleName == "紧固件强度校核--紧固件强度校核":
+        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件强度校核":
             location = ProfileDataProcessing("testCase", "fastener_intensityCheck").config_File()
-        elif moduleName == "紧固件优化--紧固件参数优化":
+        elif sole_ModuleIdentifier == "紧固件优化--紧固件参数优化":
             location = ProfileDataProcessing("testCase", "fastener_parOptimization").config_File()
-        elif moduleName == "金属结构强度校核--金属一维单元强度校核":
+        elif sole_ModuleIdentifier == "金属结构强度校核--金属一维单元强度校核":
             location = ProfileDataProcessing("testCase", "metal_intensityCheck1D").config_File()
-        elif moduleName == "金属结构强度校核--金属二维单元强度校核":
+        elif sole_ModuleIdentifier == "金属结构强度校核--金属二维单元强度校核":
             location = ProfileDataProcessing("testCase", "metal_intensityCheck2D").config_File()
-        elif moduleName == "金属结构强度校核--金属加筋板强度校核":
+        elif sole_ModuleIdentifier == "金属结构强度校核--金属加筋板强度校核":
             location = ProfileDataProcessing("testCase", "metal_stiffenedPlate").config_File()
-        elif moduleName == "金属结构强度校核--金属曲板后驱曲强度校核":
+        elif sole_ModuleIdentifier == "金属结构强度校核--金属曲板后驱曲强度校核":
             location = ProfileDataProcessing("testCase", "metal_rearGuard").config_File()
         else:
-            print("没有地址:",moduleName, __file__, sys._getframe().f_lineno)
+            print("没有地址:",sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
             os._exit(0)
         if list_tableName:
             for tableName in list_tableName:
@@ -629,9 +699,9 @@ class UseCase_parameterization:
         :return:
         """
         for dicti_argument in list_dicti_argument :
-            for  moduleName, tableName in dicti_argument.items():
+            for  sole_ModuleIdentifier, tableName in dicti_argument.items():
                 # 获取读取电子表格的路径和相关参数
-                list_dict=UseCase_parameterization().parameterization_location(moduleName,tableName)
+                list_dict=UseCase_parameterization().parameterization_location(sole_ModuleIdentifier,tableName)
                 for site in list_dict:
                     dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
                     ar_testdicts = FormatConversion().RemoveSubscript(dicts)

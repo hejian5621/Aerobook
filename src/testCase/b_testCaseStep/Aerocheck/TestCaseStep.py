@@ -22,7 +22,7 @@ class UseCase_step:
         self.initialLevel = testCase_dict["初始化级别"]
         self.operationWindow = testCase_dict["操作窗口标题"]
         self.operationWindow_son = testCase_dict["操作子窗口标题"]
-        self.UseCase_Name= testCase_dict["模块唯一标识"]
+        self.sole_ModuleIdentifier= testCase_dict["模块唯一标识"]
         self.actual_Text = None
         self.aero_window = None
         self.son_window = None
@@ -41,55 +41,55 @@ class UseCase_step:
         # 连接到被测程序，并且通过菜单栏打开被测模块
         aero_window, son_window = pywin_openAProgram().menuOpen(self.testCase_dict)
         # 切换到被测模块窗口
-        if self.UseCase_Name == "铺层信息--铺层库优化" or self.UseCase_Name =="求解计算--求解计算" or \
-            self.UseCase_Name =="紧固件强度校核--紧固件参数设置" or self.UseCase_Name == "材料信息--定义金属材料参数" or\
-             self.UseCase_Name == "金属结构强度校核--金属一维单元强度校核" or self.UseCase_Name == "金属结构强度校核--金属二维单元强度校核" or\
-                self.UseCase_Name == "金属结构强度校核--金属加筋板强度校核" or self.UseCase_Name == "金属结构强度校核--金属曲板后驱曲强度校核" :
+        if self.sole_ModuleIdentifier == "铺层信息--铺层库优化" or self.sole_ModuleIdentifier =="求解计算--求解计算" or \
+            self.sole_ModuleIdentifier =="紧固件强度校核--紧固件参数设置" or self.sole_ModuleIdentifier == "材料信息--定义金属材料参数" or\
+             self.sole_ModuleIdentifier == "金属结构强度校核--金属一维单元强度校核" or self.sole_ModuleIdentifier == "金属结构强度校核--金属二维单元强度校核" or\
+                self.sole_ModuleIdentifier == "金属结构强度校核--金属加筋板强度校核" or self.sole_ModuleIdentifier == "金属结构强度校核--金属曲板后驱曲强度校核" :
             self.window_one = BeingMeasured_work(son_window).workField_general()
-        elif self.UseCase_Name == "尺寸信息--一维单元尺寸定义（模板）" or self.UseCase_Name == "尺寸信息--二维单元尺寸定义（模板）":
+        elif self.sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义（模板）" or self.sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义（模板）":
             self.window_one=BeingMeasured_work(son_window).workField_sizeInfo()
-        elif self.UseCase_Name == "铺层信息--铺层数据库制作工具":
+        elif self.sole_ModuleIdentifier == "铺层信息--铺层数据库制作工具":
             # 切入铺层数据库工具弹窗中
             self.window_three = BeingMeasured_popupWin("铺层数据库制作工具").menu_LetsGoTopopover()
             # 切入铺层数据库工具弹窗中控件中
             self.window_one, self.window_two = BeingMeasured_popupWin(None).\
                 Laminatedata_popUp(self.window_three)
-        elif self.UseCase_Name == "载荷信息--载荷数据库制作工具":
+        elif self.sole_ModuleIdentifier == "载荷信息--载荷数据库制作工具":
             # 切入铺层数据库工具弹窗中
             self.window_three = BeingMeasured_popupWin("载荷数据库制作工具").menu_LetsGoTopopover()
             # 切入铺层数据库工具弹窗中控件中
             self.window_one, self.window_two = BeingMeasured_popupWin(None).\
                 Laminatedata_popUp(self.window_three)
-        elif self.UseCase_Name == "载荷信息--编辑工况":
+        elif self.sole_ModuleIdentifier == "载荷信息--编辑工况":
             self.window_one = BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
-        elif self.UseCase_Name == "复材结构强度校核--复合材料强度校核1D" or \
-                self.UseCase_Name == "复材结构强度校核--复合材料强度校核2D":
+        elif self.sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核1D" or \
+                self.sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核2D":
             specialWay_OperatingControls(self.operationWindow_son).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
             self.window_one, self.window_two=BeingMeasured_work(son_window).workField_intensityCheck()
-        elif self.UseCase_Name == "尺寸信息--一维单元尺寸定义":
+        elif self.sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义":
             self.window_one,self.window_two,self.window_three,self.window_four = BeingMeasured_work(son_window).\
                 workField_SizeDefinition_1D()
-        elif self.UseCase_Name == "尺寸信息--二维单元尺寸定义":
+        elif self.sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义":
             self.window_one,self.window_two = BeingMeasured_work(son_window).\
                 workField_SizeDefinition_2D()
-        elif self.UseCase_Name == "紧固件强度校核--紧固件信息输入":
+        elif self.sole_ModuleIdentifier == "紧固件强度校核--紧固件信息输入":
             if self.operationWindow_son =="紧固件参数输入":
                 self.window_one = BeingMeasured_work(son_window).workField_general()
             elif self.operationWindow_son =="编辑参数弹框":
                 self.window_one = BeingMeasured_work(son_window).workField_Open_EditArgument()
-        elif self.UseCase_Name == "紧固件强度校核--紧固件强度校核":
+        elif self.sole_ModuleIdentifier == "紧固件强度校核--紧固件强度校核":
             self.window_one = BeingMeasured_work(son_window).workField_general()
-        elif self.UseCase_Name == "紧固件优化--紧固件参数优化":
+        elif self.sole_ModuleIdentifier == "紧固件优化--紧固件参数优化":
             self.window_one = BeingMeasured_work(son_window).workField_fastener_parOptimization()
         else:
-            print("没有找到需要切换的窗口：%r"%self.UseCase_Name, __file__, sys._getframe().f_lineno)
+            print("没有找到需要切换的窗口：%r"%self.sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
             os._exit(0)
         # 操作控制
         OperatingControls(self.window_one,  self.window_two, self.window_three,self.window_four). \
             controlConsole(self.testCase_attribute, self.testCase_dict)
         time.sleep(self.results_waitTime) # 实际值等待时间
         # 获取时间值实例
-        if self.UseCase_Name == "载荷信息--编辑工况":
+        if self.sole_ModuleIdentifier == "载荷信息--编辑工况":
             self.example = self.window_one
         self.actual_Text = GetActual_Value(self.testCase_dict,self.example).ActualValue_controller()
         return self.actual_Text

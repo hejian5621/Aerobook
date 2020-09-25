@@ -23,7 +23,7 @@ from OperatingControls.enterModule import BeingMeasured_work
 from src.utils.otherMethods.initialize import pywin_openAProgram
 from tool import WindowTop
 # 被系统置顶
-WindowTop.EnumWindows("Aerobook v1.0.4")
+WindowTop("Aerobook v1.0.4").EnumWindows()
 for dict in dicts2 :
 
     testdicts={"所在模块":"铺层信息->铺层库优化"}

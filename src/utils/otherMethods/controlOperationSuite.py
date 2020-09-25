@@ -28,7 +28,7 @@ class  ControlOperationSuite:
         :param list_Popup_parameter:弹窗参数信息
         :param location: 路径
         :param window_one: 关闭弹窗按钮名称
-        :param Popup_type:
+        :param Popup_type: 弹窗类型
         :param Popup_parameter: 在文件名文本框输入的内容
         :return:
         """
@@ -85,9 +85,9 @@ class  ControlOperationSuite:
         ControlOperationSuite(None).SelectFile_Popover(list_AfterParsing, source,Popup_type2)
         # 项目设置，增加有限元模型路径
         try:
-            app = Application().connect(title="项目设置",timeout=20)  # 连接项目设置弹窗
+            app = Application().connect(title="项目设置",timeout=5)  # 连接项目设置弹窗
             self.dlg_spec = app.window(title="项目设置")
-            app.window(title="项目设置").maximize()  # 项目弹窗最大化
+            # app.window(title="项目设置").maximize()  # 项目弹窗最大化
         except findwindows.ElementNotFoundError:
             import sys, os
             print("没有找到“项目设置“窗口", __file__, sys._getframe().f_lineno)
@@ -95,10 +95,10 @@ class  ControlOperationSuite:
         else:
             x = int(ProfileDataProcessing("commonality", "coord1_x").config_File()) # 从配置文件获取鼠标点击坐标
             y = int(ProfileDataProcessing("commonality", "coord1_y").config_File())  # 从配置文件获取鼠标点击坐标
-            mouse.click(button='left', coords= (x, y) )  # 点击有限元模型路径对应的文本框，显示出文本框
+            self.dlg_spec.click_input(button='left', coords= (x, y) )  # 点击有限元模型路径对应的文本框，显示出文本框
             DetailedPath = source + "\Htail.fem"
             self.dlg_spec.Edit.wait("exists", timeout=60, retry_interval=1).set_text(DetailedPath)  # 在有限元模型路径对应的文本框中输入数据
-            self.dlg_spec.click()
+            self.dlg_spec.wxPropertyGrid.click_input()
             Check_winControl("项目设置", "完成").nest_popUpWindows("警告", "OK")  # 检查嵌套弹窗是否关闭
 
 
