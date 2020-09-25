@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging, os,sys
 
-from os.path import path
+
 
 
 class Log:

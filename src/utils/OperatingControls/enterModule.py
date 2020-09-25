@@ -59,10 +59,10 @@ class  BeingMeasured_work:
     def __init__(self,son_window):
         self.workField = son_window.scrolledpanelwxWindowNR2   # 切换到被测工作
         self.workField_son=None
-        self.window_one = None
-        self.window_two = None
-        self.window_three = None
-        self.window_four = None
+        self.win_one = None
+        self.win_two = None
+        self.win_three = None
+        self.win_four = None
 
 
 
@@ -96,7 +96,7 @@ class  BeingMeasured_work:
         :return:
         """
         # 切换实体窗口
-        dlg_spec = self.workField.选择材料许用值曲线_wx_SysTabCtl32
+        dlg_spec = self.workField.材料许用值曲线表_wx_SysTabCtl32
         self.workField_son = dlg_spec.panelwxWindowNR0
         return self.workField_son
 
@@ -121,20 +121,20 @@ class  BeingMeasured_work:
         """
         # 获取窗口一
         dlg_spec = self.workField.截面形状_wx_SysTabCtl321
-        self.window_one = dlg_spec.panelwxWindowNR0
+        self.win_one = dlg_spec.panelwxWindowNR0
         # 获取窗口二
-        dlg2_spec = self.window_one.grid1
-        self.window_two = dlg2_spec.GridWindowwxWindowNR0
+        dlg2_spec = self.win_one.grid1
+        self.win_two = dlg2_spec.GridWindowwxWindowNR0
         # 获取窗口三
         dlg3_spec = self.workField.复合材料_wx_SysTabCtl32
         dlg4_spec =dlg3_spec.panelwxWindowNR1
         dlg5_spec = dlg4_spec.gridwxWindowNR
-        self.window_three = dlg5_spec.wxWindowNR6
+        self.win_three = dlg5_spec.wxWindowNR6
         # 获取窗口四
         dlg6_spec = self.workField.复合材料_wx_SysTabCtl32
         dlg7_spec = dlg6_spec.panel5
-        self.window_four = dlg7_spec.GridWindow2
-        return self.window_one,self.window_two,self.window_three,self.window_four
+        self.win_four = dlg7_spec.GridWindow2
+        return self.win_one,self.win_two,self.win_three,self.win_four
 
 
 
@@ -145,11 +145,11 @@ class  BeingMeasured_work:
         """
         # 获取窗口一
         dlg_spec = self.workField.截面形状_wx_SysTabCtl321
-        self.window_one = dlg_spec.panelwxWindowNR0
+        self.win_one = dlg_spec.panelwxWindowNR0
         # 获取窗口二
-        work4 = self.window_one.复合材料_wx_SysTabCtl32
-        self.window_two = work4.wxWindowNR6
-        return self.window_one,self.window_two
+        work4 = self.win_one.复合材料_wx_SysTabCtl32
+        self.win_two = work4.wxWindowNR6
+        return self.win_one,self.win_two
 
 
     def workField_Open_EditArgument(self):
@@ -173,9 +173,25 @@ class  BeingMeasured_work:
         紧固件优化->紧固件参数优化
         :return:
         """
-        self.window_one = self.workField.child_window(title="panel", class_name="wxWindowNR")
-        return self.window_one
+        self.win_one = self.workField.child_window(title="panel", class_name="wxWindowNR")
+        return self.win_one
 
+
+    def workField_fastenerSEO(self,operationWindow_son):
+        """
+        紧固件优化->紧固件参数优化
+        :return:
+        """
+        from tool import Check_winControl
+        from src.utils.OperatingControls.moduleControlOperation import OperatingControls
+        dlg_spec = self.workField.材料许用值曲线表_wx_SysTabCtl32
+        self.win_one = dlg_spec.panelwxWindowNR0
+        if operationWindow_son =="编辑材料许用值曲线弹窗":
+            dlg_spec = OperatingControls(self.win_one).ExpressionAssembly("Button1")  # 在编辑材料许用值工作栏点击“创建材料许用值曲线”按钮
+            Check_winControl("编辑材料许用值曲线", dlg_spec).window_WhetherOpen()  # 判断预期窗口是否出现
+            self.win_one = BeingMeasured_popupWin("编辑材料许用值曲线").menu_LetsGoTopopover()  # 切换到“编辑材料许用值曲线弹窗”中
+            self.win_two =  self.win_one.child_window(title="GridWindow", class_name="wxWindowNR") #  切换到网格窗口
+        return self.win_one,self.win_two
 
 
 
@@ -203,3 +219,80 @@ class specialWay_OperatingControls:
         app1.Click()
 
 
+
+
+
+class GetWindowInstance:
+    """
+    获取窗口实例
+    """
+
+    def __init__(self,property,son_window):
+        self.property = property  # 字典类型测试用例
+        self.son_window=son_window
+        self.initialLevel = property["初始化级别"]
+        self.testWinTitle = property["操作窗口标题"]
+        self.testWinTitle_son = property["操作子窗口标题"]
+        self.ModuMarking = property["模块唯一标识"]
+        self.win_one = None  # 窗口一
+        self.win_two = None  # 窗口二
+        self.win_three = None  # 窗口三
+        self.win_four = None  # 窗口四
+
+
+
+    def get_window_instance(self):
+        """
+        获取窗口实例
+        :return:
+        """
+        # 切换到被测模块窗口
+        if self.ModuMarking == "铺层信息--铺层库优化" or \
+                self.ModuMarking == "求解计算--求解计算" or \
+                self.ModuMarking == "紧固件强度校核--紧固件参数设置" or \
+                self.ModuMarking == "材料信息--定义金属材料参数" or \
+                self.ModuMarking == "金属结构强度校核--金属一维单元强度校核" or \
+                self.ModuMarking == "金属结构强度校核--金属二维单元强度校核" or \
+                self.ModuMarking == "金属结构强度校核--金属加筋板强度校核" or \
+                self.ModuMarking == "金属结构强度校核--金属曲板后驱曲强度校核":
+            self.win_one = BeingMeasured_work(self.son_window).workField_general()
+        elif self.ModuMarking == "尺寸信息--一维单元尺寸定义（模板）" or self.ModuMarking == "尺寸信息--二维单元尺寸定义（模板）":
+            self.win_one = BeingMeasured_work(self.son_window).workField_sizeInfo()
+        elif self.ModuMarking == "铺层信息--铺层数据库制作工具":
+            # 切入铺层数据库工具弹窗中
+            self.win_three = BeingMeasured_popupWin("铺层数据库制作工具").menu_LetsGoTopopover()
+            # 切入铺层数据库工具弹窗中控件中
+            self.win_one, self.win_two = BeingMeasured_popupWin(None).Laminatedata_popUp(self.win_three)
+        elif self.ModuMarking == "载荷信息--载荷数据库制作工具":
+            # 切入铺层数据库工具弹窗中
+            self.win_three = BeingMeasured_popupWin("载荷数据库制作工具").menu_LetsGoTopopover()
+            # 切入铺层数据库工具弹窗中控件中
+            self.win_one, self.win_two = BeingMeasured_popupWin(None).Laminatedata_popUp(self.win_three)
+        elif self.ModuMarking == "载荷信息--编辑工况":
+            self.win_one = BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
+        elif self.ModuMarking == "复材结构强度校核--复合材料强度校核1D" or \
+                self.ModuMarking == "复材结构强度校核--复合材料强度校核2D":
+            specialWay_OperatingControls(self.testWinTitle_son).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
+            self.win_one, self.win_two = BeingMeasured_work(self.son_window).workField_intensityCheck()
+        elif self.ModuMarking == "尺寸信息--一维单元尺寸定义":
+            self.win_one, self.win_two, self.win_three, self.win_four = BeingMeasured_work(self.son_window). \
+                workField_SizeDefinition_1D()
+        elif self.ModuMarking == "尺寸信息--二维单元尺寸定义":
+            self.win_one, self.win_two = BeingMeasured_work(self.son_window). \
+                workField_SizeDefinition_2D()
+        elif self.ModuMarking == "紧固件强度校核--紧固件信息输入":
+            if self.testWinTitle_son == "紧固件参数输入":
+                self.win_one = BeingMeasured_work(self.son_window).workField_general()
+            elif self.testWinTitle_son == "编辑参数弹框":
+                self.win_one = BeingMeasured_work(self.son_window).workField_Open_EditArgument()
+        elif self.ModuMarking == "紧固件强度校核--紧固件强度校核":
+            self.win_one = BeingMeasured_work(self.son_window).workField_general()
+        elif self.ModuMarking == "紧固件优化--紧固件参数优化":
+            self.win_one = BeingMeasured_work(self.son_window).workField_fastener_parOptimization()
+        elif self.ModuMarking == "材料信息--定义复合材料参数":
+            specialWay_OperatingControls(self.testWinTitle).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
+            self.win_one,self.win_two = BeingMeasured_work(self.son_window).workField_fastenerSEO(self.testWinTitle_son)
+        else:
+            print("没有找到需要切换的窗口：%r" % self.ModuMarking, __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        return self.win_one,self.win_two,self.win_three,self.win_four

@@ -3,7 +3,6 @@
 from pywinauto.application import Application
 import uiautomation
 from config.configurationFile import ProfileDataProcessing
-from src.utils.commonality.ExcelFile import read_excel
 import time,os
 from OperatingControls.enterModule import specialWay_OperatingControls
 

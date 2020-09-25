@@ -17,7 +17,7 @@ class Initializing:
     """用例执行前需要做的操作"""
 
     def __init__(self):
-        self.testCase_attribute=None
+        self.testCase=None
 
 
     def controller(self,dictSet,dict_testCase ):
@@ -32,7 +32,7 @@ class Initializing:
         number=dictSet["全局参数"]
         global_UseCase_Name = dictSet["全局用例集名称"]
         sole_ModuleIdentifier = dict_testCase["模块唯一标识"]
-        self.testCase_attribute = dictSet["控件属性已经操作方法"]
+        self.testCase = dictSet["控件属性已经操作方法"]
         # 用例运行前首先检查有没有弹窗没有关闭
         handlingMethod().Loop_closeWindow(sole_ModuleIdentifier)
         # 在运行每一个用例集之前初始化全局变量参数
@@ -47,11 +47,11 @@ class Initializing:
             # 取出“控件属性已经操作方法”
             tableName=["控件属性已经操作方法"]
             site = UseCase_parameterization().parameterization_location(sole_ModuleIdentifier, tableName)
-            self.testCase_attribute = read_excel(site[0]).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
+            self.testCase = read_excel(site[0]).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
             # 在模块开始前数据清理
             if sole_ModuleIdentifier=="载荷信息--编辑工况":
                 execute_useCase_initialize().clear_editWorkingCondition()    # 清除所有的包络工况
-        return number,global_Name,ProjectPath,old_content,self.testCase_attribute
+        return number,global_Name,ProjectPath,old_content,self.testCase
 
 
 

@@ -1,8 +1,5 @@
 #  数据处理
 
-from src.utils.commonality.ExcelFile import read_excel
-import numpy as np
-
 
 class FormatConversion:
     """数据处理"""

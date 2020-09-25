@@ -12,7 +12,7 @@ class GetActual_Value:
     """获取实际值"""
 
     def __init__(self,testCase_dict,instance=None):
-        self.testCase_dict=testCase_dict
+        self.property=testCase_dict
         self.instance = instance
         self.actual_Text=None
 
@@ -24,8 +24,8 @@ class GetActual_Value:
         :return:
         """
 
-        Message_type = self.testCase_dict["预期值信息类型"]
-        UseCase_Number = self.testCase_dict["用例编号"]  # 取出预期值
+        Message_type = self.property["预期值信息类型"]
+        UseCase_Number = self.property["用例编号"]  # 取出预期值
         print("开始获取实际值,途径：", Message_type)
         if Message_type == "警告弹窗":  # 获取警告弹窗的文本信息（实际值）
             result= Warning_PopUp().Check_warning()
@@ -36,7 +36,7 @@ class GetActual_Value:
             else:
                 self.actual_Text="没有警告弹窗"
         elif Message_type == "信息窗口":  # 获取信息窗口的文本信息（实际值）
-            ProjectPath = self.testCase_dict["被测程序文件地址"]
+            ProjectPath = self.property["被测程序文件地址"]
             self.actual_Text = Information_Win().acquire_HTML_TXT(ProjectPath)
         elif Message_type == "控件文本":  # 获取信息窗口的文本信息（实际值）
             # 获取工况组合下拉框里的文本信息

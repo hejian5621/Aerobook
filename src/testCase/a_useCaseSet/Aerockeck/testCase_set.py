@@ -60,7 +60,7 @@ from utils.commonality.tool import UseCase_parameterization
 
 
 list_dicti_argument=[
-       {"铺层信息--铺层库优化": ["测试一"]}
+       {"材料信息--定义复合材料参数": ["测试一"]}
 ]
 list_dict_site,list_testPoint = UseCase_parameterization().parameterization_data(list_dicti_argument)  # 读取测试用例
 

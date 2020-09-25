@@ -40,7 +40,7 @@ for dict in dicts2 :
 
 
 
-    OperatingControls(module_window).controlConsole(dicts1,dict)
+    OperatingControls(module_window).console(dicts1,dict)
 #
     # living="Edit2"
     #

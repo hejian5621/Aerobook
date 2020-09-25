@@ -17,8 +17,8 @@ class  module_initialize:
 
 
     def __init__(self):
-        self.testCase_dict=None
-        self.testCase_attribute=None
+        self.property=None
+        self.testCase=None
 
 
     def TestCase_Data(self,UseCaseNumber,attribute_tableName):
@@ -31,16 +31,16 @@ class  module_initialize:
         real_UseCase_Name = "程序初始化用例"
         site = UseCase_parameterization().parameterization_location(real_UseCase_Name, attribute_tableName)
         site = site[0]
-        self.testCase_attribute = read_excel(site).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
+        self.testCase = read_excel(site).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
         # 获取初始化用例
         list_dicti_argument = [{"程序初始化用例": ["测试用例步骤"]}]
         list_dict_site, list_testPoint = UseCase_parameterization().parameterization_data(list_dicti_argument)  # 读取测试用例
         for dict_site in list_dict_site:  # 取出对应模块的测试用例
             if dict_site["用例编号"] == UseCaseNumber:
-                self.testCase_dict = dict_site
+                self.property = dict_site
                 break
-        self.testCase_dict["被测程序文件地址"]=ProjectPath
-        return self.testCase_attribute,self.testCase_dict
+        self.property["被测程序文件地址"]=ProjectPath
+        return self.testCase,self.property
 
 
 
@@ -81,9 +81,9 @@ class  module_initialize:
         :return:
         """
         # 获取初始测试用例参数
-        self.testCase_attribute,self.testCase_dict=module_initialize().TestCase_Data(UseCaseNumber,attribute_tableName)
+        self.testCase,self.property=module_initialize().TestCase_Data(UseCaseNumber,attribute_tableName)
         # 执行初始化测试用例
-        UseCase_step(self.testCase_attribute,self.testCase_dict).Perform_useCase_Steps()
+        UseCase_step(self.testCase,self.property).Perform_useCase_Steps()
 
 
 

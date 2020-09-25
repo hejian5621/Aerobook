@@ -12,15 +12,15 @@ class OperatingControls:
 
 
     def __init__(self,window_one=None,window_two=None,window_three =None,window_four =None):
-        self.window_one=window_one
-        self.window_two = window_two
-        self.window_three = window_three
-        self.window_four = window_four
+        self.win_one=window_one
+        self.win_two = window_two
+        self.win_three = window_three
+        self.win_four = window_four
         self.dlg_spec=None
         self.list_AfterParsing=None
 
 
-    def controlConsole(self,Silverlight,argument ):
+    def console(self,Silverlight,argument ):
         """
         操作控件控制台
         :param Silverlight: 控件的存在方法
@@ -42,7 +42,7 @@ class OperatingControls:
                     discern = ControlProperties["唯一标识"]
                     waitingTime = ControlProperties["操作控件后等待时间"]
                     Control_mode = ControlProperties["唯一标识方法"]
-                    WindowInstance = OperatingControls(self.window_one, self.window_two, self.window_three,self.window_four). \
+                    WindowInstance = OperatingControls(self.win_one, self.win_two, self.win_three,self.win_four). \
                         OperationControlInstance(ControlInstance)  # 获取操作控件实例
                     dlg_spec = OperatingControls(WindowInstance). \
                         IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
@@ -106,32 +106,32 @@ class OperatingControls:
         :return:
         """
         if ControlInstance=="窗口一":
-            if self.window_one:
-                return  self.window_one
+            if self.win_one:
+                return  self.win_one
             else:
                 print("传过来的实例为空", __file__, sys._getframe().f_lineno)
                 os._exit(0)
         elif ControlInstance=="窗口二":
-            if self.window_two:
-                return self.window_two
+            if self.win_two:
+                return self.win_two
             else:
                 print("传过来的实例为空", __file__, sys._getframe().f_lineno)
                 os._exit(0)
         elif ControlInstance=="窗口三":
-            if self.window_three:
-                return self.window_three
+            if self.win_three:
+                return self.win_three
             else:
                 print("传过来的实例为空", __file__, sys._getframe().f_lineno)
                 os._exit(0)
         elif ControlInstance == "窗口四":
-            if self.window_four:
-                return self.window_four
+            if self.win_four:
+                return self.win_four
             else:
                 print("传过来的实例为空", __file__, sys._getframe().f_lineno)
                 os._exit(0)
         else:
-            if self.window_one:
-                return self.window_one
+            if self.win_one:
+                return self.win_one
             else:
                 print("传过来的实例为空", __file__, sys._getframe().f_lineno)
                 os._exit(0)
@@ -147,14 +147,14 @@ class OperatingControls:
             self.list_AfterParsing = discern.split("；")
             discern=self.list_AfterParsing[-1]
         if Controlmethod=="方式一":
-           self.dlg_spec= OperatingControls(self.window_one).ExpressionAssembly(discern)
+           self.dlg_spec= OperatingControls(self.win_one).ExpressionAssembly(discern)
            Check_winControl("警告", "OK").popUp_Whether_close()
         elif Controlmethod=="方式二":
             title_n=self.list_AfterParsing[0]
             className = self.list_AfterParsing[1]
             print("title_n:",title_n)
             print("className :", className )
-            self.dlg_spec = self.window_one.child_window(title=title_n, class_name=className)
+            self.dlg_spec = self.win_one.child_window(title=title_n, class_name=className)
         else:
             print("没有唯一标识的操作方法", __file__, sys._getframe().f_lineno)
             os._exit(0)
@@ -170,168 +170,168 @@ class OperatingControls:
         """
         print("str_Name:",str_Name)
         if str_Name=="Edit":
-            self.dlg_spec=self.window_one.Edit
+            self.dlg_spec=self.win_one.Edit
         elif str_Name=="Edit1":
-            self.dlg_spec=self.window_one.Edit1
+            self.dlg_spec=self.win_one.Edit1
         elif str_Name=="Edit2":
-            self.dlg_spec = self.window_one.Edit2
+            self.dlg_spec = self.win_one.Edit2
         elif str_Name=="Edit3":
-            self.dlg_spec = self.window_one.Edit3
+            self.dlg_spec = self.win_one.Edit3
         elif str_Name=="Edit4":
-            self.dlg_spec = self.window_one.Edit4
+            self.dlg_spec = self.win_one.Edit4
         elif str_Name=="Edit5":
-            self.dlg_spec = self.window_one.Edit5
+            self.dlg_spec = self.win_one.Edit5
         elif str_Name=="Edit6":
-            self.dlg_spec = self.window_one.Edit6
+            self.dlg_spec = self.win_one.Edit6
         elif str_Name=="Edit7":
-            self.dlg_spec = self.window_one.Edit7
+            self.dlg_spec = self.win_one.Edit7
         elif str_Name=="Edit8":
-            self.dlg_spec = self.window_one.Edit8
+            self.dlg_spec = self.win_one.Edit8
         elif str_Name=="Edit9":
-            self.dlg_spec = self.window_one.Edit9
+            self.dlg_spec = self.win_one.Edit9
         elif str_Name=="Edit10":
-            self.dlg_spec = self.window_one.Edit10
+            self.dlg_spec = self.win_one.Edit10
         elif str_Name=="Edit11":
-            self.dlg_spec = self.window_one.Edit11
+            self.dlg_spec = self.win_one.Edit11
         elif str_Name=="Edit12":
-            self.dlg_spec = self.window_one.Edit12
+            self.dlg_spec = self.win_one.Edit12
         elif str_Name=="Edit13":
-            self.dlg_spec = self.window_one.Edit13
+            self.dlg_spec = self.win_one.Edit13
         elif str_Name == "Edit14":
-            self.dlg_spec = self.window_one.Edit14
+            self.dlg_spec = self.win_one.Edit14
         elif str_Name == "Edit15":
-            self.dlg_spec = self.window_one.Edit15
+            self.dlg_spec = self.win_one.Edit15
         elif str_Name == "Edit16":
-            self.dlg_spec = self.window_one.Edit16
+            self.dlg_spec = self.win_one.Edit16
         elif str_Name == "CheckBox0":
-            self.dlg_spec = self.window_one.CheckBox0
+            self.dlg_spec = self.win_one.CheckBox0
         elif str_Name == "CheckBox1":
-            self.dlg_spec = self.window_one.CheckBox1
+            self.dlg_spec = self.win_one.CheckBox1
         elif str_Name == "CheckBox2":
-            self.dlg_spec = self.window_one.CheckBox2
+            self.dlg_spec = self.win_one.CheckBox2
         elif str_Name == "CheckBox3":
-            self.dlg_spec = self.window_one.CheckBox3
+            self.dlg_spec = self.win_one.CheckBox3
         elif str_Name == "CheckBox4":
-            self.dlg_spec = self.window_one.CheckBox4
+            self.dlg_spec = self.win_one.CheckBox4
         elif str_Name == "CheckBox5":
-            self.dlg_spec = self.window_one.CheckBox5
+            self.dlg_spec = self.win_one.CheckBox5
         elif str_Name == "CheckBox6":
-            self.dlg_spec = self.window_one.CheckBox6
+            self.dlg_spec = self.win_one.CheckBox6
         elif str_Name == "CheckBox7":
-            self.dlg_spec = self.window_one.CheckBox7
+            self.dlg_spec = self.win_one.CheckBox7
         elif str_Name == "CheckBox8":
-            self.dlg_spec = self.window_one.CheckBox8
+            self.dlg_spec = self.win_one.CheckBox8
         elif str_Name == "CheckBox9":
-            self.dlg_spec = self.window_one.CheckBox9
+            self.dlg_spec = self.win_one.CheckBox9
         elif str_Name == "CheckBox10":
-            self.dlg_spec = self.window_one.CheckBox10
+            self.dlg_spec = self.win_one.CheckBox10
         elif str_Name == "CheckBox11":
-            self.dlg_spec = self.window_one.CheckBox11
+            self.dlg_spec = self.win_one.CheckBox11
         elif str_Name == "CheckBox12":
-            self.dlg_spec = self.window_one.CheckBox12
+            self.dlg_spec = self.win_one.CheckBox12
         elif str_Name == "CheckBox13":
-            self.dlg_spec = self.window_one.CheckBox13
+            self.dlg_spec = self.win_one.CheckBox13
         elif str_Name == "CheckBox14":
-            self.dlg_spec = self.window_one.CheckBox14
+            self.dlg_spec = self.win_one.CheckBox14
         elif str_Name == "CheckBox15":
-            self.dlg_spec = self.window_one.CheckBox15
+            self.dlg_spec = self.win_one.CheckBox15
         elif str_Name == "CheckBox16":
-            self.dlg_spec = self.window_one.CheckBox16
+            self.dlg_spec = self.win_one.CheckBox16
         elif str_Name == "Button":
-            self.dlg_spec = self.window_one.Button
+            self.dlg_spec = self.win_one.Button
         elif str_Name == "Button0":
-            self.dlg_spec = self.window_one.Button0
+            self.dlg_spec = self.win_one.Button0
         elif str_Name == "Button1":
-            self.dlg_spec = self.window_one.Button1
+            self.dlg_spec = self.win_one.Button1
         elif str_Name == "Button2":
-            self.dlg_spec = self.window_one.Button2
+            self.dlg_spec = self.win_one.Button2
         elif str_Name == "Button3":
-            self.dlg_spec = self.window_one.Button3
+            self.dlg_spec = self.win_one.Button3
         elif str_Name == "Button4":
-            self.dlg_spec = self.window_one.Button4
+            self.dlg_spec = self.win_one.Button4
         elif str_Name == "Button5":
-            self.dlg_spec = self.window_one.Button5
+            self.dlg_spec = self.win_one.Button5
         elif str_Name == "Button6":
-            self.dlg_spec = self.window_one.Button6
+            self.dlg_spec = self.win_one.Button6
         elif str_Name == "Button7":
-            self.dlg_spec = self.window_one.Button7
+            self.dlg_spec = self.win_one.Button7
         elif str_Name == "Button8":
-            self.dlg_spec = self.window_one.Button8
+            self.dlg_spec = self.win_one.Button8
         elif str_Name == "Button9":
-            self.dlg_spec = self.window_one.Button9
+            self.dlg_spec = self.win_one.Button9
         elif str_Name == "Button10":
-            self.dlg_spec = self.window_one.Button10
+            self.dlg_spec = self.win_one.Button10
         elif str_Name == "Button11":
-            self.dlg_spec = self.window_one.Button11
+            self.dlg_spec = self.win_one.Button11
         elif str_Name == "RadioButton":
-            self.dlg_spec = self.window_one.RadioButton
+            self.dlg_spec = self.win_one.RadioButton
         elif str_Name == "RadioButton1":
-            self.dlg_spec = self.window_one.RadioButton1
+            self.dlg_spec = self.win_one.RadioButton1
         elif str_Name == "RadioButton2":
-            self.dlg_spec = self.window_one.RadioButton2
+            self.dlg_spec = self.win_one.RadioButton2
         elif str_Name == "RadioButton3":
-            self.dlg_spec = self.window_one.RadioButton3
+            self.dlg_spec = self.win_one.RadioButton3
         elif str_Name == "RadioButton4":
-            self.dlg_spec = self.window_one.RadioButton4
+            self.dlg_spec = self.win_one.RadioButton4
         elif str_Name == "RadioButton5":
-            self.dlg_spec = self.window_one.RadioButton5
+            self.dlg_spec = self.win_one.RadioButton5
         elif str_Name == "RadioButton6":
-            self.dlg_spec = self.window_one.RadioButton6
+            self.dlg_spec = self.win_one.RadioButton6
         elif str_Name == "RadioButton7":
-            self.dlg_spec = self.window_one.RadioButton7
+            self.dlg_spec = self.win_one.RadioButton7
         elif str_Name == "RadioButton8":
-            self.dlg_spec = self.window_one.RadioButton8
+            self.dlg_spec = self.win_one.RadioButton8
         elif str_Name == "RadioButton9":
-            self.dlg_spec = self.window_one.RadioButton9
+            self.dlg_spec = self.win_one.RadioButton9
         elif str_Name == "RadioButton10":
-            self.dlg_spec = self.window_one.RadioButton10
+            self.dlg_spec = self.win_one.RadioButton10
         elif str_Name == "RadioButton11":
-            self.dlg_spec = self.window_one.RadioButton11
+            self.dlg_spec = self.win_one.RadioButton11
         elif str_Name == "RadioButton12":
-            self.dlg_spec = self.window_one.RadioButton12
+            self.dlg_spec = self.win_one.RadioButton12
         elif str_Name == "RadioButton13":
-            self.dlg_spec = self.window_one.RadioButton13
+            self.dlg_spec = self.win_one.RadioButton13
         elif str_Name == "RadioButton14":
-            self.dlg_spec = self.window_one.RadioButton14
+            self.dlg_spec = self.win_one.RadioButton14
         elif str_Name == "ComboBox0":
-            self.dlg_spec = self.window_one.ComboBox0
+            self.dlg_spec = self.win_one.ComboBox0
         elif str_Name == "ComboBox1":
-            self.dlg_spec = self.window_one.ComboBox1
+            self.dlg_spec = self.win_one.ComboBox1
         elif str_Name == "ComboBox2":
-            self.dlg_spec = self.window_one.ComboBox2
+            self.dlg_spec = self.win_one.ComboBox2
         elif str_Name == "ComboBox3":
-            self.dlg_spec = self.window_one.ComboBox3
+            self.dlg_spec = self.win_one.ComboBox3
         elif str_Name == "ComboBox4":
-            self.dlg_spec = self.window_one.ComboBox4
+            self.dlg_spec = self.win_one.ComboBox4
         elif str_Name == "ComboBox5":
-            self.dlg_spec = self.window_one.ComboBox5
+            self.dlg_spec = self.win_one.ComboBox5
         elif str_Name == "GroupBox":
-            self.dlg_spec = self.window_one.ComboBox
+            self.dlg_spec = self.win_one.ComboBox
         elif str_Name == "GroupBox1":
-            self.dlg_spec = self.window_one.ComboBox1
+            self.dlg_spec = self.win_one.ComboBox1
         elif str_Name == "GroupBox2":
-            self.dlg_spec = self.window_one.ComboBox2
+            self.dlg_spec = self.win_one.ComboBox2
         elif str_Name == "GroupBox3":
-            self.dlg_spec = self.window_one.GroupBox3
+            self.dlg_spec = self.win_one.GroupBox3
         elif str_Name == "Static3":
-            self.dlg_spec = self.window_one.Static3
+            self.dlg_spec = self.win_one.Static3
         elif str_Name == "Static6":
-            self.dlg_spec = self.window_one.Static6
+            self.dlg_spec = self.win_one.Static6
         elif str_Name == "Static15":
-            self.dlg_spec = self.window_one.Static15
+            self.dlg_spec = self.win_one.Static15
         elif str_Name == "路径Edit":
-            self.dlg_spec = self.window_one.路径Edit
+            self.dlg_spec = self.win_one.路径Edit
         elif str_Name == "两边各取蒙皮宽度一半":
-            self.dlg_spec = self.window_one.两边各取蒙皮宽度一半
+            self.dlg_spec = self.win_one.两边各取蒙皮宽度一半
         elif str_Name == "极":
-            self.dlg_spec = self.window_one.极
+            self.dlg_spec = self.win_one.极
         elif str_Name == "均":
-            self.dlg_spec = self.window_one.均
+            self.dlg_spec = self.win_one.均
         elif str_Name == "机身半径Edit":
-            self.dlg_spec = self.window_one.机身半径Edit
+            self.dlg_spec = self.win_one.机身半径Edit
         else:
             print("没有找到唯一标识拼接方法:",str_Name)
-            self.dlg_spec = self.window_one[str_Name]
+            self.dlg_spec = self.win_one[str_Name]
         return self.dlg_spec
 
 
@@ -352,17 +352,17 @@ class OperatingControls:
         if Popup_type=="路径弹窗":  # 操作弹窗套件
             Popup_type2=ControlProperties["套件类型二"]
             Popup_parameter2 = ControlProperties["套件参数二"]
-            ControlOperationSuite(None).SelectFile_Popover(self.list_AfterParsing,location,Popup_type2,Popup_parameter2,self.window_one)
+            ControlOperationSuite(None).SelectFile_Popover(self.list_AfterParsing,location,Popup_type2,Popup_parameter2,self.win_one)
         elif Popup_type == "选择材料许用值曲线":  # 操作弹窗套件
             str_coord = ControlProperties["唯一标识"]
-            Check_winControl(Popup_parameter, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
+            Check_winControl(Popup_parameter, self.win_one).window_WhetherOpen()  # 判断预期窗口是否出现
             ControlOperationSuite(None).select_AllowableCurve(str_coord)
         elif Popup_type == "选择校核工况" or Popup_type == "选择优化工况":  # 操作弹窗套件
-            Check_winControl(Popup_type, self.window_one).window_WhetherOpen()  # 判断选择校核工况是否出现
+            Check_winControl(Popup_type, self.win_one).window_WhetherOpen()  # 判断选择校核工况是否出现
             ControlOperationSuite(None).select_workingCondition(Popup_type)
         elif Popup_type == "选择结构单元":  # 操作弹窗套件
             time.sleep(0.3)
-            self.window_one.click_input()
+            self.win_one.click_input()
             KeyboardMouse().selectionModel()  # 选择结构单元
         else:
             print("被操作的套件名称不存在,套件名称为：",Popup_type, __file__, sys._getframe().f_lineno)
@@ -383,11 +383,11 @@ class OperatingControls:
         discern = ControlProperties["唯一标识"]
         ControlTypes = ControlProperties["控件类型"]
         if ControlTypes=="坐标--单击--文本框":
-            self.dlg_spec=OperatingControls(self.window_one).coord_dblclick(discern)
+            self.dlg_spec=OperatingControls(self.win_one).coord_dblclick(discern)
         elif ControlTypes=="坐标--三击--文本框":
-            self.dlg_spec = OperatingControls(self.window_one).coord_Threeclick(discern)
+            self.dlg_spec = OperatingControls(self.win_one).coord_Threeclick(discern)
         elif ControlTypes=="坐标--键盘--文本框":
-            OperatingControls(self.window_one).coord_keyboardInput(discern,argument)
+            OperatingControls(self.win_one).coord_keyboardInput(discern,argument)
         else:
             print("没有找到操作方法：", ControlTypes, __file__, sys._getframe().f_lineno)
             os._exit(0)
@@ -403,7 +403,7 @@ class OperatingControls:
         """
         discern = ControlProperties["唯一标识"]
         Popup_type =ControlProperties["套件类型一"]
-        OperatingControls(self.window_one).coord_dblclick(discern)
+        OperatingControls(self.win_one).coord_dblclick(discern)
         if Popup_type=="选择铺层库信息":
             ControlOperationSuite(None).select_Laminatedata(argument)
         else:
@@ -419,8 +419,8 @@ class OperatingControls:
         :return:
         """
         coord_X, coord_Y, sole = OperatingControls().analysis_coord(sole_logo)  # 解析参数
-        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
-        self.window_one.double_click_input(coords=(coord_X, coord_Y), button="left")
+        dlg1_spec = OperatingControls(self.win_one).ExpressionAssembly(sole)
+        self.win_one.double_click_input(coords=(coord_X, coord_Y), button="left")
         return dlg1_spec
 
 
@@ -430,9 +430,9 @@ class OperatingControls:
         :return:
         """
         coord_X,coord_Y,sole = OperatingControls().analysis_coord(sole_logo)  # 解析参数
-        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
-        self.window_one.click_input(coords=(coord_X, coord_Y), button="left")
-        self.window_one.double_click_input(coords=(coord_X, coord_Y), button="left")
+        dlg1_spec = OperatingControls(self.win_one).ExpressionAssembly(sole)
+        self.win_one.click_input(coords=(coord_X, coord_Y), button="left")
+        self.win_one.double_click_input(coords=(coord_X, coord_Y), button="left")
         return dlg1_spec
 
 
@@ -446,7 +446,7 @@ class OperatingControls:
         """
         from pywinauto.keyboard import send_keys
         coord_X,coord_Y,sole = OperatingControls().analysis_coord(sole_logo)  # 解析参数
-        dlg1_spec = OperatingControls(self.window_one).ExpressionAssembly(sole)
+        dlg1_spec = OperatingControls(self.win_one).ExpressionAssembly(sole)
         dlg1_spec.click_input(coords=(coord_X, coord_Y), button="left")
         time.sleep(1)
         argument=str(argument)
@@ -480,6 +480,6 @@ class OperatingControls:
         滚动鼠标
         :return:
         """
-        self.window_one.click_input()
+        self.win_one.click_input()
         import win32api, win32con
         win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -1000)  # 滚动鼠标
