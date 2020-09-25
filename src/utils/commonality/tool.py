@@ -206,21 +206,15 @@ class  Check_winControl:
         :param event_button: 触发的按钮操作
         :return:
         """
-        print("进入")
         import win32gui
         self.triggerButton.click_input()   # 点击触发弹窗的按钮
         # 判断弹窗是否弹窗，如果没有弹出，就继续点击
         while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
             try:
-                time.sleep(3)
                 # 知识点：主动抛出异常，就是实例化一个异常类
-                print("弹窗", self.title)
                 hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
-                print("hwnd1:", hwnd)
                 if hwnd != 0:
                     raise MyException("没有找到弹窗")  # 实例化一个异常,实例化的时候需要传参数
-                print("hwnd2:",hwnd)
-                print("弹窗已经打开",self.title)
             except Exception as obj:  # 万能捕获，之前的可能捕获不到，这里添加Exception作为保底
                 break
             else:
@@ -229,7 +223,9 @@ class  Check_winControl:
                 elif self.CircleInitial == 1:  # 如果第一次链接不上，在点击一次
                     self.triggerButton.click_input()
             self.CircleInitial = self.CircleInitial + 1
-            print("")
+        if self.CircleInitial == (self.cycleIndex + 1):
+            print("%s窗口没有找到" % self.title, __file__, sys._getframe().f_lineno)
+            os._exit(0)
 
 
     # 检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现
@@ -269,10 +265,13 @@ class  Check_winControl:
         :return:
         """
         while self.CircleInitial <= self.cycleIndex:
-            close_result=Check_winControl(self.title,self.triggerButton,1,1).popUp_Whether_close("嵌套")   # 然后在检查弹窗有没有关闭
+            close_result=Check_winControl(self.title,self.triggerButton,1,1).popUp_Whether_close()   # 然后在检查弹窗有没有关闭
             if close_result=="窗口已正常关闭":
                 break
-            Check_winControl(nest_title, nest_triggerButton).popUp_Whether_close()  # 检查有没有嵌套弹框
+            time.sleep(1)
+            print("nest_title:",nest_title)
+            print("nest_triggerButton:", nest_triggerButton)
+            Check_winControl(nest_title, nest_triggerButton).popUp_Whether_close()  # 检查有没有嵌套弹框,有嵌套弹框就关掉
             self.CircleInitial = self.CircleInitial + 1
             if self.CircleInitial == (self.cycleIndex + 1):
                 print("%s窗口没有关闭" % self.title, __file__, sys._getframe().f_lineno)
@@ -280,13 +279,10 @@ class  Check_winControl:
 
 
 
-    def popUp_Whether_close(self, nest=None):
+    def popUp_Whether_close(self):
         """
         检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮
         首先通过获取句柄的形式来判断是否有弹窗，因为以句柄的形式会快一点
-        :param nest: 判断掉该方法是否在有嵌套弹窗的情况下
-        :param nest_win: 控件操作方法
-        :param nestWin_Dicti: 嵌套标题
         :return:
         """
         import win32gui
@@ -573,7 +569,9 @@ class UseCase_parameterization:
         :return:
         """
         location=None
-        if moduleName=="铺层信息--铺层库优化":
+        if moduleName=="程序初始化用例":
+            location = ProfileDataProcessing("testCase", "initializeUsecase").config_File()
+        elif moduleName=="铺层信息--铺层库优化":
             location = ProfileDataProcessing("testCase", "LaminateOptimize").config_File()
         elif moduleName=="铺层信息--铺层数据库制作工具":
             location = ProfileDataProcessing("testCase", "LaminatedataPopup").config_File()

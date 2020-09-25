@@ -15,34 +15,34 @@ workField1 = module_window.scrolledpanelwxWindowNR2   # 切换到被测工作
 
 workField1.print_control_identifiers()
 
-
-#安全系数文本框
-workField1.Edit1.set_text("222")
-
-
-#1D静强度勾选框
-workField1.CheckBox1.click_input()
-
-
-#压损勾选框
-workField1.CheckBox2.click_input()
-
-#弯制单选框
-workField1.RadioButton1.click_input()
-
-
-#挤压单选框
-workField1.RadioButton2.click_input()
-
-
-#局部失稳勾选框
-workField1.CheckBox3.click_input()
-
-#均值单选框
-workField1.child_window(title="均  值", class_name="Button").click_input()
-
-#极值单选框
-workField1.child_window(title="极  值", class_name="Button").click_input()
+#
+# #安全系数文本框
+# workField1.Edit1.set_text("222")
+#
+#
+# #1D静强度勾选框
+# workField1.CheckBox1.click_input()
+#
+#
+# #压损勾选框
+# workField1.CheckBox2.click_input()
+#
+# #弯制单选框
+# workField1.RadioButton1.click_input()
+#
+#
+# #挤压单选框
+# workField1.RadioButton2.click_input()
+#
+#
+# #局部失稳勾选框
+# workField1.CheckBox3.click_input()
+#
+# #均值单选框
+# workField1.child_window(title="均  值", class_name="Button").click_input()
+#
+# #极值单选框
+# workField1.child_window(title="极  值", class_name="Button").click_input()
 
 
 

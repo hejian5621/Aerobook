@@ -18,11 +18,11 @@ class UseCase_step:
         self.Message_type = testCase_dict["预期值信息类型"]
         self.ProjectPath = testCase_dict["被测程序文件地址"]
         self.UseCase_Number = testCase_dict["用例编号"]  # 取出预期值
-        self.results_waitTime = testCase_dict["测试结果等待时间"]  # 取出预期值
+        self.results_waitTime = testCase_dict["测试结果等待时间"]
         self.initialLevel = testCase_dict["初始化级别"]
         self.operationWindow = testCase_dict["操作窗口标题"]
         self.operationWindow_son = testCase_dict["操作子窗口标题"]
-        self.UseCase_Name= testCase_dict["用例集名称"]
+        self.UseCase_Name= testCase_dict["模块唯一标识"]
         self.actual_Text = None
         self.aero_window = None
         self.son_window = None
@@ -102,7 +102,6 @@ class UseCase_step:
         :return:
         """
         # 执行步骤之前初始化
-
         self.aero_window, self.son_window = pywin_openAProgram().\
             menuOpen_switchingWin_UIA(self.testCase_dict,self.operationWindow)
         # 切换到材料信息--定义复合材料信息--编辑材料许用值、定义材料许用值模块

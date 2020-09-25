@@ -36,38 +36,33 @@ from utils.commonality.tool import UseCase_parameterization
 #     {"金属结构强度校核--金属加筋板强度校核": ["其他"]}
 # ]
 
-# list_dicti_argument=[
-#     {"铺层信息--铺层库优化": ["最大铺层数"]},
-#     {"铺层信息--铺层数据库制作工具": ["铺层库制作弹窗"]},
-#     {"尺寸信息--一维单元尺寸定义": ["一维单元尺寸定义截面形状T型"]},
-#     {"尺寸信息--二维单元尺寸定义": ["二维单元尺寸定义"]},
-#     {"尺寸信息--一维单元尺寸定义（模板）": ["一维单元尺寸定义复合材料（模板）"]},
-#     {"尺寸信息--二维单元尺寸定义（模板）": ["二维单元尺寸定义复合材料（模板）"]},
-#     {"求解计算--求解计算": ["属性更新选择路径", "载荷提取选择路径"]},
-#     {"载荷信息--载荷数据库制作工具": ["载荷数据库制作弹窗"]},
-#     {"载荷信息--编辑工况": ["新建"]},
-#     {"材料信息--定义复合材料参数": ["其他"]},
-#     {"复材结构强度校核--复合材料强度校核1D": ["其他"]},
-#     {"复材结构强度校核--复合材料强度校核2D": ["其他"]},
-#     {"紧固件强度校核--紧固件信息输入": ["测试"]},
-#     {"紧固件强度校核--紧固件参数设置": ["其他"]},
-#     {"紧固件强度校核--紧固件强度校核": ["其他"]},
-#     {"紧固件优化--紧固件参数优化": ["其他"]}
-#     {"材料信息--定义金属材料参数": ["其他"]}
-#     {"金属结构强度校核--金属一维单元强度校核": ["其他"]},
-#     {"金属结构强度校核--金属二维单元强度校核": ["其他"]},
-#     {"金属结构强度校核--金属加筋板强度校核": ["其他"]}
-# ]
-
-
 list_dicti_argument=[
-        {"铺层信息--铺层库优化": ["测试"]},
-        {"铺层信息--铺层数据库制作工具": ["铺层库制作弹窗"]}
+    {"铺层信息--铺层库优化": ["测试一"]},
+    {"铺层信息--铺层数据库制作工具": ["测试一"]},
+    {"尺寸信息--一维单元尺寸定义": ["测试一"]},
+    {"尺寸信息--二维单元尺寸定义": ["测试一"]},
+    {"尺寸信息--一维单元尺寸定义（模板）": ["测试一"]},
+    {"尺寸信息--二维单元尺寸定义（模板）": ["测试一"]},
+    {"求解计算--求解计算": ["测试一"]},
+    {"载荷信息--载荷数据库制作工具": ["测试一"]},
+    {"载荷信息--编辑工况": ["测试一"]},
+    {"复材结构强度校核--复合材料强度校核1D": ["测试一"]},
+    {"复材结构强度校核--复合材料强度校核2D": ["测试一"]},
+    {"紧固件强度校核--紧固件信息输入": ["测试一"]},
+    {"紧固件强度校核--紧固件参数设置": ["测试一"]},
+    {"紧固件强度校核--紧固件强度校核": ["测试一"]},
+    {"紧固件优化--紧固件参数优化": ["测试一"]},
+    {"材料信息--定义金属材料参数": ["测试一"]},
+    {"金属结构强度校核--金属一维单元强度校核":["测试一"]},
+    {"金属结构强度校核--金属二维单元强度校核": ["测试一"]},
+    {"金属结构强度校核--金属加筋板强度校核": ["测试一"]}
 ]
 
+
+# list_dicti_argument=[
+#         {"金属结构强度校核--金属二维单元强度校核": ["测试一"]}
+# ]
 list_dict_site,list_testPoint = UseCase_parameterization().parameterization_data(list_dicti_argument)  # 读取测试用例
-
-
 
 """测试用例集"""
 @ddt
@@ -75,7 +70,6 @@ list_dict_site,list_testPoint = UseCase_parameterization().parameterization_data
 class  test_UseCaseSet(unittest.TestCase):
     """紧固件强度校核--紧固件参数输入"""
     global real_UseCase_Name
-
 
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
@@ -96,6 +90,7 @@ class  test_UseCaseSet(unittest.TestCase):
 
 
 
+    """每次执行测试用例前都做的操作"""
     def setUp(self):
         """
         每次执行测试用例前都做的操作
@@ -109,21 +104,18 @@ class  test_UseCaseSet(unittest.TestCase):
         print("测试开始")
         self.dict_testCase=list_dict_site[useCase_sum]   # 取出单个的测试用例
         module_uniqueName = self.dict_testCase["模块唯一标识"]  # 被测模块的唯一标识
-        dictSet = {"全局参数": module_n, "全局用例集名称": UseSet_n, "当前用例集名称": module_uniqueName,
-                   "控件属性已经操作方法": Use_attribute}
+        dictSet = {"全局参数": module_n, "全局用例集名称": UseSet_n, "当前用例集名称": module_uniqueName,"控件属性已经操作方法": Use_attribute}
         module_n,UseSet_n, self.ProjectPath, self.old_content, Use_attribute = Initializing().controller(dictSet)
         self.expect_result = self.dict_testCase["预期结果文本信息"]  # 取出Excel文件中的预期值
         self.messageType = self.dict_testCase["预期值信息类型"]  # 取出提示类型
         self.dict_testCase["被测程序文件地址"] = self.ProjectPath
-        self.dict_testCase["用例集名称"] = module_uniqueName
         print("开始执行用例：", self.dict_testCase["用例编号"])
         useCase_sum = useCase_sum + 1
 
 
-
-
-
+    """用例执行完成收尾操作"""
     def tearDown(self):
+        """用例执行完成收尾操作"""
         print("用例执行完成开始执行收尾操作")
         dictSet = {"预期值信息类型": self.messageType, "信息窗口之前的文本": self.old_content, "实际值": self.actual_result,
                    "预期值": self.expect_result}
@@ -134,7 +126,6 @@ class  test_UseCaseSet(unittest.TestCase):
         assert_that(self.expect_result).is_equal_to(self.actual_result)  # 预期值跟实际值对比
         print("测试结束")
         print(" ")
-
 
 
     @data(*list_testPoint)  # 参数化参数用例

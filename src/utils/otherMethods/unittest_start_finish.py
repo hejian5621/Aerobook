@@ -20,7 +20,7 @@ class Initializing:
 
     def controller(self,dictSet ):
         """
-          在执行用例前需要要准备的操作
+        在执行用例前需要要准备的操作
         dict={"全局参数":"","全局用例集名称":"","当前用例集名称":"","删除文件名列表":[],"详细地址":"","关闭弹窗":[],"控件属性已经操作方法":testCase_attribute}
         :param dictSet:
         :return:
@@ -86,8 +86,7 @@ class finish_clear:
         actual_result = dictSet["实际值"]
         expect_result = dictSet["预期值"]
         """ 收尾，如果有警告弹框就关掉"""
-        list_CloseWindows = [["铺层数据库制作工具", "关闭"],["警告", "OK"],["错误", "确定"],["编辑工况", "关闭"],
-                             ["选择输出路径","选择文件夹"]]
+        list_CloseWindows = [["铺层数据库制作工具", "关闭"],["警告", "OK"],["错误", "确定"],["编辑工况", "关闭"],["选择输出路径","选择文件夹"]]
         for CloseWindows in list_CloseWindows:
             title = CloseWindows[0]
             button_name = CloseWindows[1]

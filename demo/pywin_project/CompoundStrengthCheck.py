@@ -23,7 +23,7 @@ operationWindow="二维单元"
 
 aero_window, son_window = pywin_openAProgram().menuOpen_switchingWin_UIA(testCase_dict,operationWindow)
 
-#
+
 
 aero_window, son_window=BeingMeasured_work(son_window).workField_intensityCheck()
 
@@ -291,12 +291,12 @@ while True:
 # aero_window.Edit1.set_text("0.35")
 
 
-# 在B值减缩系数文本框中输入数据
-aero_window.Edit2.set_text("0.25")
-
-
-# 宽度修正系数文本框
-aero_window.Edit3.set_text("0.25")
+# # 在B值减缩系数文本框中输入数据
+# aero_window.Edit2.set_text("0.25")
+#
+#
+# # 宽度修正系数文本框
+# aero_window.Edit3.set_text("0.25")
 
 # 勾选极值
 # aero_window.极.click()

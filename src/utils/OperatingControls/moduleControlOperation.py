@@ -41,7 +41,6 @@ class OperatingControls:
                     Controlmethod = ControlProperties["唯一标识方法"]
                     discern = ControlProperties["唯一标识"]
                     waitingTime = ControlProperties["操作控件后等待时间"]
-                    whetherpopup = ControlProperties["是否有弹窗出现"]
                     Control_mode = ControlProperties["唯一标识方法"]
                     WindowInstance = OperatingControls(self.window_one, self.window_two, self.window_three,self.window_four). \
                         OperationControlInstance(ControlInstance)  # 获取操作控件实例
@@ -55,13 +54,13 @@ class OperatingControls:
                     elif ControlTypes == "勾选框" or ControlTypes == "单选框":
                         Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
                         print("控件%r成功勾选" % ControlsName)
-                    elif ControlTypes == "按钮" and whetherpopup == "否":
+                    elif ControlTypes == "按钮" :
                         dlg_spec.click_input()
                         print("控件”%r“按钮点击成功" % ControlsName)
-                    elif ControlTypes == "按钮" and whetherpopup == "是":  # 操作套件
+                    elif ControlTypes == "按钮--弹窗套件":  # 操作套件
                         print("进入操作")
                         OperatingControls(dlg_spec).button_popUp(ControlProperties, location, operational)
-                        PopupTitle = ControlProperties["弹窗标题"]
+                        PopupTitle = ControlProperties["套件参数一"]
                         print("控件%r按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle))
                     elif ControlTypes == "坐标--单击--文本框":
                         OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
@@ -314,6 +313,10 @@ class OperatingControls:
             self.dlg_spec = self.window_one.ComboBox2
         elif str_Name == "GroupBox3":
             self.dlg_spec = self.window_one.GroupBox3
+        elif str_Name == "Static3":
+            self.dlg_spec = self.window_one.Static3
+        elif str_Name == "Static6":
+            self.dlg_spec = self.window_one.Static6
         elif str_Name == "Static15":
             self.dlg_spec = self.window_one.Static15
         elif str_Name == "路径Edit":
@@ -341,38 +344,28 @@ class OperatingControls:
        :param  operational:
        :return:
        """
-        nestWin_Dicti ={}
         examine =None
-        Popuptype = ControlProperties["弹窗类型"]
-        if Popuptype=="路径弹窗":  # 操作弹窗套件
-            print("路径弹窗")
-            PopupTitle = ControlProperties["弹窗标题"]
-            nestPopup = ControlProperties["是否有嵌套弹窗"]
-            Check_winControl(PopupTitle, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
-            closeName = ControlProperties["关闭弹窗按钮名称"]
-            filename = ControlProperties["弹窗中输入文件名"]
-            # 判断有没有嵌套弹窗
-            if nestPopup=="是":
-                examine= "检查"
-                nest_PopupTitle = ControlProperties["嵌套弹窗标题"]
-                nest_closeName = ControlProperties["嵌套弹窗关闭按钮名称"]
-                nestWin_Dicti = {"嵌套窗口标题": nest_PopupTitle, "嵌套控件名称": nest_closeName }
-            parWin1_Dicti = {"窗口标题": PopupTitle, "关闭窗口控件名称": closeName, "地址": location, "文件夹输入内容": filename}
-            ControlOperationSuite(None).SelectFile_Popover(parWin1_Dicti, examine, nestWin_Dicti)
-        elif Popuptype == "选择材料许用值曲线":  # 操作弹窗套件
-            PopupTitle = ControlProperties["弹窗标题"]
+        Popup_type = ControlProperties["套件类型一"]
+        Popup_parameter = ControlProperties["套件参数一"]
+        if "；" in Popup_parameter:
+            self.list_AfterParsing = Popup_parameter.split("；")
+        if Popup_type=="路径弹窗":  # 操作弹窗套件
+            Popup_type2=ControlProperties["套件类型二"]
+            Popup_parameter2 = ControlProperties["套件参数二"]
+            ControlOperationSuite(None).SelectFile_Popover(self.list_AfterParsing,location,Popup_type2,Popup_parameter2,self.window_one)
+        elif Popup_type == "选择材料许用值曲线":  # 操作弹窗套件
             str_coord = ControlProperties["唯一标识"]
-            Check_winControl(PopupTitle, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
+            Check_winControl(Popup_parameter, self.window_one).window_WhetherOpen()  # 判断预期窗口是否出现
             ControlOperationSuite(None).select_AllowableCurve(str_coord)
-        elif Popuptype == "选择校核工况" or Popuptype == "选择优化工况":  # 操作弹窗套件
-            Check_winControl(Popuptype, self.window_one).window_WhetherOpen()  # 判断选择校核工况是否出现
-            ControlOperationSuite(None).select_workingCondition(Popuptype)
-        elif Popuptype == "选择结构单元":  # 操作弹窗套件
+        elif Popup_type == "选择校核工况" or Popup_type == "选择优化工况":  # 操作弹窗套件
+            Check_winControl(Popup_type, self.window_one).window_WhetherOpen()  # 判断选择校核工况是否出现
+            ControlOperationSuite(None).select_workingCondition(Popup_type)
+        elif Popup_type == "选择结构单元":  # 操作弹窗套件
             time.sleep(0.3)
             self.window_one.click_input()
             KeyboardMouse().selectionModel()  # 选择结构单元
         else:
-            print("被操作的套件名称不存在,套件名称为：",Popuptype, __file__, sys._getframe().f_lineno)
+            print("被操作的套件名称不存在,套件名称为：",Popup_type, __file__, sys._getframe().f_lineno)
             os._exit(0)
 
 
@@ -409,8 +402,7 @@ class OperatingControls:
         :return:
         """
         discern = ControlProperties["唯一标识"]
-        Popup_type =ControlProperties["弹窗类型"]
-        ControlTypes = ControlProperties["控件类型"]
+        Popup_type =ControlProperties["套件类型一"]
         OperatingControls(self.window_one).coord_dblclick(discern)
         if Popup_type=="选择铺层库信息":
             ControlOperationSuite(None).select_Laminatedata(argument)
@@ -490,4 +482,4 @@ class OperatingControls:
         """
         self.window_one.click_input()
         import win32api, win32con
-        win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -500)  # 滚动鼠标
+        win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -1000)  # 滚动鼠标

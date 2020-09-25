@@ -22,25 +22,27 @@ class  ControlOperationSuite:
 
 
 
-    def SelectFile_Popover(self,parWin_Dicti,examine="不检查",nestWin_Dicti=None):
+    def SelectFile_Popover(self,list_Popup_parameter,location,Popup_type,Popup_parameter=None,window_one=None):
         """
         在保存和选择文件路径弹窗中操作
-        :param parWin_Dicti: 选择文件弹窗的属性参数;
-        parWin_Dicti={"窗口标题":"","关闭窗口控件名称":"","关闭窗口控件操作方法":"","地址":"","文件夹输入状态":"","文件夹输入内容":""}
-        :param examine: 需不要检查嵌套的窗口
-        :param nestWin_Dicti: 嵌套弹窗标题
+        :param list_Popup_parameter:弹窗参数信息
+        :param location: 路径
+        :param window_one: 关闭弹窗按钮名称
+        :param Popup_type:
+        :param Popup_parameter: 在文件名文本框输入的内容
         :return:
         """
-        PopWinTitle  =     parWin_Dicti["窗口标题"]
-        control_Name =     parWin_Dicti["关闭窗口控件名称"]
-        location     =     parWin_Dicti["地址"]
-        filename_content=  parWin_Dicti["文件夹输入内容"]
+        Popup_Title = list_Popup_parameter[0]  # 取出弹窗标题
+        file_name = list_Popup_parameter[1]  # 取出输入的文件名
+        close_Name = list_Popup_parameter[2]  # 取出关闭弹窗的按钮名称
+        if window_one:
+            Check_winControl(Popup_Title, window_one).window_WhetherOpen()  # 判断预期窗口是否出现
         try :
-            app = Application().connect(title=PopWinTitle,timeout=20)
-            self.dlg_spec = app.window(title=PopWinTitle)  # 切换到选择文件弹窗窗口
+            app = Application().connect(title=Popup_Title,timeout=20)
+            self.dlg_spec = app.window(title=Popup_Title)  # 切换到选择文件弹窗窗口
         except findwindows.ElementNotFoundError:
             import sys, os
-            print("没有找到“%r“窗口"%PopWinTitle, __file__, sys._getframe().f_lineno)
+            print("没有找到“%r“窗口"%Popup_Title, __file__, sys._getframe().f_lineno)
             os._exit(0)
         else:
             # 切换控件
@@ -53,13 +55,17 @@ class  ControlOperationSuite:
             dlg_spec6.click()   # 点击地址栏，让地址栏输入框显示出来
             dlg_spec4.Edit.set_text(location)     # 在地址栏输入地址
             send_keys('{ENTER}')   # 点击回车键
-            self.dlg_spec["Edit"].set_text(filename_content)   # 在文件名中输入内容
-            if examine=="检查":
-                nest_PopWinTitle=nestWin_Dicti["嵌套窗口标题"]
-                nest_control_Name = nestWin_Dicti["嵌套控件名称"]
-                Check_winControl(PopWinTitle, control_Name).nest_popUpWindows(nest_PopWinTitle,nest_control_Name) # 检查嵌套弹窗是否关闭
+            self.dlg_spec["Edit"].set_text(file_name)   # 在文件名中输入内容
+            if Popup_type=="" or Popup_type=="无":
+                print("Popup_type：", Popup_type)
+                Check_winControl(Popup_Title, close_Name).popUp_Whether_close()
             else:
-                Check_winControl(PopWinTitle, control_Name).popUp_Whether_close()
+                list_AfterParsing = Popup_parameter.split("；")
+                print("Popup_parameter:",Popup_parameter)
+                print("list_AfterParsing :",list_AfterParsing )
+                nest_PopWinTitle=list_AfterParsing[0]
+                nest_control_Name = list_AfterParsing[1]
+                Check_winControl(Popup_Title, close_Name).nest_popUpWindows(nest_PopWinTitle,nest_control_Name)  # 检查嵌套弹窗是否关闭
 
 
     """在子应用中新建项目"""
@@ -74,9 +80,9 @@ class  ControlOperationSuite:
         dlg_app.menu_select(MenuOptions)  # 点击菜单选项
         Check_winControl("提示", "是").popUp_Whether_close()
         # 选择项目的保存路径
-        parWin_Dicti = {"窗口标题": "新建项目: 指定项目保存路径", "关闭窗口控件名称": "保存","地址": source,  "文件夹输入内容": "test_01"}
-        nestWin_Dicti = {"嵌套窗口标题": "确认另存为", "嵌套控件名称": "是"}
-        ControlOperationSuite(None).SelectFile_Popover(parWin_Dicti,"检查",nestWin_Dicti )
+        Popup_type2="无"
+        list_AfterParsing = ["新建项目: 指定项目保存路径", "test_1", "保存"]
+        ControlOperationSuite(None).SelectFile_Popover(list_AfterParsing, source,Popup_type2)
         # 项目设置，增加有限元模型路径
         try:
             app = Application().connect(title="项目设置",timeout=20)  # 连接项目设置弹窗
@@ -203,8 +209,8 @@ class  ControlOperationSuite:
         dlg_spec=app_window.child_window(title="GridWindow", class_name="wxWindowNR")
         # 勾选数据
         dlg_spec.double_click_input(coords=(coord_X, coord_Y), button="left")
-        # 数据勾选完毕点击“确认”按钮
-        app_window.确认.click_input()()
+        #钮 数据勾选完毕点击“确认”按
+        app_window.确认.click_input()
         # 检查“选择材料许用值曲线”窗口是否关闭
         Check_winControl("选择材料许用值曲线", "确认").popUp_Whether_close()
 
