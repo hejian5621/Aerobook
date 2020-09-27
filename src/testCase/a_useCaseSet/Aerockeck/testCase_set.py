@@ -1,5 +1,5 @@
 # 尺寸信息--1D2D尺寸定义
-import unittest,time
+import unittest,time,datetime
 from assertpy import assert_that
 from BeautifulReport import BeautifulReport
 from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import UseCase_step
@@ -60,7 +60,7 @@ from utils.commonality.tool import UseCase_parameterization
 
 
 list_dicti_argument=[
-       {"材料信息--定义复合材料参数": ["测试一"]}
+       {"材料信息--定义复合材料参数": ["测试"]}
 ]
 list_dict_site,list_testPoint = UseCase_parameterization().parameterization_data(list_dicti_argument)  # 读取测试用例
 
@@ -108,6 +108,7 @@ class  test_UseCaseSet(unittest.TestCase):
             controller(dictSet,self.dict_testCase)
         self.dict_testCase["信息窗口之前的文本"]=self.old_content
         self.dict_testCase["被测程序文件地址"] = self.ProjectPath
+        self.dict_testCase["用例步骤执行前时间"]=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print("开始执行用例：", self.dict_testCase["用例编号"])
         useCase_sum = useCase_sum + 1
 
@@ -140,5 +141,5 @@ if __name__ == '__main__':
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(test_UseCaseSet))
     file_name=time.strftime("%Y%m%d%H%M%S")+"Aerocheck测试报告"    # 测试报告名称
     relativeAddress = path.location()
-    logPath = relativeAddress+"report//Aerocheck//laminateOptimize_testReport//" # 测试报告保存地址
-    result = BeautifulReport(suite).report(filename=file_name,log_path=logPath,description="铺层库优化工作栏")
+    logPath = relativeAddress+"report//Aerocheck//" # 测试报告保存地址
+    result = BeautifulReport(suite).report(filename=file_name,log_path=logPath,description="Aerocheck测试报告")

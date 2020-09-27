@@ -243,36 +243,6 @@ class execute_useCase_initialize:
 
 
 
-class  module_initialize:
-    """各模块测试之前数据初始化"""
-
-
-    def __init__(self):
-        self.dict={}
-
-
-
-    def LaminatedataPopup(self):
-        """
-        尺寸信息--铺层数据库制作工具
-        在测试尺寸信息模块时需要进行铺层数据库的制作
-        :return:
-        """
-        from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import UseCase_step
-        # 从Excel中获取测试用例
-        # ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()  # 获取配置文件中项目的路径
-        actual_result = UseCase_step(testCase_attribute, testCase_dict).Perform_useCase_Steps()  # 铺层信息--铺层库优化工作栏测试用例
-
-
-
-
-    def sizeInformation(self):
-        """
-        尺寸信息--一维单元尺寸定义（模板）、二维单元尺寸定义（模板）
-        在测试尺寸信息模块时需要进行铺层数据库的制作
-        :return:
-        """
-
 
 
 

@@ -83,14 +83,14 @@ class  module_initialize:
         # 获取初始测试用例参数
         self.testCase,self.property=module_initialize().TestCase_Data(UseCaseNumber,attribute_tableName)
         # 执行初始化测试用例
-        UseCase_step(self.testCase,self.property).Perform_useCase_Steps()
+        UseCase_step(self.testCase,self.property).Perform_useCase_Steps(1)
 
 
 
 
 # 执行初始化
 
-module_initialize().start_Aerobook_Aercheck()
+# module_initialize().start_Aerobook_Aercheck()
 
 module_initialize().LaminatedataPopup("csh001",["铺层数据库制作工具"])  # 铺层信息->铺层数据库制作工具
 

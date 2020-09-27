@@ -71,15 +71,9 @@ class finish_clear:
         """ 收尾，如果有警告弹框就关掉"""
         handlingMethod().Loop_closeWindow(sole_ModuleIdentifier)
         """处理预期结果或实际结果，用以实际结果和预期结果文本对比"""
-        if messageType == "信息窗口":  # 如果预期值在信息窗口，就通过以下方法获取最新的信息窗口文本信息
-            old_content=dictSet["信息窗口之前的文本"]
-            actual_result = FormatConversion().GetLatestData(actual_result, old_content)
-        # 格式化实际值跟预期值
-        if type(actual_result) == list:  # 实际值如果是列表，就转化成字符串
-            actual_result = ' '.join(actual_result)
-        if actual_result:  # 如果实际值不为空
-            expect_result = expect_result.strip()  # 去掉预期值，前后的空格
-            actual_result = actual_result.strip()  # 去掉实际值，前后的空格
+        expect_result = FormatConversion().expect_dataProcessing(dictSet, actual_result)  # 格式化实际值
+        print("预期值：", expect_result)
+        actual_result = FormatConversion().Actual_dataProcessing(dictSet,actual_result)  # 格式化实际值
         return  expect_result,actual_result
 
 

@@ -1,5 +1,7 @@
 #  数据处理
 
+import os,sys
+
 
 class FormatConversion:
     """数据处理"""
@@ -46,6 +48,51 @@ class FormatConversion:
 
 
 
+    def Actual_dataProcessing(self,dictSet,dicti_actual):
+        """
+        实际值数据处理
+        :return:
+        """
+        # 格式化实际值
+        for infowin,actual_result in dicti_actual.items():
+            # 格式化实际值
+            if type(actual_result) == list:  # 实际值如果是列表，就转化成字符串
+                actual_result = ' '.join(actual_result)
+            if actual_result:  # 如果实际值不为空
+                actual_result = actual_result.strip()  # 去掉实际值，前后的空格
+            dicti_actual[infowin]=actual_result
+        return dicti_actual
+
+
+
+    def expect_dataProcessing(self, dictSet, listt_dicti_actual):
+        """
+       预期值数据处理
+       :return:
+        """
+        dict_expect ={}
+        messageType=dictSet["预期值信息类型"]
+        expect_result = dictSet["预期结果文本信息"]
+        if expect_result:  # 如果预期值不为空
+            expect_result = expect_result.strip()  # 去掉预期值，前后的空格
+        if "；" in messageType:   # 如果预期值信息类型值中有“；”，就说明有多个检查类型
+           messageType = messageType.split("；")
+           if "；" in expect_result:  # 如果预期值信息类型值中有“；”，就说明有多个检查类型
+               expect_result = expect_result.split("；")
+        # 把预期值转化成列表嵌套字典格式的数据
+        if type(messageType)==list and type(expect_result)==list :   #  如果“预期值信息类型”和“预期结果文本信息”都是列表
+            dict_expect = dict(zip(messageType, expect_result))      #  就把两个列表合成一个字典
+        elif type(messageType) == str and type(expect_result) == str:
+            dict_expect ={messageType:expect_result}
+        else:
+            print("预期值信息类型和预期结果文本信息不匹配,预期值信息类型:%r;预期结果文本信息：%r"%(
+                type(messageType),type(expect_result)), __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        return dict_expect
+
+
+
+
     def GetLatestData(self,list_new,list_old):
         """
         两个列表对吧，去掉前面重复的数据
@@ -67,6 +114,10 @@ class FormatConversion:
 
 
 
+
+
+
+
     def takeOut_space(self,str_spacing):
         """
         去掉空格
@@ -79,6 +130,8 @@ class FormatConversion:
             str = str.strip()
             list_NoSpace.append(str)
         return list_NoSpace
+
+
 
 
 

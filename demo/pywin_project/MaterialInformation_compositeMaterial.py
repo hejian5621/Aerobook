@@ -25,8 +25,8 @@ window_one = BeingMeasured_work(son_window).workField_composite_information()
 #
 #
 window_one.print_control_identifiers()
-
-window_one.Button5.click()
+#
+# window_one.Button5.click()
 #
 # dlg_spec= OperatingControls(window_one).ExpressionAssembly("Button1")
 #
@@ -34,6 +34,11 @@ window_one.Button5.click()
 # dlg_spec.click()
 
 
+time.sleep(5)
+
+txt=window_one.Edit1.window_text()
+
+print("txt:",txt)
 
 
 """获取”编辑材料许用值“中的值"""

@@ -227,9 +227,8 @@ class GetWindowInstance:
     获取窗口实例
     """
 
-    def __init__(self,property,son_window):
+    def __init__(self,property):
         self.property = property  # 字典类型测试用例
-        self.son_window=son_window
         self.initialLevel = property["初始化级别"]
         self.testWinTitle = property["操作窗口标题"]
         self.testWinTitle_son = property["操作子窗口标题"]
@@ -246,6 +245,9 @@ class GetWindowInstance:
         获取窗口实例
         :return:
         """
+        from src.utils.otherMethods.initialize import pywin_openAProgram
+        # 连接到被测程序，并且通过菜单栏打开被测模块
+        aero_window, son_window = pywin_openAProgram().menuOpen(self.property)
         # 切换到被测模块窗口
         if self.ModuMarking == "铺层信息--铺层库优化" or \
                 self.ModuMarking == "求解计算--求解计算" or \
@@ -255,9 +257,9 @@ class GetWindowInstance:
                 self.ModuMarking == "金属结构强度校核--金属二维单元强度校核" or \
                 self.ModuMarking == "金属结构强度校核--金属加筋板强度校核" or \
                 self.ModuMarking == "金属结构强度校核--金属曲板后驱曲强度校核":
-            self.win_one = BeingMeasured_work(self.son_window).workField_general()
+            self.win_one = BeingMeasured_work(son_window).workField_general()
         elif self.ModuMarking == "尺寸信息--一维单元尺寸定义（模板）" or self.ModuMarking == "尺寸信息--二维单元尺寸定义（模板）":
-            self.win_one = BeingMeasured_work(self.son_window).workField_sizeInfo()
+            self.win_one = BeingMeasured_work(son_window).workField_sizeInfo()
         elif self.ModuMarking == "铺层信息--铺层数据库制作工具":
             # 切入铺层数据库工具弹窗中
             self.win_three = BeingMeasured_popupWin("铺层数据库制作工具").menu_LetsGoTopopover()
@@ -273,25 +275,25 @@ class GetWindowInstance:
         elif self.ModuMarking == "复材结构强度校核--复合材料强度校核1D" or \
                 self.ModuMarking == "复材结构强度校核--复合材料强度校核2D":
             specialWay_OperatingControls(self.testWinTitle_son).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
-            self.win_one, self.win_two = BeingMeasured_work(self.son_window).workField_intensityCheck()
+            self.win_one, self.win_two = BeingMeasured_work(son_window).workField_intensityCheck()
         elif self.ModuMarking == "尺寸信息--一维单元尺寸定义":
-            self.win_one, self.win_two, self.win_three, self.win_four = BeingMeasured_work(self.son_window). \
+            self.win_one, self.win_two, self.win_three, self.win_four = BeingMeasured_work(son_window). \
                 workField_SizeDefinition_1D()
         elif self.ModuMarking == "尺寸信息--二维单元尺寸定义":
-            self.win_one, self.win_two = BeingMeasured_work(self.son_window). \
+            self.win_one, self.win_two = BeingMeasured_work(son_window). \
                 workField_SizeDefinition_2D()
         elif self.ModuMarking == "紧固件强度校核--紧固件信息输入":
             if self.testWinTitle_son == "紧固件参数输入":
-                self.win_one = BeingMeasured_work(self.son_window).workField_general()
+                self.win_one = BeingMeasured_work(son_window).workField_general()
             elif self.testWinTitle_son == "编辑参数弹框":
-                self.win_one = BeingMeasured_work(self.son_window).workField_Open_EditArgument()
+                self.win_one = BeingMeasured_work(son_window).workField_Open_EditArgument()
         elif self.ModuMarking == "紧固件强度校核--紧固件强度校核":
-            self.win_one = BeingMeasured_work(self.son_window).workField_general()
+            self.win_one = BeingMeasured_work(son_window).workField_general()
         elif self.ModuMarking == "紧固件优化--紧固件参数优化":
-            self.win_one = BeingMeasured_work(self.son_window).workField_fastener_parOptimization()
+            self.win_one = BeingMeasured_work(son_window).workField_fastener_parOptimization()
         elif self.ModuMarking == "材料信息--定义复合材料参数":
             specialWay_OperatingControls(self.testWinTitle).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
-            self.win_one,self.win_two = BeingMeasured_work(self.son_window).workField_fastenerSEO(self.testWinTitle_son)
+            self.win_one,self.win_two = BeingMeasured_work(son_window).workField_fastenerSEO(self.testWinTitle_son)
         else:
             print("没有找到需要切换的窗口：%r" % self.ModuMarking, __file__, sys._getframe().f_lineno)
             os._exit(0)

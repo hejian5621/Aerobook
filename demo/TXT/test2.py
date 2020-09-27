@@ -1,11 +1,22 @@
-# import win32gui, win32con
-# hwnd = win32gui.FindWindow(None, "Aerobook v1.0.4")
-#
-# print(win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE))
 
-Popup_parameter="选择输出路径；；选择文件夹"
+from tool import folderFile_dispose
+import os,datetime
+
+ProjectPath=r"F:\Aerobook\src\testCase\projectFile\automateFile"
+
+list_fileNames=folderFile_dispose(ProjectPath).FetchFileName("2020-09-27 17:30:40")
 
 
-list_AfterParsing = Popup_parameter.split("；")
 
-print("list_AfterParsing:",list_AfterParsing)
+
+
+print(list_fileNames)
+
+print(type(list_fileNames))
+
+
+str1=str(list_fileNames)
+
+
+print(type(str1))
+print(str1)

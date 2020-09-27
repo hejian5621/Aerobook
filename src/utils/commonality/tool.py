@@ -6,12 +6,13 @@ from aip import AipOcr
 import win32clipboard as wc
 import os,shutil,win32con,time,os,sys
 from pywinauto.application import Application
-import re
+import re,datetime
 from os import listdir
 from pathlib import Path
 from src.utils.commonality.ExcelFile import read_excel
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from pywinauto import  findwindows
+
 
 
 
@@ -153,7 +154,7 @@ class folderFile_dispose:
             shutil.rmtree(self.sourceDir )
             print('文件“%s“删除完毕' % self.sourceDir )
 
-
+    #  批量删除文件
     def delfile(self, dict_testCase):
         """
         批量删除文件
@@ -180,6 +181,39 @@ class folderFile_dispose:
                     if my_file.is_file():  # 先检查文件是否存在
                         # 指定的文件存在，就删除
                         os.remove(list_path)
+
+
+    # 取出文件夹里文件所有的名称
+    def FetchFileName(self,InitialTime):
+        """
+        取出文件夹里文件所有的名称,并且根据实际筛选出符合时间条件的文件名称
+        :return:
+        """
+        list_fileNames=[]
+        # 获取实时时间
+        now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # 获取文件夹里的所有文件名
+        list_fileName=os.listdir(self.sourceDir)
+        if list_fileName:
+            for fileName in list_fileName:
+                site=self.sourceDir+r"\\"+fileName    # 拼接文件路径
+                t = os.path.getmtime(site)     #  获取文件的修改时间
+                amend_time = datetime.datetime.fromtimestamp(t).strftime("%Y-%m-%d %H:%M:%S")
+                if now_time>amend_time>InitialTime:
+                    list_fileNames.append(fileName)
+        return list_fileNames
+
+
+
+
+
+
+
+
+
+
+
+
 """定义的异常类，用于主动抛出异常"""
 class MyException(Exception):
     def __init__(self,name):
@@ -538,10 +572,12 @@ class htmlFormat:
         with open(txt_location, 'r') as f:
             content = list(f)
         for con in content:
+
             zhmodel = re.compile(u'[\u4e00-\u9fa5]')  # 检查中文
             # zhmodel = re.compile(u'[^\u4e00-\u9fa5]')  #检查非中文
             match = zhmodel.search(con)
             if match:
+                con.replace('\n', u'')
                 self.list_Name.append(con)
         with open(txt_NewLocation, 'w') as file_object:
             for li in self.list_Name:
@@ -583,9 +619,15 @@ class htmlFormat:
         layoffPeriod_TXT=source+"/"+self.str_Name+".txt"
         ultimately_TXT=source+"/"+"Now_"+self.str_Name+".txt"
         # 取出html里的特定标签里的文本
-        list_Name = htmlFormat().takeOut_html_label(HTML_address, layoffPeriod_TXT)
+        htmlFormat().takeOut_html_label(HTML_address, layoffPeriod_TXT)
+        # 过滤没有中文的行
         htmlFormat(). Filter_nonChinese(layoffPeriod_TXT, ultimately_TXT)
+
         return ultimately_TXT
+
+
+
+
 
 
 """控制台打印进度条方法"""
