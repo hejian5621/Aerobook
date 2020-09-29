@@ -5,38 +5,10 @@ from src.utils.otherMethods.initialize import pywin_openAProgram
 from OperatingControls.enterModule import BeingMeasured_popupWin
 
 
-testdicts={"所在模块":"尺寸信息->一维单元尺寸定义"}
+testdicts={"所在模块":"尺寸信息->二维单元尺寸定义"}
 
 
 aero_window, module_window = pywin_openAProgram().menuOpen(testdicts)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 workField = module_window.scrolledpanelwxWindowNR2   # 切换到被测工作
@@ -49,28 +21,35 @@ work15=workField1.panelwxWindowNR13
 
 workField1.print_control_identifiers()
 
+workField1.Button2.click()
 
-# 进入截面参数文本框中
-work2=workField1.grid1
-workField2=work2.GridWindowwxWindowNR0
+txt=workField1.Button2.is_checked()
 
-
-
-
-# 进入复合材料表格窗口中
-work4=workField1.复合材料_wx_SysTabCtl32
-work5=work4.panelwxWindowNR1
-work6=work5.gridwxWindowNR
-workField3=work6.wxWindowNR6
+print("txt:",txt)
 
 
-
-
-
-# 进入金属材料
-work4=workField1.复合材料_wx_SysTabCtl32
-work5=work4.panel5
-workField4=work5.GridWindow2
+#
+# # 进入截面参数文本框中
+# work2=workField1.grid1
+# workField2=work2.GridWindowwxWindowNR0
+#
+#
+#
+#
+# # 进入复合材料表格窗口中
+# work4=workField1.复合材料_wx_SysTabCtl32
+# work5=work4.panelwxWindowNR1
+# work6=work5.gridwxWindowNR
+# workField3=work6.wxWindowNR6
+#
+#
+#
+#
+#
+# # 进入金属材料
+# work4=workField1.复合材料_wx_SysTabCtl32
+# work5=work4.panel5
+# workField4=work5.GridWindow2
 
 
 
@@ -88,7 +67,16 @@ workField4=work5.GridWindow2
 # work10.ComboBox2.select("Y轴")
 
 
-# work10=workField1.child_window(title="X轴", class_name="ComboBox").select("Y轴")
+# work10=workField1.child_window(title="X轴", class_name="ComboBox")
+#
+#
+# txt=work10.item_texts()
+#
+#
+# work10.select(1)
+# print("txt:",txt)
+
+
 
 
 # work10.select("Y轴")
@@ -142,7 +130,7 @@ workField4=work5.GridWindow2
 
 
 # 选择金属材料
-workField1.RadioButton2.click_input()
+# workField1.RadioButton2.click_input()
 
 # 选择复合材料
 # workField1.RadioButton1.click_input()
@@ -180,22 +168,22 @@ workField1.RadioButton2.click_input()
 
 
 
-#第一行
-workField4.double_click_input(coords=(30,10 ), button="left")
-workField4.Edit.set_text("777")
-
-
-
-
-#第二行
-workField4.click_input(coords=(30,30), button="left")
-workField4.double_click_input(coords=(30,30), button="left")
-workField4.Edit.set_text("888")
-
-
-
-
-#第三行
-workField4.click_input(coords=(30,50), button="left")
-workField4.double_click_input(coords=(30,50), button="left")
-workField4.Edit.set_text("999")
+# #第一行
+# workField4.double_click_input(coords=(30,10 ), button="left")
+# workField4.Edit.set_text("777")
+#
+#
+#
+#
+# #第二行
+# workField4.click_input(coords=(30,30), button="left")
+# workField4.double_click_input(coords=(30,30), button="left")
+# workField4.Edit.set_text("888")
+#
+#
+#
+#
+# #第三行
+# workField4.click_input(coords=(30,50), button="left")
+# workField4.double_click_input(coords=(30,50), button="left")
+# workField4.Edit.set_text("999")

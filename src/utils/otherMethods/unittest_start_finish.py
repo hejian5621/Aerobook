@@ -6,6 +6,7 @@ from tool import folderFile_dispose,Check_winControl
 from src.utils.otherMethods.initialize import execute_useCase_initialize
 from utils.commonality.tool import UseCase_parameterization
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
+from tool import pictureProcessing
 import os,sys
 import time
 
@@ -60,20 +61,24 @@ class finish_clear:
 
     def controller(self, dictSet):
         """
-        用例执行结束后，所作的清理工作
-        :param dictSet:{"预期值信息类型":"","信息窗口之前的文本":"","实际值":"","预期值":[],"详细地址":"","关闭弹窗":[]}
-        :return:
+        用例步骤操作结束后
+        准备如果测试失败后的截图
+        关闭所有在用例执行中出现的的弹窗
+        统一格式预期值和实际值
+        :param dictSet:字典类型的数据集
+        :return: 返回格式规范化的实际值和预期值
         """
-        messageType=dictSet["预期值信息类型"]
         actual_result = dictSet["实际值"]
-        expect_result = dictSet["预期结果文本信息"]
         sole_ModuleIdentifier = dictSet["模块唯一标识"]
+        """在关闭弹窗前首先截图，用于如果断言失败后，在测试报告上显示测试失败的截图"""
+        actuals = pictureProcessing(None). BeingMeasured_system_screenshot()
         """ 收尾，如果有警告弹框就关掉"""
         handlingMethod().Loop_closeWindow(sole_ModuleIdentifier)
-        """处理预期结果或实际结果，用以实际结果和预期结果文本对比"""
-        expect_result = FormatConversion().expect_dataProcessing(dictSet, actual_result)  # 格式化实际值
+        """处理预期结果和实际结果，用以实际结果和预期结果文本对比"""
+        expect_result,location = FormatConversion().expect_dataProcessing(dictSet, actual_result)  # 格式化实际值
         print("预期值：", expect_result)
-        actual_result = FormatConversion().Actual_dataProcessing(dictSet,actual_result)  # 格式化实际值
+        actual_result = FormatConversion().Actual_dataProcessing(dictSet,actual_result,location)  # 格式化实际值
+        print("实际值：", actual_result)
         return  expect_result,actual_result
 
 
@@ -159,3 +164,6 @@ class handlingMethod:
         for CloseWindows in list_CloseWindows:
             title = CloseWindows[0]
             Check_winControl(title).Force_close_popUp()
+
+
+

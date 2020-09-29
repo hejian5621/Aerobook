@@ -44,17 +44,17 @@ print("txt:",txt)
 """获取”编辑材料许用值“中的值"""
 
 # 点击创建材料需用值曲线
-# son_window.Button1.click()
+son_window.Button1.click()
 
 
 # """连接编辑材料许用值曲线弹框"""
-# dlg_spec3=BeingMeasured_popupWin("编辑材料许用值曲线").menu_LetsGoTopopover()
-#
-#
-# dlg_spec3.print_control_identifiers()
-#
-#
-# dlg1_spec= OperatingControls(dlg_spec3).ExpressionAssembly("Edit")
+dlg_spec3=BeingMeasured_popupWin("编辑材料许用值曲线").menu_LetsGoTopopover()
+
+
+dlg_spec3.print_control_identifiers()
+
+
+dlg1_spec= OperatingControls(dlg_spec3).ExpressionAssembly("Edit")
 
 
 

@@ -46,6 +46,7 @@ from utils.commonality.tool import UseCase_parameterization
 #     {"求解计算--求解计算": ["测试一"]},
 #     {"载荷信息--载荷数据库制作工具": ["测试一"]},
 #     {"载荷信息--编辑工况": ["测试一"]},
+#     {"材料信息--定义复合材料参数": ["其他"]},
 #     {"复材结构强度校核--复合材料强度校核1D": ["测试一"]},
 #     {"复材结构强度校核--复合材料强度校核2D": ["测试一"]},
 #     {"紧固件强度校核--紧固件信息输入": ["测试一"]},
@@ -60,16 +61,18 @@ from utils.commonality.tool import UseCase_parameterization
 
 
 list_dicti_argument=[
-       {"材料信息--定义复合材料参数": ["测试"]}
-]
-list_dict_site,list_testPoint = UseCase_parameterization().parameterization_data(list_dicti_argument)  # 读取测试用例
+        {"材料信息--定义复合材料参数": ["测试"]},
+        ]
+# 读取测试用例
+list_dict_site,list_testPoint = UseCase_parameterization().parameterization_data(list_dicti_argument)
+
 
 """测试用例集"""
 @ddt
 # @unittest.skip(u"暂时不执行")
 class  test_UseCaseSet(unittest.TestCase):
     """紧固件强度校核--紧固件参数输入"""
-    global real_UseCase_Name
+
 
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
@@ -87,6 +90,15 @@ class  test_UseCaseSet(unittest.TestCase):
         self.dict_testCase=None    # 单个测试用例
         self.messageType=None      # 预期值出现的形式（警告弹窗、窗口信息、截图等）
         self.ProjectPath=None      # 项目所在路径
+        self.UseCase_Number = None
+
+
+    """ 执行测试用例步骤 """
+    @data(*list_testPoint)  # 参数化参数用例，主要的用于用例的循环测试，并且把测试点放入测试报告
+    def test_1(self, testCase):
+        global Use_attribute  # 控件属性方法
+        self.actual_result = UseCase_step(Use_attribute, self.dict_testCase).Perform_useCase_Steps()
+        self.dict_testCase["实际值"] = self.actual_result  # 实际值放入字典
 
 
 
@@ -96,11 +108,11 @@ class  test_UseCaseSet(unittest.TestCase):
         每次执行测试用例前都做的操作
         :return:
         """
-        global messageType  # 预期值信息类型
         global Use_attribute  # 控件属性方法
         global UseSet_n  # 用例集名称
         global  useCase_sum   # 全局参数，记录执行用例的次数
         global  module_n      # 全局参数，获取执行没一个模块的第一条
+        global UseCase_Number
         print("测试开始")
         self.dict_testCase=list_dict_site[useCase_sum]   # 取出单个的测试用例
         dictSet = {"全局参数": module_n, "全局用例集名称": UseSet_n,"控件属性已经操作方法": Use_attribute}
@@ -108,38 +120,42 @@ class  test_UseCaseSet(unittest.TestCase):
             controller(dictSet,self.dict_testCase)
         self.dict_testCase["信息窗口之前的文本"]=self.old_content
         self.dict_testCase["被测程序文件地址"] = self.ProjectPath
+        UseCase_Number=self.dict_testCase["用例编号"]
         self.dict_testCase["用例步骤执行前时间"]=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print("开始执行用例：", self.dict_testCase["用例编号"])
         useCase_sum = useCase_sum + 1
 
 
     """用例执行完成收尾操作"""
+    @BeautifulReport.add_test_img("test_1")   # 如果用例执行失败，就把用例失败的截图放入测试报告中
     def tearDown(self):
         """用例执行完成收尾操作"""
+        global UseCase_Number
         print("用例执行完成开始执行收尾操作")
+        print("1111")
         self.expect_result, self.actual_result = finish_clear().controller(self.dict_testCase)  # 当每条用例执行完毕，执行收尾工作
         """实际值跟预期值对比（文本对比）"""
         print("实际值跟预期值对比")
-        assert_that(self.expect_result).is_equal_to(self.actual_result)  # 预期值跟实际值对比
+        assert_that(self.expect_result).is_equal_to(self.actual_result)  # 断言实际值个预期值
+        """ 收尾，如果有警告弹框就关掉"""
         print("测试结束")
         print(" ")
 
 
-    @data(*list_testPoint)  # 参数化参数用例
-    def test_1(self, testCase):
-        global Use_attribute  # 控件属性方法
-        global dict_testCase  # 单个的测试用例
-        # 执行测试用例步骤
-        self.actual_result = UseCase_step(Use_attribute, self.dict_testCase).Perform_useCase_Steps()
-        self.dict_testCase["实际值"]=self.actual_result
+
+    """用于测试报告中的截图"""
+    def save_img(self, img_name):  # 错误截图
+        """
+        测试结果如果断言失败，测试报告必须读取该函数
+        因为截图已经截取，所有此函数为空函数
+        :param img_name:
+        :return:
+        """
+        pass
+
 
 
 
 
 if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(test_UseCaseSet))
-    file_name=time.strftime("%Y%m%d%H%M%S")+"Aerocheck测试报告"    # 测试报告名称
-    relativeAddress = path.location()
-    logPath = relativeAddress+"report//Aerocheck//" # 测试报告保存地址
-    result = BeautifulReport(suite).report(filename=file_name,log_path=logPath,description="Aerocheck测试报告")
+    unittest.main()

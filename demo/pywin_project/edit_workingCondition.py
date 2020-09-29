@@ -19,21 +19,32 @@ aero_window, module_window = pywin_openAProgram().menuOpen(testdicts)
 dlg_spec=BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
 #
 
+
+
+
+dlg_spec1=dlg_spec.child_window(title="panel", class_name="wxWindowNR")
+
+
 dlg_spec.print_control_identifiers()
 
+
+
+# dlg_spec1.CustomTreeCtrl.start_dragging("1：CASE1")
 print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
 
 
 
 # # # 勾选新建勾选框
-dlg_spec.RadioButton2.click()
+dlg_spec.RadioButton2.check()
 #
+# txt=dlg_spec.check_by_click_input()
+# print("txt:",txt)
 
 
 #
 # # 在新建文本框中输入数据
-dlg_spec.Edit2.set_text("all")
+# dlg_spec.Edit2.set_text("all")
 
 #
 #
@@ -99,7 +110,7 @@ dlg_spec.Edit2.set_text("all")
 
 #
 # # 删除工况
-dlg_spec.编辑工况Button.click()
+# dlg_spec.编辑工况Button.click()
 
 
 

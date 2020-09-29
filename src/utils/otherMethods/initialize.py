@@ -210,8 +210,7 @@ class execute_useCase_initialize:
         # 预期截图位置location_expect
         location_expect = relativeAddress + r"src\testCase\d_useCase_screenshot\Aerocheck\expectScreenshots\aaa.png"
         # 实际截图位置
-        location_actual=relativeAddress+r"src\testCase\d_useCase_screenshot\Aerocheck\ActualScreenshots\\"\
-                        +"实际材料许用值曲线表截图.png"
+        location_actual=relativeAddress+r"src\testCase\d_useCase_screenshot\Aerocheck\ActualScreenshots\\"+"实际材料许用值曲线表截图.png"
         while True:
             # 判断实际值截图是否存在，如果存在就删掉
             result = os.path.exists(location_actual)

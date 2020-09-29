@@ -23,56 +23,57 @@ class OperatingControls:
     def console(self,Silverlight,argument ):
         """
         操作控件控制台
-        :param Silverlight: 控件的存在方法
-        :param argument: 控件的存在参数
+        每次循环就是操作一次控件
+        :param Silverlight: 控件的属性，例如：唯一标识、操作方法等
+        :param argument: 控件输入参数和需不要操作
         :return:
         """
-        print("\033[0;34m 《进入操作控件函数开始操作控件》")
+        print("\033[0;34m 《进入操作控件函数开始操作控件》\033[0m")
         print(" ")
         location = argument["被测程序文件地址"]
         els = argument["其他"]
+        # 循环取出“控件属性已经操作方法”内的数据
         for ControlsName, ControlProperties in Silverlight.items():  # 循环取出控件
             if ControlsName in argument:
                 operational = argument[ControlsName]
                 print("开始操作控件：%r 值：%r" % (ControlsName, operational))
                 if operational != "默认":  # 当控件不等于默认（默认代表不用操作控件）
                     ControlTypes = ControlProperties["控件类型"]
-                    ControlInstance = ControlProperties["所操作实例"]
+                    operateWin = ControlProperties["所操作实例"]
                     Controlmethod = ControlProperties["唯一标识方法"]
                     discern = ControlProperties["唯一标识"]
                     waitingTime = ControlProperties["操作控件后等待时间"]
                     Control_mode = ControlProperties["唯一标识方法"]
-                    WindowInstance = OperatingControls(self.win_one, self.win_two, self.win_three,self.win_four). \
-                        OperationControlInstance(ControlInstance)  # 获取操作控件实例
-                    dlg_spec = OperatingControls(WindowInstance). \
-                        IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
+                    ControlWin = OperatingControls(self.win_one,self.win_two,self.win_three,self.win_four).acquire_controlWin(operateWin) # 获取操作控件实例
+                    dlg_spec = OperatingControls(ControlWin).IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
                     if ControlTypes == "文本框":  # 当控件是文本框的时候
-                        if els == "拼接路径":  # 如果是路径文本框，就判断需不需要拼接路径
-                            operational = location + operational
-                        Check_winControl(None, dlg_spec).Verify_inputBox(operational)
+                        if "][" in operational:  # 当输入的参数中有“][”符号，代表此文本框为路径文本框，并且需要拼接路径
+                            list_operational = operational.split("；")
+                            operational  = list_operational[0]
+                            operational = location + operational    # 拼接路径
+                        Check_winControl(None, dlg_spec).Verify_inputBox(operational)   # 向文本框中输入数据
                         print("在控件”%r“文本框中输入：%r" % (ControlsName, operational))
-                    elif ControlTypes == "勾选框" or ControlTypes == "单选框":
+                    elif ControlTypes == "勾选框" or ControlTypes == "单选框" or ControlTypes == "复选框":
                         Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
                         print("控件%r成功勾选" % ControlsName)
                     elif ControlTypes == "按钮" :
                         dlg_spec.click_input()
                         print("控件”%r“按钮点击成功" % ControlsName)
                     elif ControlTypes == "按钮--弹窗套件":  # 操作套件
-                        print("进入操作")
-                        OperatingControls(dlg_spec).button_popUp(ControlProperties, location, operational)
+                        OperatingControls(dlg_spec).button_popUp(ControlProperties, location)
                         PopupTitle = ControlProperties["套件参数一"]
                         print("控件%r按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle))
                     elif ControlTypes == "坐标--单击--文本框":
-                        OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
+                        OperatingControls(ControlWin).coord_click_textbox(ControlProperties,operational)
                         print("控件%r坐标选择正确，并且在文本框中正确输入数据" % ControlsName)
                     elif ControlTypes == "坐标--双击--弹窗套件":
-                        OperatingControls(WindowInstance).coord_dblclick_popUp(ControlProperties,operational)
+                        OperatingControls(ControlWin).coord_dblclick_popUp(ControlProperties,operational)
                         print("控件%r操作成功" % ControlsName)
                     elif ControlTypes == "坐标--三击--文本框":
-                        OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
+                        OperatingControls(ControlWin).coord_click_textbox(ControlProperties,operational)
                         print("控件%r操作成功" % ControlsName)
                     elif ControlTypes == "坐标--键盘--文本框":
-                        OperatingControls(WindowInstance).coord_click_textbox(ControlProperties,operational)
+                        OperatingControls(ControlWin).coord_click_textbox(ControlProperties,operational)
                         print("控件%r操作成功" % ControlsName)
                     elif ControlTypes == "下拉框":
                         if Control_mode=="方式二":
@@ -92,7 +93,7 @@ class OperatingControls:
             else:
                 print("不操作控件“%r”" %ControlsName)
                 print(" ")
-            print("控件操作完成 \033[0m")
+            print("\033[0;34m控件操作完成 \033[0m")
             print(" ")
             print(" ")
 
@@ -100,9 +101,9 @@ class OperatingControls:
 
 
 
-    def OperationControlInstance(self,ControlInstance):
+    def acquire_controlWin(self,ControlInstance):
         """
-        获取操作控件的窗口
+        获取操作控件的窗口  acquire_controlWin
         :return:
         """
         if ControlInstance=="窗口一":
@@ -143,18 +144,23 @@ class OperatingControls:
         因为从电子表格获取的控件标识字符串，拼接在操作控件的时候会报错，暂时还没有找到原因，暂时使用该方法拼接操作方法
         :return:
         """
-        if "；" in discern:   # 解析参数
+        # 解析参数
+        if "；" in discern:
             self.list_AfterParsing = discern.split("；")
             discern=self.list_AfterParsing[-1]
         if Controlmethod=="方式一":
            self.dlg_spec= OperatingControls(self.win_one).ExpressionAssembly(discern)
            Check_winControl("警告", "OK").popUp_Whether_close()
         elif Controlmethod=="方式二":
-            title_n=self.list_AfterParsing[0]
-            className = self.list_AfterParsing[1]
-            print("title_n:",title_n)
-            print("className :", className )
-            self.dlg_spec = self.win_one.child_window(title=title_n, class_name=className)
+            if "][" in discern:  # 解析参数
+                self.list_AfterParsing = discern.split("][")
+                discern = self.list_AfterParsing[-1]
+                title_n=self.list_AfterParsing[0]
+                className = self.list_AfterParsing[1]
+                self.dlg_spec = self.win_one.child_window(title=title_n, class_name=className)
+            else:
+                print("传过来的控件唯一标识没有“][”，所有无法被转化成列表：",discern, __file__, sys._getframe().f_lineno)
+                os._exit(0)
         else:
             print("没有唯一标识的操作方法", __file__, sys._getframe().f_lineno)
             os._exit(0)
@@ -168,7 +174,7 @@ class OperatingControls:
         :param str_Name:
         :return:
         """
-        print("str_Name:",str_Name)
+        print("控件的唯一标识:",str_Name)
         if str_Name=="Edit":
             self.dlg_spec=self.win_one.Edit
         elif str_Name=="Edit1":
@@ -336,12 +342,11 @@ class OperatingControls:
 
 
 
-    def button_popUp(self, ControlProperties,location, operational):
+    def button_popUp(self, ControlProperties,location):
         """
        套件操作
        :param  ControlProperties: 控件的属性
        :param  location: 项目存放路径
-       :param  operational:
        :return:
        """
         examine =None
@@ -452,11 +457,6 @@ class OperatingControls:
         argument=str(argument)
         # 使用键盘向文本框中输入数据
         send_keys(argument)  # 使用键盘强制输入数据
-
-
-
-
-
 
 
     def analysis_coord(self,sole_logo):

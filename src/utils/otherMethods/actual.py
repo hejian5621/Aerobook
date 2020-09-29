@@ -27,13 +27,14 @@ class GetActual_Value:
     def ActualValue_controller(self,result):
         """
         获取实际值
+        :param result: 因为在程序启动或执行用例前需要做的初始化前不需要实例值
         :return:
         """
         if result==1:
             pass
         else:
             Message_type = self.property["预期值信息类型"]
-            UseCase_Number = self.property["用例编号"]  # 取出预期值
+            UseCase_Number = self.property["用例编号"]
             print("开始获取实际值,途径：", Message_type)
             # 判断是不是有多个检查类型
             if "；" in Message_type:   # 如果预期值信息类型值中有“；”，就说明有多个检查类型
@@ -55,11 +56,10 @@ class GetActual_Value:
                     new_content = Information_Win().acquire_HTML_TXT(ProjectPath)  # 取出信息窗口实时数据
                     self.dicti_actual = FormatConversion().GetLatestData(new_content, old_content)
                 elif Message_type == "控件文本":  # 获取信息窗口的文本信息（实际值）
-                    # 获取工况组合下拉框里的文本信息
-                    expect_control=self.property["预期值控件标识属性"]
                     self.dicti_actual = localControl(self.instance).LocalControl_TXT(self.property)
                 elif Message_type == "控件截图":  # 获取控件的实际值截图
-                    pass
+                    # 获取工况组合下拉框里的文本信息
+                    self.dicti_actual =screenshot(self.instance).interceptPicture(self.property,Message_type)
                 elif Message_type == "文件检查":  #
                     ProjectPath = self.property["被测程序文件地址"]
                     BeforeTime = self.property["用例步骤执行前时间"]
@@ -70,8 +70,8 @@ class GetActual_Value:
                 else:
                     print("该“%r”测试用例没有说实际值的获取途径" % UseCase_Number, __file__, sys._getframe().f_lineno)
                     os._exit(0)
-            # 把获取的单个检查类型放在列表嵌套字典中
-            self.actual_dicti_type[Message_type]=self.dicti_actual
+                # 把获取的单个检查类型放在列表嵌套字典中
+                self.actual_dicti_type[Message_type]=self.dicti_actual
         return self.actual_dicti_type
 
 
@@ -140,50 +140,61 @@ class  localControl:
 
 
 
-    def LocalControl_TXT(self,property):
+
+    def Get_window_identity(self,property):
         """
-        本地控件获取实际值
+        获取窗口或者唯一标识
         :return:
         """
         expect_control = property["预期值控件标识属性"]
-
-        list_Message_type=None
+        list_Message_type = None
         # 取出窗口
-        win_one=self.module_window[0]
+        win_one = self.module_window[0]
         win_two = self.module_window[1]
         win_three = self.module_window[2]
         win_four = self.module_window[3]
         if expect_control:
             if "；" in expect_control:
-                    list_Message_type = expect_control.split("；")
-                    if len(list_Message_type)==5:
-                        pass
-                    else:
-                        print("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段虽然没有为空,也转化成了列表，但是属性不足：",
-                              list_Message_type, __file__, sys._getframe().f_lineno)
-                        os._exit(0)
+                list_Message_type = expect_control.split("；")
+                if len(list_Message_type) == 5:
+                    pass
+                else:
+                    print("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段虽然没有为空,也转化成了列表，但是属性不足：",
+                          list_Message_type, __file__, sys._getframe().f_lineno)
+                    os._exit(0)
             else:
                 print("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段虽然没有为空但是，由于没有“；”特殊字符"
-                      "，所有无法转化成列表",list_Message_type, __file__, sys._getframe().f_lineno)
+                      "，所有无法转化成列表", list_Message_type, __file__, sys._getframe().f_lineno)
                 os._exit(0)
         else:
             print("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段不能为空", __file__, sys._getframe().f_lineno)
             os._exit(0)
         # 如果需要获取实际值的控件所在窗口等于步骤操作的窗口，就用之前的窗口
-        if property["操作窗口标题"]==list_Message_type[0] and property["操作子窗口标题"]== list_Message_type[1]:
+        if property["操作窗口标题"] == list_Message_type[0] and property["操作子窗口标题"] == list_Message_type[1]:
             pass
         else:
             # 切换到被测模块窗口
-            property["操作窗口标题"]=list_Message_type[0]
-            property["操作子窗口标题"]=list_Message_type[1]
-            win_one, win_two,win_three, win_four = GetWindowInstance(property).get_window_instance()
-        logo=list_Message_type[2]
+            property["操作窗口标题"] = list_Message_type[0]
+            property["操作子窗口标题"] = list_Message_type[1]
+            win_one, win_two, win_three, win_four = GetWindowInstance(property).get_window_instance()
+        logo = list_Message_type[2]
         method = list_Message_type[3]
         win = list_Message_type[4]
         # 获取操作控件的实际窗口
-        WindowInstance = OperatingControls(win_one, win_two, win_three, win_four).OperationControlInstance(win)
+        WindowInstance = OperatingControls(win_one, win_two, win_three, win_four).acquire_controlWin(win)
         # 获取操作控件的唯一标识
         dlg_spec = OperatingControls(WindowInstance).IdentificationMethod(method, logo)
+        return dlg_spec
+
+
+
+    def LocalControl_TXT(self,property):
+        """
+        本地控件获取实际值
+        :return:
+        """
+        # 获取控件的唯一标识
+        dlg_spec=localControl(self.module_window).Get_window_identity(property)
         # 获取控件的文本
         txt = dlg_spec.window_text()
         return txt
@@ -192,14 +203,37 @@ class  localControl:
 
 
 
+class screenshot:
+    """截取图片"""
+
+    def __init__(self,module_window):
+        self.module_window = module_window
+
+
+    def interceptPicture(self,property,Message_type=None):
+        """
+       截取图片返回图片地址
+       :return:
+       """
+        UseCase_Number=property["用例编号"]
+        # 获取控件的唯一标识
+        self.module_window = localControl(self.module_window).Get_window_identity(property)
+        location=r"F:\Aerobook\src\testCase\d_useCase_screenshot\expectScreenshots"+"\\"+UseCase_Number+".png"
+        # 截取图片
+        self.module_window.capture_as_image().save(location)  # 获取警告弹窗的文本截图
+        return location
 
 
 
-
-
-
-
-
+    def UseCaseFailureScreenshot(self,UseCase_Number,Message_type):
+        """
+        把截的图片移动到生成测试
+        :return:
+        """
+        import shutil
+        old_path = r"F:\Aerobook\src\testCase\d_useCase_screenshot\expectScreenshots\test_1.png"
+        new_path = r"F:\Aerobook\src\testCase\a_useCaseSet\Aerockeck\img\test_1.png"
+        shutil.copyfile(old_path, new_path)
 
 
 

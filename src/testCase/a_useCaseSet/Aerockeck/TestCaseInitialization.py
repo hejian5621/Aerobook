@@ -90,7 +90,7 @@ class  module_initialize:
 
 # 执行初始化
 
-# module_initialize().start_Aerobook_Aercheck()
+module_initialize().start_Aerobook_Aercheck()
 
 module_initialize().LaminatedataPopup("csh001",["铺层数据库制作工具"])  # 铺层信息->铺层数据库制作工具
 

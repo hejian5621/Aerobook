@@ -69,8 +69,8 @@ class  BeingMeasured_work:
 
     def workField_general(self):
         """
-        切换到工作栏实体
-        :return:铺层库优化工作栏对象
+        切换到工作栏窗口
+        :return:
         """
         # 切换到铺层库优化工作栏
         return self.workField
@@ -84,7 +84,6 @@ class  BeingMeasured_work:
         """
         dlg_spec = self.workField.child_window(class_name="_wx_SysTabCtl32")
         self.workField_son = dlg_spec.panelwxWindowNR2
-        # self.workField_son.print_control_identifiers()
         return self.workField_son
 
 
@@ -99,7 +98,6 @@ class  BeingMeasured_work:
         dlg_spec = self.workField.材料许用值曲线表_wx_SysTabCtl32
         self.workField_son = dlg_spec.panelwxWindowNR0
         return self.workField_son
-
 
 
 
@@ -242,7 +240,7 @@ class GetWindowInstance:
 
     def get_window_instance(self):
         """
-        获取窗口实例
+        获取操作控件的各个窗口
         :return:
         """
         from src.utils.otherMethods.initialize import pywin_openAProgram

@@ -80,8 +80,9 @@ class pictureProcessing:
     """图片处理"""
 
 
-    def __init__(self,path):
+    def __init__(self,path,location=None):
         self.path=path   # 图片的位置
+        self.location = location  # 图片的位置
         self.list1=[]
 
 
@@ -112,6 +113,35 @@ class pictureProcessing:
         # 合并列表
         str = ''.join(self.list1)
         return str
+
+    def BeingMeasured_system_screenshot(self):
+        """
+        被测系统截图
+        :return:
+        """
+        from src.utils.otherMethods.initialize import pywin_openAProgram
+        aero_window = pywin_openAProgram().entrance_subroutine_title()
+        location = r"F:\Aerobook\src\testCase\a_useCaseSet\Aerockeck\img\test_1.png"
+        aero_window.capture_as_image().save(location)  # 获取警告弹窗的文本截图
+
+
+    def imageComparison(self,):
+        """
+        图片对比
+        :return:
+        """
+        from PIL import Image
+        from PIL import ImageChops
+        image_one = Image.open(self.path)  # 获取图片信息
+        image_two = Image.open(self.location)  # 获取图片信息
+        diff = ImageChops.difference(image_one, image_two)  # 对比图片
+        if diff.getbbox() is None:  # 图片一样
+            result="图片一样"
+        else:  # 如果不图片一样，就说明材料许用值曲线表里有内容，就删除内容
+            result = "图片不一样"
+        return result
+
+
 
 
 """文件、文件夹的复制、新建和删除"""
@@ -144,6 +174,7 @@ class folderFile_dispose:
             if os.path.isdir(sourceF):
                 folderFile_dispose(sourceF).copyFile(targetF)
 
+
     # 强制删除文件夹
     def delfolder(self):
         """
@@ -153,6 +184,7 @@ class folderFile_dispose:
         if os.path.isdir(r"F:\Aerobook\\src\testCase\projectFile\automateFile"):
             shutil.rmtree(self.sourceDir )
             print('文件“%s“删除完毕' % self.sourceDir )
+
 
     #  批量删除文件
     def delfile(self, dict_testCase):
@@ -205,15 +237,6 @@ class folderFile_dispose:
 
 
 
-
-
-
-
-
-
-
-
-
 """定义的异常类，用于主动抛出异常"""
 class MyException(Exception):
     def __init__(self,name):
@@ -250,16 +273,15 @@ class  Check_winControl:
         # 判断弹窗是否弹窗，如果没有弹出，就继续点击
         while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
             try:
-                # 知识点：主动抛出异常，就是实例化一个异常类
                 hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
-                if hwnd != 0:
-                    raise MyException("没有找到弹窗")  # 实例化一个异常,实例化的时候需要传参数
-            except Exception as obj:  # 万能捕获，之前的可能捕获不到，这里添加Exception作为保底
+                if hwnd != 0:                                 # 如果句柄不为零证明找到了该弹窗
+                    raise MyException("没有找到弹窗")           # 如果找到了该弹窗，则主动抛出异常
+            except Exception:                                  # 捕捉到该异常，证明弹窗已经找到，就退出循环
                 break
             else:
-                if (self.CircleInitial % 5) == 0:  # 如果循环次数数10的倍数，就再次点击按钮
-                    self.triggerButton.click_input()
-                elif self.CircleInitial == 1:  # 如果第一次链接不上，在点击一次
+                if (self.CircleInitial % 5) == 0:
+                    self.triggerButton.click_input()           # 如果没有找到弹窗，再次点击触发出现弹窗的按钮
+                elif self.CircleInitial == 1:                  # 如果第一次链接不上，在点击一次
                     self.triggerButton.click_input()
             self.CircleInitial = self.CircleInitial + 1
         if self.CircleInitial == (self.cycleIndex + 1):
@@ -271,7 +293,7 @@ class  Check_winControl:
     def window_handle_WhetherOpen(self,handle,identification):
         """
         检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现
-        通过句柄判断弹窗是否存在
+        因为有些文本框根本就没有标题，只有通过句柄判断弹窗是否存在
         如果出现，程序正常运行
         如果没有出现，程序停止运行
         :param handle: 预期弹出弹窗的标题
@@ -282,11 +304,11 @@ class  Check_winControl:
         # 判断弹窗是否弹窗，如果没有弹出，就继续点击
         while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
             result = None
-            state=Check_winControl(handle).handle_popUp_exist(identification)
+            state=Check_winControl(handle).handle_popUp_exist(identification)   # 通过弹窗的类名获取弹窗的句柄
             if state:
                 break
             else:
-                if (self.CircleInitial % 10) == 0:  # 如果循环次数数10的倍数，就再次点击按钮
+                if (self.CircleInitial % 5) == 0:  # 如果循环次数数10的倍数，就再次点击按钮
                     self.triggerButton.click_input()
                 elif self.CircleInitial == 1:  # 如果第一次链接不是，在点击一次
                     self.triggerButton.click_input()
@@ -307,9 +329,7 @@ class  Check_winControl:
             close_result=Check_winControl(self.title,self.triggerButton,1,1).popUp_Whether_close()   # 然后在检查弹窗有没有关闭
             if close_result=="窗口已正常关闭":
                 break
-            time.sleep(1)
-            print("nest_title:",nest_title)
-            print("nest_triggerButton:", nest_triggerButton)
+            time.sleep(0.5)
             Check_winControl(nest_title, nest_triggerButton).popUp_Whether_close()  # 检查有没有嵌套弹框,有嵌套弹框就关掉
             self.CircleInitial = self.CircleInitial + 1
             if self.CircleInitial == (self.cycleIndex + 1):
@@ -404,7 +424,7 @@ class  Check_winControl:
         :return:
         """
         import win32gui
-        hwnd=win32gui.FindWindow(self.title,None)   # 获取窗体的句柄
+        hwnd=win32gui.FindWindow(self.title,None)   # 通过弹窗的类名获取弹窗的句柄
         app = Application().connect(handle=hwnd,timeout=20)
         dlg_spec = app.window(handle=hwnd)  # 切换到选择文件弹窗窗口
         if dlg_spec[identification].exists():
@@ -431,18 +451,18 @@ class  Check_winControl:
 
 
 
+
+
     def Verify_inputBox(self,data):
         """
         验证输入框是否输入正确的数据，如果还没有输入就再次输入，一直到输入成功为止
         :return:
         """
         print("向文本框内的输入的数据：",data)
-        print(type(data))
-        if type(data) == float:
-            print("运行")
-            data = '{:g}'.format(data)
+        if type(data) == float:  # 如果需要输入的参数的数据类型为浮点
+            data = '{:g}'.format(data)   # 去掉浮点数最后的零
         print("向文本框内的输入的数据：", data)
-        self.triggerButton.set_text(data)  # 文本框
+        self.triggerButton.set_text(data)  # 向文本框内输入数据
         while self.CircleInitial<self.cycleIndex:
             State = self.triggerButton.window_text()  # 返回输入的文本
             if str(State) == str(data):  # 0
@@ -522,9 +542,6 @@ class WindowTop:
 
 
 
-
-
-
 """Html格式转化"""
 class htmlFormat:
     """Html格式转化"""
@@ -536,6 +553,8 @@ class htmlFormat:
     def takeOut_html_label(self,html_location,txt_location):
         """
         取出Html文件中指定标签里的文本
+        :param html_location:源文件地址
+        :param txt_location: 保存文件地址
         :return:
         """
         with open(html_location, "r", encoding="utf-8") as strf:
@@ -624,9 +643,6 @@ class htmlFormat:
         htmlFormat(). Filter_nonChinese(layoffPeriod_TXT, ultimately_TXT)
 
         return ultimately_TXT
-
-
-
 
 
 
