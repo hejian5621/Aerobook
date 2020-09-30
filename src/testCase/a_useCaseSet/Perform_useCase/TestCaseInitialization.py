@@ -21,7 +21,7 @@ class  module_initialize:
         self.testCase=None
 
 
-    def TestCase_Data(self,UseCaseNumber,attribute_tableName):
+    def TestCase_Data(self,moduleName,UseCaseNumber,attribute_tableName):
         """
         测试用例数据
         :return:
@@ -29,12 +29,12 @@ class  module_initialize:
         ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()  # 获取配置文件中项目的路径
         # 获取属性信息
         real_UseCase_Name = "程序初始化用例"
-        site = UseCase_parameterization().parameterization_location(real_UseCase_Name, attribute_tableName)
+        site = UseCase_parameterization().parameterization_location(moduleName,real_UseCase_Name, attribute_tableName)
         site = site[0]
         self.testCase = read_excel(site).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
         # 获取初始化用例
         list_dicti_argument = [{"程序初始化用例": ["测试用例步骤"]}]
-        list_dict_site, list_testPoint = UseCase_parameterization().parameterization_data(list_dicti_argument)  # 读取测试用例
+        list_dict_site, list_testPoint = UseCase_parameterization().parameterization_data(moduleName,list_dicti_argument)  # 读取测试用例
         for dict_site in list_dict_site:  # 取出对应模块的测试用例
             if dict_site["用例编号"] == UseCaseNumber:
                 self.property = dict_site
@@ -73,39 +73,42 @@ class  module_initialize:
 
 
 
-    def LaminatedataPopup(self,UseCaseNumber,attribute_tableName):
+    def LaminatedataPopup(self,moduleName,UseCaseNumber,attribute_tableName):
         """
 
+        :param moduleName:模块标识
         :param UseCaseNumber:模块标识
         :param attribute_tableName:带属性的表名称
         :return:
         """
         # 获取初始测试用例参数
-        self.testCase,self.property=module_initialize().TestCase_Data(UseCaseNumber,attribute_tableName)
+        self.testCase,self.property=module_initialize().TestCase_Data(moduleName,UseCaseNumber,attribute_tableName)
         # 执行初始化测试用例
         UseCase_step(self.testCase,self.property).Perform_useCase_Steps(1)
 
 
 
 
+
+moduleName= "Aerocheck"
 # 执行初始化
 
 module_initialize().start_Aerobook_Aercheck()
 
-module_initialize().LaminatedataPopup("csh001",["铺层数据库制作工具"])  # 铺层信息->铺层数据库制作工具
+module_initialize().LaminatedataPopup(moduleName,"csh001",["铺层数据库制作工具"])  # 铺层信息->铺层数据库制作工具
 
-module_initialize().LaminatedataPopup("csh002",["1D单元尺寸定义（模板）"]) # 尺寸信息->一维单元尺寸定义（模板）
+module_initialize().LaminatedataPopup(moduleName,"csh002",["1D单元尺寸定义（模板）"]) # 尺寸信息->一维单元尺寸定义（模板）
 
-module_initialize().LaminatedataPopup("csh003",["2D单元尺寸定义（模板）"]) # 尺寸信息->二维单元尺寸定义（模板）
+module_initialize().LaminatedataPopup(moduleName,"csh003",["2D单元尺寸定义（模板）"]) # 尺寸信息->二维单元尺寸定义（模板）
 
-module_initialize().LaminatedataPopup("csh004",["求解计算"])             # 求解计算->求解计算
+module_initialize().LaminatedataPopup(moduleName,"csh004",["求解计算"])             # 求解计算->求解计算
 
-module_initialize().LaminatedataPopup("csh005",["载荷数据库制作工具"])     # 载荷信息->载荷数据库制作工具
+module_initialize().LaminatedataPopup(moduleName,"csh005",["载荷数据库制作工具"])     # 载荷信息->载荷数据库制作工具
 
-module_initialize().LaminatedataPopup("csh006",["定义材料许用值"])        # 材料信息->定义复合材料参数
+module_initialize().LaminatedataPopup(moduleName,"csh006",["定义材料许用值"])        # 材料信息->定义复合材料参数
 
-module_initialize().LaminatedataPopup("csh007",["定义材料许用值"])        # 材料信息->定义复合材料参数
+module_initialize().LaminatedataPopup(moduleName,"csh007",["定义材料许用值"])        # 材料信息->定义复合材料参数
 
-module_initialize().LaminatedataPopup("csh008",["定义材料许用值"])        # 材料信息->定义复合材料参数
+module_initialize().LaminatedataPopup(moduleName,"csh008",["定义材料许用值"])        # 材料信息->定义复合材料参数
 
-module_initialize().LaminatedataPopup("csh009",["定义材料许用值"])        # 材料信息->定义复合材料参数
+module_initialize().LaminatedataPopup(moduleName,"csh009",["定义材料许用值"])        # 材料信息->定义复合材料参数

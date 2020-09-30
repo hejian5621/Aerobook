@@ -28,7 +28,7 @@ class OperatingControls:
         :param argument: 控件输入参数和需不要操作
         :return:
         """
-        print("\033[0;34m 《进入操作控件函数开始操作控件》\033[0m")
+        print("\033[1;33m￥￥￥《进入操作控件函数开始操作控件》￥￥￥￥￥￥￥\033[0m")
         print(" ")
         location = argument["被测程序文件地址"]
         els = argument["其他"]
@@ -36,7 +36,7 @@ class OperatingControls:
         for ControlsName, ControlProperties in Silverlight.items():  # 循环取出控件
             if ControlsName in argument:
                 operational = argument[ControlsName]
-                print("开始操作控件：%r 值：%r" % (ControlsName, operational))
+                print("\033[0;34m开始操作控件：%r 值：%r\033[0m" % (ControlsName, operational))
                 if operational != "默认":  # 当控件不等于默认（默认代表不用操作控件）
                     ControlTypes = ControlProperties["控件类型"]
                     operateWin = ControlProperties["所操作实例"]
@@ -48,7 +48,7 @@ class OperatingControls:
                     dlg_spec = OperatingControls(ControlWin).IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
                     if ControlTypes == "文本框":  # 当控件是文本框的时候
                         if "][" in operational:  # 当输入的参数中有“][”符号，代表此文本框为路径文本框，并且需要拼接路径
-                            list_operational = operational.split("；")
+                            list_operational = operational.split("][")
                             operational  = list_operational[0]
                             operational = location + operational    # 拼接路径
                         Check_winControl(None, dlg_spec).Verify_inputBox(operational)   # 向文本框中输入数据
@@ -89,13 +89,11 @@ class OperatingControls:
                     time.sleep(waitingTime)
                 else:
                     print("不操作控件“%r”：%r" % (ControlsName,operational))
-                    print(" ")
             else:
-                print("不操作控件“%r”" %ControlsName)
-                print(" ")
+                print("\033[0;34m不操作控件“%r”\033[0m" %ControlsName)
             print("\033[0;34m控件操作完成 \033[0m")
             print(" ")
-            print(" ")
+
 
 
 

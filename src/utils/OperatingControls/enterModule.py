@@ -5,7 +5,7 @@ from pywinauto import findwindows
 from config.configurationFile import ProfileDataProcessing
 
 
-
+"""进入被测弹窗"""
 class BeingMeasured_popupWin:
     """进入被测弹窗"""
 
@@ -52,7 +52,7 @@ class BeingMeasured_popupWin:
         return window_one,window_two
 
 
-
+"""切换到被测工作栏"""
 class  BeingMeasured_work:
     """切换到被测工作栏"""
 
@@ -193,7 +193,7 @@ class  BeingMeasured_work:
 
 
 
-
+"""特殊情况下的控件操作，一般是正常方法识别不了控件"""
 class specialWay_OperatingControls:
     """特殊情况下的控件操作，一般是正常方法识别不了控件"""
 
@@ -219,11 +219,9 @@ class specialWay_OperatingControls:
 
 
 
-
+"""获取窗口实例"""
 class GetWindowInstance:
-    """
-    获取窗口实例
-    """
+    """获取窗口实例"""
 
     def __init__(self,property):
         self.property = property  # 字典类型测试用例

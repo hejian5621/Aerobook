@@ -35,16 +35,6 @@ for dict_site in list_dict_site:
 
 
 
-
-
-
-
-
-
-
-
-
-
 @ddt
 class Test_test(unittest.TestCase):
         """铺层数据库制作"""
@@ -69,38 +59,6 @@ class Test_test(unittest.TestCase):
             :return:
             """
             pass
-            # import shutil
-            # import os
-            # global number
-            # global number1
-            # print("number:", number)
-            # old_path = None
-            # new_path = None
-            # if number == 0:
-            #     old_path = r"F:\Aerobook\src\testCase\d_useCase_screenshot\Aerocheck\1.png"
-            # elif number == 1:
-            #     old_path = r"F:\Aerobook\src\testCase\d_useCase_screenshot\Aerocheck\2.png"
-            # elif number == 2:
-            #     old_path = r"F:\Aerobook\src\testCase\d_useCase_screenshot\Aerocheck\3.png"
-            # elif number == 3:
-            #     old_path = r"F:\Aerobook\src\testCase\d_useCase_screenshot\Aerocheck\4.png"
-            # elif number == 4:
-            #     old_path = r"F:\Aerobook\src\testCase\d_useCase_screenshot\Aerocheck\5.png"
-            # elif number == 5:
-            #     old_path = r"F:\Aerobook\src\testCase\d_useCase_screenshot\Aerocheck\6.png"
-            # elif number == 6:
-            #     old_path = r"F:\Aerobook\src\testCase\d_useCase_screenshot\Aerocheck\7.png"
-            # print("img_name:", img_name)
-            # img_name1=str(number)
-            # print("img_name1:", img_name1)
-            # new_path = r"F:\Aerobook\src\testCase\a_useCaseSet\Aerockeck\img"+"\\"+img_name+".png"
-            # print("old_path:", old_path)
-            # print("new_path:", new_path)
-            # # filelist = os.listdir(old_path)  # 列出该目录下的所有文件,listdir返回的文件列表是不包含路径的
-            # shutil.copyfile(old_path, new_path)
-            # number = number + 1
-
-
 
 
 

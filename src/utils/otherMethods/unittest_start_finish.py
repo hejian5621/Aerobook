@@ -29,11 +29,13 @@ class Initializing:
         :param dict_testCase:
         :return:
         """
-        WindowTop("Aerobook v1.0.4").console()    # 把被测系统页面置顶
+        title=ProfileDataProcessing("commonality", "AerobookEdition").config_File()
+        WindowTop(title).console()    # 把被测系统页面置顶
         number=dictSet["全局参数"]
         global_UseCase_Name = dictSet["全局用例集名称"]
         sole_ModuleIdentifier = dict_testCase["模块唯一标识"]
         self.testCase = dictSet["控件属性已经操作方法"]
+        moduleName=dict_testCase["测试模块"]
         # 用例运行前首先检查有没有弹窗没有关闭
         handlingMethod().Loop_closeWindow(sole_ModuleIdentifier)
         # 在运行每一个用例集之前初始化全局变量参数
@@ -47,7 +49,7 @@ class Initializing:
         if number == 1:  # 在执行该模块第一条用例前执行下面操作
             # 取出“控件属性已经操作方法”
             tableName=["控件属性已经操作方法"]
-            site = UseCase_parameterization().parameterization_location(sole_ModuleIdentifier, tableName)
+            site = UseCase_parameterization().parameterization_location(moduleName,sole_ModuleIdentifier, tableName)
             self.testCase = read_excel(site[0]).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
             # 在模块开始前数据清理
             if sole_ModuleIdentifier=="载荷信息--编辑工况":

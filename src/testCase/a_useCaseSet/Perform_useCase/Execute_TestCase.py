@@ -1,8 +1,9 @@
 
-import unittest,time,datetime
+import unittest,time
 from BeautifulReport import BeautifulReport
 from config.relative_location import  path
-from testCase_set import test_UseCaseSet
+from testCaseSet_Aerocheck import test_UseCaseSet_Aerocheck
+
 
 
 """执行测试用例，生成测试报告"""
@@ -21,5 +22,5 @@ useCase_name="Aerocheck测试报告"
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(test_UseCaseSet))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(test_UseCaseSet_Aerocheck))
     result = BeautifulReport(suite).report(filename=file_name,log_path=logPath,description=useCase_name)

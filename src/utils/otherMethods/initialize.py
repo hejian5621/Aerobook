@@ -8,7 +8,7 @@ from OperatingControls.enterModule import specialWay_OperatingControls
 
 
 
-
+"""打开Arobook"""
 class pywin_openAProgram:
     """打开Arobook"""
 
@@ -79,7 +79,7 @@ class pywin_openAProgram:
         进入子程序,通过标题链接
         :return:
         """
-        main_window = Application().connect(title_re="Aerobook v1.0.4", timeout=10)
+        main_window = Application().connect(title_re=self.aero_title, timeout=10)
         Aerobook_main = main_window.window(title_re=self.aero_title)
         return Aerobook_main
 

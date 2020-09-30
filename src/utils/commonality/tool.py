@@ -12,6 +12,8 @@ from pathlib import Path
 from src.utils.commonality.ExcelFile import read_excel
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from pywinauto import  findwindows
+from src.utils.otherMethods.initialize import pywin_openAProgram,UIA_link
+
 
 
 
@@ -289,7 +291,7 @@ class  Check_winControl:
             os._exit(0)
 
 
-    # 检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现
+    """检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现"""
     def window_handle_WhetherOpen(self,handle,identification):
         """
         检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现
@@ -318,7 +320,7 @@ class  Check_winControl:
             self.CircleInitial = self.CircleInitial + 1
 
 
-
+    """处理带有嵌套弹窗的弹窗"""
     def nest_popUpWindows(self,nest_title,nest_triggerButton):
         """
         处理带有嵌套弹窗的弹窗
@@ -337,7 +339,7 @@ class  Check_winControl:
                 os._exit(0)
 
 
-
+    """检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮"""
     def popUp_Whether_close(self):
         """
         检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮
@@ -378,7 +380,7 @@ class  Check_winControl:
 
 
 
-
+    """强行关闭弹窗"""
     def Force_close_popUp(self):
         """
         强行关闭弹窗
@@ -417,7 +419,7 @@ class  Check_winControl:
         return self.state
 
 
-
+    """通过窗口的类名获取句柄，通句柄判断窗口是否存在"""
     def handle_popUp_exist(self,identification):
         """
         通过窗口的类名获取句柄，通句柄判断窗口是否存在
@@ -434,7 +436,7 @@ class  Check_winControl:
         return retur
 
 
-
+    """确认勾选框是否勾选，如果没有勾选，就勾选"""
     def Verify_CheckBox_Status(self):
         """
         确认勾选框是否勾选，如果没有勾选，就勾选
@@ -448,9 +450,6 @@ class  Check_winControl:
             else:
                 break
             self.CircleInitial = self.CircleInitial + 1
-
-
-
 
 
     def Verify_inputBox(self,data):
@@ -489,12 +488,58 @@ class  Check_winControl:
             self.CircleInitial = self.CircleInitial + 1
 
 
+    """选择下拉框,没有检查"""
     def Verify_dropDownBox_change(self,data):
         """
         选择下拉框
         :return:
         """
         self.triggerButton.select(data)  # 下拉框
+
+
+
+    """检查被系统是否在被模块（Aerocherk、frmbook等）"""
+    def examine_LocatedModule(self):
+        """
+        检查被系统是否在被模块（Aerocherk、frmbook等）
+        :return:
+        """
+        titleName=None;moduleName=None
+        if self.title=="Aerocheck":
+            titleName= ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+            moduleName="Aerocheck"
+        elif self.title=="Fiberbook":
+            titleName = ProfileDataProcessing("commonality", "FiberbookEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+            moduleName = "Fiberbook"
+        else:
+            print("没有找到需要检查的模块：", self.title, __file__, sys._getframe().f_lineno)
+            os._exit(0)
+        # 通过Aerobook标题链接Aerobook进程，并切换到Aerobook窗口
+        aero_window = pywin_openAProgram().entrance_subroutine_title()
+        dlg_spec = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
+        try:   # 是否能找到被测模块
+            dlg_spec.child_window(title=titleName, class_name="wxWindowNR").verify_enabled()
+        except Exception:   # 如果没有找到抛出异常
+            # 如果没有找到被测模块
+            uia_app = UIA_link().EntrySubapplication(moduleName)  # 然后点击进入被测模块的按钮
+            try:
+                dlg_spec.child_window(title=titleName, class_name="wxWindowNR",).wait("exists", timeout=60, retry_interval=0.5)  # 等待被测模块出现
+            except Exception:   # 如果抛出异常说明没有找到被测模块
+                print("没有找到被测试模块:",titleName, __file__, sys._getframe().f_lineno)
+                os._exit(0)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 """窗口置顶"""
@@ -691,58 +736,64 @@ class UseCase_parameterization:
         self.list_testPoint=[]
         self.location = None
 
-    def parameterization_location(self, sole_ModuleIdentifier,list_tableName):
+    def parameterization_location(self,moduleName,sole_ModuleIdentifier,list_tableName):
         """
         获取读取电子表格的路径和相关参数
         :return:
         """
         location=None
-        if sole_ModuleIdentifier=="程序初始化用例":
-            location = ProfileDataProcessing("testCase", "initializeUsecase").config_File()
-        elif sole_ModuleIdentifier=="铺层信息--铺层库优化":
-            location = ProfileDataProcessing("testCase", "LaminateOptimize").config_File()
-        elif sole_ModuleIdentifier=="铺层信息--铺层数据库制作工具":
-            location = ProfileDataProcessing("testCase", "LaminatedataPopup").config_File()
-        elif sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义":
-            location = ProfileDataProcessing("testCase", "SizeDefinition_1D").config_File()
-        elif sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义":
-            location = ProfileDataProcessing("testCase", "SizeDefinition_2D").config_File()
-        elif sole_ModuleIdentifier=="尺寸信息--一维单元尺寸定义（模板）":
-            location = ProfileDataProcessing("testCase", "sizeInfo_1DXls").config_File()
-        elif sole_ModuleIdentifier=="尺寸信息--二维单元尺寸定义（模板）":
-            location = ProfileDataProcessing("testCase", "sizeInfo_2DXls").config_File()
-        elif sole_ModuleIdentifier == "求解计算--求解计算":
-            location = ProfileDataProcessing("testCase", "solveCalculation").config_File()
-        elif sole_ModuleIdentifier == "载荷信息--载荷数据库制作工具":
-            location = ProfileDataProcessing("testCase", "loaddatabase_popUp").config_File()
-        elif sole_ModuleIdentifier == "载荷信息--编辑工况":
-            location = ProfileDataProcessing("testCase", "editWorkingCondition").config_File()
-        elif sole_ModuleIdentifier == "材料信息--定义复合材料参数":
-            location = ProfileDataProcessing("testCase", "compositeMaterial").config_File()
-        elif sole_ModuleIdentifier == "材料信息--定义金属材料参数":
-            location = ProfileDataProcessing("testCase", "definitionMetalMaterial").config_File()
-        elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核1D":
-             location= ProfileDataProcessing("testCase", "CompoundStrengthCheck_1D").config_File()
-        elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核2D":
-            location = ProfileDataProcessing("testCase", "CompoundStrengthCheck_2D").config_File()
-        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件信息输入":
-            location = ProfileDataProcessing("testCase", "fastener_parameterInput").config_File()
-        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件参数设置":
-            location = ProfileDataProcessing("testCase", "fastener_parameterSetting").config_File()
-        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件强度校核":
-            location = ProfileDataProcessing("testCase", "fastener_intensityCheck").config_File()
-        elif sole_ModuleIdentifier == "紧固件优化--紧固件参数优化":
-            location = ProfileDataProcessing("testCase", "fastener_parOptimization").config_File()
-        elif sole_ModuleIdentifier == "金属结构强度校核--金属一维单元强度校核":
-            location = ProfileDataProcessing("testCase", "metal_intensityCheck1D").config_File()
-        elif sole_ModuleIdentifier == "金属结构强度校核--金属二维单元强度校核":
-            location = ProfileDataProcessing("testCase", "metal_intensityCheck2D").config_File()
-        elif sole_ModuleIdentifier == "金属结构强度校核--金属加筋板强度校核":
-            location = ProfileDataProcessing("testCase", "metal_stiffenedPlate").config_File()
-        elif sole_ModuleIdentifier == "金属结构强度校核--金属曲板后驱曲强度校核":
-            location = ProfileDataProcessing("testCase", "metal_rearGuard").config_File()
+        if moduleName=="Aerocheck":
+            if sole_ModuleIdentifier=="程序初始化用例":
+                location = ProfileDataProcessing("testCase", "initializeUsecase").config_File()
+            elif sole_ModuleIdentifier=="铺层信息--铺层库优化":
+                location = ProfileDataProcessing("testCase", "LaminateOptimize").config_File()
+            elif sole_ModuleIdentifier=="铺层信息--铺层数据库制作工具":
+                location = ProfileDataProcessing("testCase", "LaminatedataPopup").config_File()
+            elif sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义":
+                location = ProfileDataProcessing("testCase", "SizeDefinition_1D").config_File()
+            elif sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义":
+                location = ProfileDataProcessing("testCase", "SizeDefinition_2D").config_File()
+            elif sole_ModuleIdentifier=="尺寸信息--一维单元尺寸定义（模板）":
+                location = ProfileDataProcessing("testCase", "sizeInfo_1DXls").config_File()
+            elif sole_ModuleIdentifier=="尺寸信息--二维单元尺寸定义（模板）":
+                location = ProfileDataProcessing("testCase", "sizeInfo_2DXls").config_File()
+            elif sole_ModuleIdentifier == "求解计算--求解计算":
+                location = ProfileDataProcessing("testCase", "solveCalculation").config_File()
+            elif sole_ModuleIdentifier == "载荷信息--载荷数据库制作工具":
+                location = ProfileDataProcessing("testCase", "loaddatabase_popUp").config_File()
+            elif sole_ModuleIdentifier == "载荷信息--编辑工况":
+                location = ProfileDataProcessing("testCase", "editWorkingCondition").config_File()
+            elif sole_ModuleIdentifier == "材料信息--定义复合材料参数":
+                location = ProfileDataProcessing("testCase", "compositeMaterial").config_File()
+            elif sole_ModuleIdentifier == "材料信息--定义金属材料参数":
+                location = ProfileDataProcessing("testCase", "definitionMetalMaterial").config_File()
+            elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核1D":
+                 location= ProfileDataProcessing("testCase", "CompoundStrengthCheck_1D").config_File()
+            elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核2D":
+                location = ProfileDataProcessing("testCase", "CompoundStrengthCheck_2D").config_File()
+            elif sole_ModuleIdentifier == "紧固件强度校核--紧固件信息输入":
+                location = ProfileDataProcessing("testCase", "fastener_parameterInput").config_File()
+            elif sole_ModuleIdentifier == "紧固件强度校核--紧固件参数设置":
+                location = ProfileDataProcessing("testCase", "fastener_parameterSetting").config_File()
+            elif sole_ModuleIdentifier == "紧固件强度校核--紧固件强度校核":
+                location = ProfileDataProcessing("testCase", "fastener_intensityCheck").config_File()
+            elif sole_ModuleIdentifier == "紧固件优化--紧固件参数优化":
+                location = ProfileDataProcessing("testCase", "fastener_parOptimization").config_File()
+            elif sole_ModuleIdentifier == "金属结构强度校核--金属一维单元强度校核":
+                location = ProfileDataProcessing("testCase", "metal_intensityCheck1D").config_File()
+            elif sole_ModuleIdentifier == "金属结构强度校核--金属二维单元强度校核":
+                location = ProfileDataProcessing("testCase", "metal_intensityCheck2D").config_File()
+            elif sole_ModuleIdentifier == "金属结构强度校核--金属加筋板强度校核":
+                location = ProfileDataProcessing("testCase", "metal_stiffenedPlate").config_File()
+            elif sole_ModuleIdentifier == "金属结构强度校核--金属曲板后驱曲强度校核":
+                location = ProfileDataProcessing("testCase", "metal_rearGuard").config_File()
+            else:
+                print("没有地址:",sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
+                os._exit(0)
+        elif moduleName=="Aerocheck":
+            pass
         else:
-            print("没有地址:",sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
+            print("没有找到执行模块的用例:",moduleName, __file__, sys._getframe().f_lineno)
             os._exit(0)
         if list_tableName:
             for tableName in list_tableName:
@@ -751,7 +802,7 @@ class UseCase_parameterization:
         return self.list_dict_site
 
 
-    def parameterization_data(self,list_dicti_argument):
+    def parameterization_data(self,moduleName,list_dicti_argument):
         """
          用例参数化
         :return:
@@ -759,7 +810,7 @@ class UseCase_parameterization:
         for dicti_argument in list_dicti_argument :
             for  sole_ModuleIdentifier, tableName in dicti_argument.items():
                 # 获取读取电子表格的路径和相关参数
-                list_dict=UseCase_parameterization().parameterization_location(sole_ModuleIdentifier,tableName)
+                list_dict=UseCase_parameterization().parameterization_location(moduleName,sole_ModuleIdentifier,tableName)
                 for site in list_dict:
                     dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
                     ar_testdicts = FormatConversion().RemoveSubscript(dicts)
