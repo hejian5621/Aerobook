@@ -1,18 +1,23 @@
 # 尺寸信息--1D2D尺寸定义
-import unittest,time,datetime
+import unittest,time,datetime,sys
 from assertpy import assert_that
 from BeautifulReport import BeautifulReport
 from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import UseCase_step
 from ddt import ddt,data
 from tool import Check_winControl
-from utils.otherMethods.unittest_start_finish import Initializing,finish_clear
+from utils.otherMethods.unittest_start_finish import Initializing,finish_clear,handlingMethod
 from utils.otherMethods.Get_TestCase import getTestCase
 
+
 # 获取测试用例
-moduleName="Aerocheck"  # 测试模块
+moduleName="Aerobook-Aerocheck"  # 测试模块
 list_dict_site,list_testPoint = getTestCase(moduleName).console()  # 获取测试用例
+print("\033[5;33m获取的测试用例：\033[0m",list_dict_site, __file__, sys._getframe().f_lineno)
+print("")
 # 检查系统是否正在被测模块，如果不在，就点击进入
 Check_winControl(moduleName).examine_LocatedModule()
+# 在执行全部的用例开始先检查所有不应该出现的弹窗是否关闭
+handlingMethod().Loop_closeWindow("全部模块", moduleName)
 
 
 
@@ -31,7 +36,7 @@ class  test_UseCaseSet_Aerocheck(unittest.TestCase):
         global Use_attribute  # 操作控件的属性方法
         UseSet_n = None
         Use_attribute = None
-        useCase_sum = 0
+        useCase_sum = -1
         module_n = 1
         self.actual_result = None  # 用例实际值
         self.expect_result=None    # 用例预期值
@@ -62,19 +67,21 @@ class  test_UseCaseSet_Aerocheck(unittest.TestCase):
         global  useCase_sum   # 全局参数，记录执行用例的次数
         global  module_n      # 全局参数，获取执行没一个模块的第一条
         global UseCase_Number
-
+        useCase_sum = useCase_sum + 1
         self.dict_testCase=list_dict_site[useCase_sum]   # 取出单个的测试用例
-        print("moduleName:",moduleName)
+        UseCase_Number = self.dict_testCase["用例编号"]
+        tested_Module = self.dict_testCase["模块唯一标识"]
+        print("")
+        print("\033[5;33m$$$《“%r”模块开始测试，执行用例：%r》\033[0m" % (tested_Module, UseCase_Number), __file__, sys._getframe().f_lineno)
+        print("")
+        print("")
         self.dict_testCase["测试模块"]=moduleName
         dictSet = {"全局参数": module_n, "全局用例集名称": UseSet_n,"控件属性已经操作方法": Use_attribute}
         module_n,UseSet_n, self.ProjectPath, self.old_content, Use_attribute = Initializing().controller(dictSet,self.dict_testCase)
         self.dict_testCase["信息窗口之前的文本"]=self.old_content
         self.dict_testCase["被测程序文件地址"] = self.ProjectPath
         self.dict_testCase["用例步骤执行前时间"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        UseCase_Number=self.dict_testCase["用例编号"]
-        tested_Module = self.dict_testCase["模块唯一标识"]
-        print("\047[1;33m $$$《模块“%r”开始测试，执行用例：%r》$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\047[0m"%(tested_Module,UseCase_Number))
-        useCase_sum = useCase_sum + 1
+
 
 
     """用例执行完成收尾操作"""
@@ -82,14 +89,14 @@ class  test_UseCaseSet_Aerocheck(unittest.TestCase):
     def tearDown(self):
         """用例执行完成收尾操作"""
         global UseCase_Number
-        print("用例执行完成开始执行收尾操作")
-        print("1111")
         self.expect_result, self.actual_result = finish_clear().controller(self.dict_testCase)  # 当每条用例执行完毕，执行收尾工作
         """实际值跟预期值对比（文本对比）"""
-        print("实际值跟预期值对比")
+        print("\033[0;32;34m实际值跟预期值对比\033[0m", __file__, sys._getframe().f_lineno)
         assert_that(self.expect_result).is_equal_to(self.actual_result)  # 断言实际值个预期值
         """ 收尾，如果有警告弹框就关掉"""
-        print("\047[1;33m $$$《执行用例“%r”执行结束》$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\047[0m"%UseCase_Number)
+        print("\033[0;31m$$$《执行用例“%r”执行结束》$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\033[0m" % UseCase_Number)
+        print(" ")
+        print(" ")
         print(" ")
 
 

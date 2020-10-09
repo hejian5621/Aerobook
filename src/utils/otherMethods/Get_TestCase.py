@@ -1,6 +1,6 @@
 # 获取测试用例
 
-
+from tool import MyException
 import  os,sys
 from utils.commonality.tool import UseCase_parameterization
 
@@ -18,15 +18,14 @@ class getTestCase:
         控制读取Aerocheck、Aerocheck等模块用例
         :return:
         """
-        if self.moduleName=="Aerocheck":
+        if self.moduleName=="Aerobook-Aerocheck":
             self.list_dict_site, self.list_testPoint=getTestCase(self.moduleName).Aerocheck_testCase()
-        elif self.moduleName=="Fiberbook":
+        elif self.moduleName=="aerobook-Fiberbook":
             pass
         elif self.moduleName=="Fembook":
             pass
         else:
-            print("没有找到执行模块的用例：",self.moduleName, __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("没有找到执行模块的用例：%r"%self.moduleName)
         return self.list_dict_site, self.list_testPoint
 
 
@@ -60,18 +59,19 @@ class getTestCase:
         #     {"金属结构强度校核--金属加筋板强度校核": ["其他"]}
         # ]
 
-        list_dicti_argument=[
-            {"铺层信息--铺层库优化": ["测试一"]},          {"铺层信息--铺层数据库制作工具": ["测试一"]},              {"尺寸信息--一维单元尺寸定义": ["测试一"]},
-            {"尺寸信息--二维单元尺寸定义": ["测试一"]},     {"尺寸信息--一维单元尺寸定义（模板）": ["测试一"]},         {"尺寸信息--二维单元尺寸定义（模板）": ["测试一"]},
-            {"求解计算--求解计算": ["测试一"]},            {"载荷信息--载荷数据库制作工具": ["测试一"]},              {"载荷信息--编辑工况": ["测试一"]},
-            {"材料信息--定义复合材料参数": ["其他"]},       {"复材结构强度校核--复合材料强度校核1D": ["测试一"]},      {"复材结构强度校核--复合材料强度校核2D": ["测试一"]},
-            {"紧固件强度校核--紧固件信息输入": ["测试一"]},  {"紧固件强度校核--紧固件参数设置": ["测试一"]},           {"紧固件强度校核--紧固件强度校核": ["测试一"]},
-            {"紧固件优化--紧固件参数优化": ["测试一"]},     {"材料信息--定义金属材料参数": ["测试一"]},               {"金属结构强度校核--金属一维单元强度校核":["测试一"]},
-            {"金属结构强度校核--金属二维单元强度校核": ["测试一"]},    {"金属结构强度校核--金属加筋板强度校核": ["测试一"]}  ]
+        # list_dicti_argument=[
+        #     {"铺层信息--铺层库优化": ["测试一"]},          {"铺层信息--铺层数据库制作工具": ["测试一"]},              {"尺寸信息--一维单元尺寸定义": ["测试一"]},
+        #     {"尺寸信息--二维单元尺寸定义": ["测试一"]},     {"尺寸信息--一维单元尺寸定义（模板）": ["测试一"]},         {"尺寸信息--二维单元尺寸定义（模板）": ["测试一"]},
+        #     {"求解计算--求解计算": ["测试一"]},            {"载荷信息--载荷数据库制作工具": ["测试一"]},              {"载荷信息--编辑工况": ["测试一"]},
+        #     {"材料信息--定义复合材料参数": ["其他"]},       {"复材结构强度校核--复合材料强度校核1D": ["测试一"]},      {"复材结构强度校核--复合材料强度校核2D": ["测试一"]},
+        #     {"紧固件强度校核--紧固件信息输入": ["测试一"]},  {"紧固件强度校核--紧固件参数设置": ["测试一"]},           {"紧固件强度校核--紧固件强度校核": ["测试一"]},
+        #     {"紧固件优化--紧固件参数优化": ["测试一"]},     {"材料信息--定义金属材料参数": ["测试一"]},               {"金属结构强度校核--金属一维单元强度校核":["测试一"]},
+        #     {"金属结构强度校核--金属二维单元强度校核": ["测试一"]},    {"金属结构强度校核--金属加筋板强度校核": ["测试一"]}  ]
 
-        # list_dicti_argument = [
-        #     {"材料信息--定义复合材料参数": ["测试"]},
-        # ]
+        list_dicti_argument = [
+            {"铺层信息--铺层数据库制作工具": ["测试一"]},
+            {"尺寸信息--一维单元尺寸定义": ["测试一"]}
+        ]
         # 读取测试用例
         self.list_dict_site, self.list_testPoint = UseCase_parameterization().parameterization_data(self.moduleName,list_dicti_argument)
         return self.list_dict_site, self.list_testPoint

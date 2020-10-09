@@ -8,7 +8,7 @@ from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from src.utils.OperatingControls.moduleControlOperation import OperatingControls
 from OperatingControls.enterModule import GetWindowInstance
 from tool import folderFile_dispose
-
+from tool import MyException
 
 
 
@@ -33,9 +33,11 @@ class GetActual_Value:
         if result==1:
             pass
         else:
+
             Message_type = self.property["预期值信息类型"]
             UseCase_Number = self.property["用例编号"]
-            print("开始获取实际值,途径：", Message_type)
+            print("\033[0;32;35m《开始获取实际值，获取的途径：%r》\033[0m" % Message_type, __file__, sys._getframe().f_lineno)
+            print("")
             # 判断是不是有多个检查类型
             if "；" in Message_type:   # 如果预期值信息类型值中有“；”，就说明有多个检查类型
                self.list_Message_type = Message_type.split("；")
@@ -68,10 +70,14 @@ class GetActual_Value:
                     # 列表转化成字符串,强行转化
                     self.dicti_actual=str(self.dicti_actual)
                 else:
-                    print("该“%r”测试用例没有说实际值的获取途径" % UseCase_Number, __file__, sys._getframe().f_lineno)
-                    os._exit(0)
+                    raise MyException("该%r测试用例没有说实际值的获取途径" % UseCase_Number)
                 # 把获取的单个检查类型放在列表嵌套字典中
                 self.actual_dicti_type[Message_type]=self.dicti_actual
+            print("\033[0;34m获取到的实际值：\033[0m",self.actual_dicti_type)
+            print("")
+            print("\033[0;32;35m{{获取实际值完毕}}\033[0;32;35m", __file__, sys._getframe().f_lineno)
+            print("")
+            print(" ")
         return self.actual_dicti_type
 
 
@@ -159,16 +165,11 @@ class  localControl:
                 if len(list_Message_type) == 5:
                     pass
                 else:
-                    print("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段虽然没有为空,也转化成了列表，但是属性不足：",
-                          list_Message_type, __file__, sys._getframe().f_lineno)
-                    os._exit(0)
+                    raise MyException("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段虽然没有为空,也转化成了列表，但是属性不足值：%r"% list_Message_type)
             else:
-                print("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段虽然没有为空但是，由于没有“；”特殊字符"
-                      "，所有无法转化成列表", list_Message_type, __file__, sys._getframe().f_lineno)
-                os._exit(0)
+                raise MyException("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段虽然没有为空但是，由于没有“；”特殊字符“，所有无法转化成列表,值：%r"% list_Message_type)
         else:
-            print("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段不能为空", __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("当获取实际值，使用“控件文本”获取文本时，“预期值控件标识属性”字段不能为空")
         # 如果需要获取实际值的控件所在窗口等于步骤操作的窗口，就用之前的窗口
         if property["操作窗口标题"] == list_Message_type[0] and property["操作子窗口标题"] == list_Message_type[1]:
             pass
@@ -299,6 +300,8 @@ class Information_Win:
         通过获取HTML文件里的文本，来获取信息窗口的实际值
         :return:
         """
+        print("\033[0;32;34m获取信息窗口数据\033[0m", __file__, sys._getframe().f_lineno)
+        print("")
         # 取出HTML文本，只留下有中文的行，在存入TXT文件中
         today = str(datetime.date.today())  # datetime.date类型当前日期
         Name = "Aerocheck_prjLog_" + today + ".html"

@@ -29,7 +29,9 @@ class Initializing:
         :param dict_testCase:
         :return:
         """
-        title=ProfileDataProcessing("commonality", "AerobookEdition").config_File()
+        print("\033[0;32;35m《开始进行执行用例前的准备工作》\033[0m", __file__, sys._getframe().f_lineno)
+        print("")
+        title=ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 读取配置文件信息
         WindowTop(title).console()    # 把被测系统页面置顶
         number=dictSet["全局参数"]
         global_UseCase_Name = dictSet["全局用例集名称"]
@@ -37,7 +39,7 @@ class Initializing:
         self.testCase = dictSet["控件属性已经操作方法"]
         moduleName=dict_testCase["测试模块"]
         # 用例运行前首先检查有没有弹窗没有关闭
-        handlingMethod().Loop_closeWindow(sole_ModuleIdentifier)
+        handlingMethod().Loop_closeWindow(global_UseCase_Name,moduleName)
         # 在运行每一个用例集之前初始化全局变量参数
         number,global_Name = handlingMethod().initialize_globalVariable(number, global_UseCase_Name, sole_ModuleIdentifier)
         # 获取项目所在路径
@@ -51,9 +53,16 @@ class Initializing:
             tableName=["控件属性已经操作方法"]
             site = UseCase_parameterization().parameterization_location(moduleName,sole_ModuleIdentifier, tableName)
             self.testCase = read_excel(site[0]).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
+            print("\033[0;32;34m获取到的Excel文档中控件属性和操作方法：\033[0m",self.testCase, __file__, sys._getframe().f_lineno)
+            print(" ")
             # 在模块开始前数据清理
             if sole_ModuleIdentifier=="载荷信息--编辑工况":
+                print("\033[0;32;34m清除包络工况：\033[0m", self.testCase, __file__, sys._getframe().f_lineno)
+                print(" ")
                 execute_useCase_initialize().clear_editWorkingCondition()    # 清除所有的包络工况
+        print("\033[0;32;35m{{准备工作准备完毕}}\033[0;32;35m", __file__, sys._getframe().f_lineno)
+        print("")
+        print(" ")
         return number,global_Name,ProjectPath,old_content,self.testCase
 
 
@@ -70,17 +79,26 @@ class finish_clear:
         :param dictSet:字典类型的数据集
         :return: 返回格式规范化的实际值和预期值
         """
+        print("\033[0;32;35m《开始进行用例的收尾工作》\033[0m", __file__, sys._getframe().f_lineno)
+        print("")
         actual_result = dictSet["实际值"]
         sole_ModuleIdentifier = dictSet["模块唯一标识"]
+        moduleName=dictSet["测试模块"]
         """在关闭弹窗前首先截图，用于如果断言失败后，在测试报告上显示测试失败的截图"""
-        actuals = pictureProcessing(None). BeingMeasured_system_screenshot()
+        actuals = pictureProcessing(None).BeingMeasured_system_screenshot()
         """ 收尾，如果有警告弹框就关掉"""
-        handlingMethod().Loop_closeWindow(sole_ModuleIdentifier)
+        handlingMethod().Loop_closeWindow(sole_ModuleIdentifier,moduleName)
         """处理预期结果和实际结果，用以实际结果和预期结果文本对比"""
+        print("\033[0;34m格式化实际值和预期值\033[0m", __file__, sys._getframe().f_lineno)
+        print("")
         expect_result,location = FormatConversion().expect_dataProcessing(dictSet, actual_result)  # 格式化实际值
-        print("预期值：", expect_result)
+        print("\033[0;34m预期值：\033[0m", expect_result)
         actual_result = FormatConversion().Actual_dataProcessing(dictSet,actual_result,location)  # 格式化实际值
-        print("实际值：", actual_result)
+        print("\033[0;34m实际值：\033[0m", actual_result)
+        print("")
+        print("\033[0;32;35m用例收尾工作完成\033[5;33m", __file__, sys._getframe().f_lineno)
+        print("")
+        print(" ")
         return  expect_result,actual_result
 
 
@@ -92,7 +110,8 @@ class handlingMethod:
 
 
     def __init__(self):
-        pass
+        self.list_CloseWindows=None
+
 
     def initialize_globalVariable(self, reset_arg, global_UseCase_Name, real_UseCase_Name):
         """
@@ -107,65 +126,43 @@ class handlingMethod:
         else:
             global_UseCase_Name = real_UseCase_Name
             real_arg = 1
+        print("\033[0;32;34m初始化全局变量，全局变量参数：%r，全局变量模块名称：%r\033[0m" % (real_arg, global_UseCase_Name), __file__, sys._getframe().f_lineno)
+        print("")
         return real_arg, global_UseCase_Name
 
 
-    def Loop_closeWindow(self,sole_ModuleIdentifier):
+    def Loop_closeWindow(self,sole_ModuleIdentifier,moduleName):
         """
         循环关闭窗口
         根据被测模块，检查特定模块的特定窗口
         :return:
         """
-        list_CloseWindows=None
-        if sole_ModuleIdentifier=="铺层信息--铺层库优化":
-            list_CloseWindows = [["警告"],["选择输出路径"]]
-        elif sole_ModuleIdentifier=="铺层信息--铺层数据库制作工具":
-            list_CloseWindows = [["警告"], ["选择Excel铺层文件"], ["选择铺层数据库保存路径"],["确认另存为"],
-                                 ["铺层数据库制作工具"]]
-        elif sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义":
-            list_CloseWindows = [["警告"],["选择铺层库信息"]]
-        elif sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义":
-            list_CloseWindows = [["警告"],["选择铺层库信息"]]
-        elif sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义（模板）":
-            list_CloseWindows = [["警告"], ["指定Excel模板文件路径"]]
-        elif sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义（模板）":
-            list_CloseWindows = [["警告"], ["指定Excel模板文件路径"]]
-        elif sole_ModuleIdentifier == "求解计算--求解计算":
-            list_CloseWindows = [["警告"], ["指定bdf文件保存路径"], ["指定载荷数据库保存路径"]]
-        elif sole_ModuleIdentifier == "载荷信息--载荷数据库制作工具":
-            list_CloseWindows = [["警告"], ["选择f06文件"], ["选择载荷数据库保存路径"],["确认另存为"],
-                                 ["载荷数据库制作工具"]]
-        elif sole_ModuleIdentifier == "载荷信息--编辑工况":
-            list_CloseWindows = [["警告"], ["编辑工况"]]
-        elif sole_ModuleIdentifier == "材料信息--定义复合材料参数":
-            list_CloseWindows = [["警告", "OK"], ["选择材料许用值曲线", "关闭"], ["编辑材料许用值曲线", "关闭"]]
-        elif sole_ModuleIdentifier == "材料信息--定义金属材料参数":
-            list_CloseWindows = [["警告", "OK"]]
-        elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核1D":
-            list_CloseWindows = [["警告", "OK"], ["选择校核工况", "关闭"]]
-        elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核2D":
-            list_CloseWindows = [["警告", "OK"], ["选择校核工况", "关闭"]]
-        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件信息输入":
-            list_CloseWindows = [["警告", "OK"]]
-        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件参数设置":
-            list_CloseWindows = [["警告", "OK"], ["选择连接件参数Excel文件", "打开"]]
-        elif sole_ModuleIdentifier == "紧固件强度校核--紧固件强度校核":
-            list_CloseWindows = [["警告", "OK"], ["选择优化工况", "关闭"]]
-        elif sole_ModuleIdentifier == "紧固件优化--紧固件参数优化":
-            list_CloseWindows = [["警告", "OK"], ["选择优化工况", "关闭"],["错误"]]
-        elif sole_ModuleIdentifier == "金属结构强度校核--金属一维单元强度校核":
-            list_CloseWindows = [["警告", "OK"], ["选择校核工况", "关闭"]]
-        elif sole_ModuleIdentifier == "金属结构强度校核--金属二维单元强度校核":
-            list_CloseWindows = [["警告", "OK"], ["选择校核工况", "关闭"]]
-        elif sole_ModuleIdentifier == "金属结构强度校核--金属加筋板强度校核":
-            list_CloseWindows = [["警告", "OK"], ["选择校核工况", "关闭"]]
-        elif sole_ModuleIdentifier == "金属结构强度校核--金属曲板后驱曲强度校核":
-            list_CloseWindows = [["警告", "OK"], ["选择校核工况", "关闭"]]
+        site = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\自动化测试公共属性.xlsx", "表单名称": moduleName,
+                 "初始行": 1,"初始列":1}
+        dicts_title = read_excel(site).readExcel_common()  # 从Excel表格中取出要关闭窗口的标题
+        # 根据模块名称取出对应模块应该检查的弹窗标题
+        if sole_ModuleIdentifier in dicts_title:
+            CloseWindows=dicts_title[sole_ModuleIdentifier]
+            if "；" in CloseWindows:    # 如果字典的值里有“；”，就转化成列表
+                self.list_CloseWindows = CloseWindows.split("；")
+            else:  # 如果字典的值里没有“；”，就强行转化成列表
+                self.list_CloseWindows.append(CloseWindows)
+            print("\033[0;32;34m检查%r模块，弹窗是否关闭,需要检查的弹窗标题：%r\033[0m" % (sole_ModuleIdentifier, self.list_CloseWindows), __file__, sys._getframe().f_lineno)
+            for title in self.list_CloseWindows:  # 依次取出预期关闭的弹窗的标题
+                Check_winControl(title).Force_close_popUp()  # 关闭弹窗
         else:
-            list_CloseWindows = [["警告", "OK"], ["选择校核工况", "关闭"]]
-        for CloseWindows in list_CloseWindows:
-            title = CloseWindows[0]
-            Check_winControl(title).Force_close_popUp()
+            if "全部模块" in  dicts_title:  # 如果没有找到对应模块的关闭窗口，就全部找一遍
+                CloseWindows = dicts_title["全部模块"]
+                if "；" in CloseWindows:  # 如果字典的值里有“；”，就转化成列表
+                    self.list_CloseWindows = CloseWindows.split("；")
+                else:  # 如果字典的值里没有“；”，就强行转化成列表
+                    self.list_CloseWindows.append(CloseWindows)
+                print("\033[0;32;34m因为该被测模块名没有找到对应关闭窗口的名称，所以全部关闭一遍，被测模块名称：%r\033[0m" % sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
+                for title in self.list_CloseWindows:  # 依次取出预期关闭的弹窗的标题
+                    Check_winControl(title).Force_close_popUp()  # 关闭弹窗
+        print("\033[0;32;34m%r模块弹窗检查完毕\033[0m" % sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
+        print("")
+
 
 
 

@@ -26,7 +26,7 @@ class read_excel():
         else:
             print("传入的电子表格地址、表单名称、初始行数和初始列数不能为空，表格地址：%r；表单名称：%r；初始行数：%r；初始列数：%r" % (
                 detailedAddress, self.menu_table_name, self.onset,self.oncol),__file__, sys._getframe().f_lineno)
-            os._exit(0)
+            sys.exit(0)
 
 
 
@@ -71,15 +71,28 @@ class read_excel():
         return self.list_dicti_dicti_Excel
 
 
-
+    def readExcel_common(self):
+        """
+        读取Excel表格内容，读取控件属性
+        :return:数据类型，字典嵌套字典
+        """
+        data = xlrd.open_workbook(self.CompleteAddress)  # 打开需要读取的电子表格
+        table = data.sheet_by_name(self.menu_table_name)  # 根据表单名称获取对应表单的数据
+        colns = table.ncols  # 获取总列数
+        list_row_one = table.row_values(self.onset - 1)  # 取出初始行的数据
+        del list_row_one[0]  # 删除第一列的数据
+        list_row_two = table.row_values(self.onset)  # 取出初始行开始第二行的数据
+        del list_row_two[0]  # 删除第一列的数据
+        dicti_Excel = dict(zip(list_row_one,list_row_two))  # 标题列表跟值列表合并成字典
+        return dicti_Excel
 
 
 
 # #
-# dict1 = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\铺层信息\自动化铺层库优化.xlsx", "表单名称": "控件属性已经操作方法",
+# dict1 = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\自动化测试公共属性.xlsx", "表单名称": "Aerobook-Aerocheck",
 #          "初始行": 1,"初始列":1}
-# dict2=read_excel(dict1).readExcel_ControlProperties()
+# dict2=read_excel(dict1).readExcel_common()
 # print("dict2:",dict2)
-#
+# #
 #
 

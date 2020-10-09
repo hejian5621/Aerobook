@@ -7,6 +7,9 @@ from pywinauto import mouse
 from pykeyboard import PyKeyboard
 from pywinauto  import  findwindows
 from OperatingControls.enterModule import BeingMeasured_popupWin
+from tool import MyException
+
+
 
 
 class  ControlOperationSuite:
@@ -43,7 +46,7 @@ class  ControlOperationSuite:
         except findwindows.ElementNotFoundError:
             import sys, os
             print("没有找到“%r“窗口"%Popup_Title, __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("没有找到“%r“窗口"%Popup_Title)
         else:
             # 切换控件
             dlg_spec1 = self.dlg_spec.child_window(class_name="WorkerW")
@@ -89,9 +92,7 @@ class  ControlOperationSuite:
             self.dlg_spec = app.window(title="项目设置")
             # app.window(title="项目设置").maximize()  # 项目弹窗最大化
         except findwindows.ElementNotFoundError:
-            import sys, os
-            print("没有找到“项目设置“窗口", __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("没有找到“项目设置“窗口")
         else:
             x = int(ProfileDataProcessing("commonality", "coord1_x").config_File()) # 从配置文件获取鼠标点击坐标
             y = int(ProfileDataProcessing("commonality", "coord1_y").config_File())  # 从配置文件获取鼠标点击坐标

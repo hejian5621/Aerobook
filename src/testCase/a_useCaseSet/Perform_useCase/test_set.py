@@ -5,7 +5,7 @@ from  BeautifulReport import BeautifulReport
 
 from config.relative_location import  path
 from demo.testReport_screenshot.testReport_screenshot1 import save
-
+from tool import MyException
 
 # 铺层库优化工作栏
 from ddt import ddt,data
@@ -75,7 +75,7 @@ class Test_test(unittest.TestCase):
 
 
         # @BeautifulReport.add_test_img(str(number1))
-        @BeautifulReport.add_test_img(number11)
+        # @BeautifulReport.add_test_img(number11)
         def tearDown(self):
             """用例执行完后收尾
                            1、首先把复制的文件夹删除
@@ -85,6 +85,9 @@ class Test_test(unittest.TestCase):
             print("调用")
 
             Test_test().save_img(number11)
+
+
+
             self.assertEqual("保存设置", "保存设")
             # 截图需用到的装饰器，在用例里面调用前面定义的save_img方法
             print("测试结束")
@@ -97,6 +100,12 @@ class Test_test(unittest.TestCase):
         def test_case_1(self,s):  # 用例错误截图示例
             time.sleep(1)
             print("s:", s)
+            a=s["测试点"]
+            if a=="1":
+                print("测试成功", __file__, sys._getframe().f_lineno)
+                raise MyException("没有找到弹窗")
+            else:
+                print("测试失败")
 
 
 

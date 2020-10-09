@@ -3,7 +3,7 @@ import time,sys,os
 from pywinauto.application import Application
 from pywinauto import findwindows
 from config.configurationFile import ProfileDataProcessing
-
+from tool import MyException
 
 """进入被测弹窗"""
 class BeingMeasured_popupWin:
@@ -30,14 +30,12 @@ class BeingMeasured_popupWin:
             except findwindows.ElementNotFoundError as err:   # 如果没有找到弹窗继续循环找
                 time.sleep(0.1)
             except Exception :
-                print("没有找到”%r“弹窗"%self.window_title, __file__, sys._getframe().f_lineno)
-                os._exit(0)
+                raise MyException("没有找到”%r“弹窗"%self.window_title)
             else:
                 break
             self.CircleInitial = self.CircleInitial + 1
             if self.CircleInitial == (self.cycleIndex + 1):
-                print("没有找到”%r“弹窗"%self.window_title, __file__, sys._getframe().f_lineno)
-                os._exit(0)
+                raise MyException("没有找到”%r“弹窗" % self.window_title)
         return self.popupWin
 
 
@@ -241,6 +239,8 @@ class GetWindowInstance:
         获取操作控件的各个窗口
         :return:
         """
+        print("\033[0;32;35m《开始获取“%r”模块窗口标识》\033[0m"%self.ModuMarking, __file__, sys._getframe().f_lineno)
+        print("")
         from src.utils.otherMethods.initialize import pywin_openAProgram
         # 连接到被测程序，并且通过菜单栏打开被测模块
         aero_window, son_window = pywin_openAProgram().menuOpen(self.property)
@@ -291,6 +291,10 @@ class GetWindowInstance:
             specialWay_OperatingControls(self.testWinTitle).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
             self.win_one,self.win_two = BeingMeasured_work(son_window).workField_fastenerSEO(self.testWinTitle_son)
         else:
-            print("没有找到需要切换的窗口：%r" % self.ModuMarking, __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("没有找到需要切换的窗口：%r" % self.ModuMarking)
+        print("\033[0;34m窗口标识一：%r，窗口标识二：%r，窗口标识三：%r，窗口标识四：%r"%(self.win_one,self.win_two,self.win_three,self.win_four), __file__, sys._getframe().f_lineno)
+        print("")
+        print("\033[0;32;35m{{窗口标识获取完毕}}\033[0m", __file__, sys._getframe().f_lineno)
+        print("")
+        print(" ")
         return self.win_one,self.win_two,self.win_three,self.win_four

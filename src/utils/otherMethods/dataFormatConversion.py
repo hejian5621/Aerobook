@@ -3,6 +3,8 @@
 import os,sys
 from config.relative_location import path
 
+
+
 class FormatConversion:
     """数据处理"""
 
@@ -91,9 +93,8 @@ class FormatConversion:
         elif type(messageType) == str and type(expect_result) == str:
             dict_expect ={messageType:expect_result}
         else:
-            print("预期值信息类型和预期结果文本信息不匹配,预期值信息类型:%r;预期结果文本信息：%r"%(
-                type(messageType),type(expect_result)), __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            from tool import MyException
+            raise MyException("预期值信息类型和预期结果文本信息不匹配,预期值信息类型:%r;预期结果文本信息：%r"%(type(messageType),type(expect_result)))
         if   "控件截图" in dict_expect:  # 控件截图如果在“预期值信息类型”里
             # 获取“预期值信息类型”中“控件截图”详细的地址
             location=dict_expect["控件截图"]

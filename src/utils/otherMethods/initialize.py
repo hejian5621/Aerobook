@@ -99,7 +99,7 @@ class pywin_openAProgram:
         son_window = dlg_spec.child_window(title=self.aerocheck_title, class_name="wxWindowNR")
         MenuOptions = testdicts["所在模块"]  # 取出菜单栏操作路径
         son_window.menu_select(MenuOptions) # 点击菜单选项
-        print("通过菜单栏正常打开被测模块")
+        print("\033[0;32;34m通过菜单栏正常打开被测模块\033[0m")
         print(" ")
         return aero_window,son_window
 

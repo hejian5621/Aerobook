@@ -12,7 +12,6 @@ from pathlib import Path
 from src.utils.commonality.ExcelFile import read_excel
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from pywinauto import  findwindows
-from src.utils.otherMethods.initialize import pywin_openAProgram,UIA_link
 
 
 
@@ -122,9 +121,11 @@ class pictureProcessing:
         :return:
         """
         from src.utils.otherMethods.initialize import pywin_openAProgram
+        print("\033[0;34m对被测系统进行截图\033[0m", __file__, sys._getframe().f_lineno)
         aero_window = pywin_openAProgram().entrance_subroutine_title()
-        location = r"F:\Aerobook\src\testCase\a_useCaseSet\Aerockeck\img\test_1.png"
+        location = r"F:\Aerobook\src\testCase\a_useCaseSet\Aerockeck\img\test_1.png"   # 截图的保存位置
         aero_window.capture_as_image().save(location)  # 获取警告弹窗的文本截图
+        print("")
 
 
     def imageComparison(self,):
@@ -195,6 +196,8 @@ class folderFile_dispose:
         :param dict_testCase:
         :return:
         """
+        print("\033[0;32;34m开始清除执行用例前需要清除的文件\033[0m")
+        print("")
         if "清除文件" in dict_testCase:  # 用例执行前，删除相关文件
             filePath_name = dict_testCase["清除文件"]
             if filePath_name =="" or filePath_name =="默认":   # 如果“清除文件”的值等于空或者默认
@@ -278,7 +281,7 @@ class  Check_winControl:
                 hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
                 if hwnd != 0:                                 # 如果句柄不为零证明找到了该弹窗
                     raise MyException("没有找到弹窗")           # 如果找到了该弹窗，则主动抛出异常
-            except Exception:                                  # 捕捉到该异常，证明弹窗已经找到，就退出循环
+            except Exception:                                 # 捕捉到该异常，证明弹窗已经找到，就退出循环
                 break
             else:
                 if (self.CircleInitial % 5) == 0:
@@ -287,8 +290,7 @@ class  Check_winControl:
                     self.triggerButton.click_input()
             self.CircleInitial = self.CircleInitial + 1
         if self.CircleInitial == (self.cycleIndex + 1):
-            print("%s窗口没有找到" % self.title, __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("%r窗口没有找到" % self.title)
 
 
     """检查触发摸一个事件（点击按钮），应该出现的弹窗或者控件是否出现"""
@@ -315,8 +317,7 @@ class  Check_winControl:
                 elif self.CircleInitial == 1:  # 如果第一次链接不是，在点击一次
                     self.triggerButton.click_input()
             if self.CircleInitial == (self.cycleIndex + 1):
-                print("%s窗口没有找到" % self.title, __file__, sys._getframe().f_lineno)
-                os._exit(0)
+                raise MyException("%r窗口没有找到" % self.title)
             self.CircleInitial = self.CircleInitial + 1
 
 
@@ -335,8 +336,7 @@ class  Check_winControl:
             Check_winControl(nest_title, nest_triggerButton).popUp_Whether_close()  # 检查有没有嵌套弹框,有嵌套弹框就关掉
             self.CircleInitial = self.CircleInitial + 1
             if self.CircleInitial == (self.cycleIndex + 1):
-                print("%s窗口没有关闭" % self.title, __file__, sys._getframe().f_lineno)
-                os._exit(0)
+                raise MyException("%r窗口没有关闭" % self.title)
 
 
     """检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮"""
@@ -365,16 +365,14 @@ class  Check_winControl:
                     if py_app2[self.triggerButton].exists():  # 如果控件存在
                         py_app2[self.triggerButton].click()
                     else:
-                        print("没有找到关闭窗口的按钮:", self.title, __file__, sys._getframe().f_lineno)
-                        os._exit(0)
+                        raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
                 except findwindows.ElementNotFoundError:
                     break
                 else:
                     if py_app1[self.triggerButton].exists():  # 如果控件存在
                         py_app1[self.triggerButton].click_input()
                     else:
-                        print("没有找到关闭窗口的按钮:",self.title, __file__, sys._getframe().f_lineno)
-                        os._exit(0)
+                        raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
                 self.CircleInitial = self.CircleInitial + 1
         return self.state
 
@@ -393,6 +391,7 @@ class  Check_winControl:
                 if hwnd == 0:                                 # 通过句柄判断窗口是否存在
                     raise MyException("没有找到弹窗")           # 如果不存在就主动抛出异常
             except Exception as obj:                          # 捕捉到异常
+                print("根据弹窗标题获得的句柄判断弹窗已经关闭,窗口标题：%r,窗口句柄：%r"%(self.title,hwnd), __file__, sys._getframe().f_lineno)
                 self.state = "窗口已正常关闭"                   # 用于有嵌套弹窗的情况
                 break                                          # 退出循环
             else:
@@ -405,16 +404,15 @@ class  Check_winControl:
                     if py_app2.exists():  # 如果控件存在
                         py_app2.close()
                     else:
-                        print("没有找到关闭窗口的按钮:", self.title, __file__, sys._getframe().f_lineno)
-                        os._exit(0)
+                        raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
                 except findwindows.ElementNotFoundError:
+                    print("根据弹窗标题判断弹窗已经关闭：",hwnd, __file__, sys._getframe().f_lineno)
                     break
                 else:
                     if py_app1.exists():  # 如果控件存在
                         py_app1.close()   # 强制关掉弹窗
                     else:
-                        print("没有找到关闭窗口的按钮:", self.title, __file__, sys._getframe().f_lineno)
-                        os._exit(0)
+                        raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
                 self.CircleInitial = self.CircleInitial + 1
         return self.state
 
@@ -457,10 +455,9 @@ class  Check_winControl:
         验证输入框是否输入正确的数据，如果还没有输入就再次输入，一直到输入成功为止
         :return:
         """
-        print("向文本框内的输入的数据：",data)
         if type(data) == float:  # 如果需要输入的参数的数据类型为浮点
             data = '{:g}'.format(data)   # 去掉浮点数最后的零
-        print("向文本框内的输入的数据：", data)
+        print("向文本框内的输入的数据：", data, __file__, sys._getframe().f_lineno)
         self.triggerButton.set_text(data)  # 向文本框内输入数据
         while self.CircleInitial<self.cycleIndex:
             State = self.triggerButton.window_text()  # 返回输入的文本
@@ -505,28 +502,28 @@ class  Check_winControl:
         :return:
         """
         titleName=None;moduleName=None
-        if self.title=="Aerocheck":
+        if self.title=="Aerobook-Aerocheck":
             titleName= ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
             moduleName="Aerocheck"
-        elif self.title=="Fiberbook":
+        elif self.title=="Aerobook-Fiberbook":
             titleName = ProfileDataProcessing("commonality", "FiberbookEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
             moduleName = "Fiberbook"
         else:
-            print("没有找到需要检查的模块：", self.title, __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("没有找到需要检查的模块：%r"%self.title)
         # 通过Aerobook标题链接Aerobook进程，并切换到Aerobook窗口
+        from src.utils.otherMethods.initialize import pywin_openAProgram
         aero_window = pywin_openAProgram().entrance_subroutine_title()
         dlg_spec = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
         try:   # 是否能找到被测模块
             dlg_spec.child_window(title=titleName, class_name="wxWindowNR").verify_enabled()
         except Exception:   # 如果没有找到抛出异常
             # 如果没有找到被测模块
+            from src.utils.otherMethods.initialize import  UIA_link
             uia_app = UIA_link().EntrySubapplication(moduleName)  # 然后点击进入被测模块的按钮
             try:
                 dlg_spec.child_window(title=titleName, class_name="wxWindowNR",).wait("exists", timeout=60, retry_interval=0.5)  # 等待被测模块出现
             except Exception:   # 如果抛出异常说明没有找到被测模块
-                print("没有找到被测试模块:",titleName, __file__, sys._getframe().f_lineno)
-                os._exit(0)
+                raise MyException("没有找到被测试模块:%r"%titleName)
 
 
 
@@ -551,9 +548,11 @@ class WindowTop:
 
     def console(self,):
         """
-
+        弹窗置顶操作
         :return:
         """
+        print("\033[0;31m%r弹窗置顶"%self.window_name, __file__, sys._getframe().f_lineno)
+        print("")
         # 首先判断控件是否是最大化
         main_window = Application().connect(title_re=self.window_name, timeout=10)
         Aerobook_main = main_window.window(title_re=self.window_name)
@@ -677,8 +676,7 @@ class htmlFormat:
         if list_Name:
             self.str_Name = list_Name[0]
         else:
-            print("没有找到“%s”的文件" % Name, __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("没有找到“%r”的文件" % Name)
         HTML_address=source+"/"+self.str_Name
         layoffPeriod_TXT=source+"/"+self.str_Name+".txt"
         ultimately_TXT=source+"/"+"Now_"+self.str_Name+".txt"
@@ -742,7 +740,7 @@ class UseCase_parameterization:
         :return:
         """
         location=None
-        if moduleName=="Aerocheck":
+        if moduleName=="Aerobook-Aerocheck":
             if sole_ModuleIdentifier=="程序初始化用例":
                 location = ProfileDataProcessing("testCase", "initializeUsecase").config_File()
             elif sole_ModuleIdentifier=="铺层信息--铺层库优化":
@@ -788,13 +786,11 @@ class UseCase_parameterization:
             elif sole_ModuleIdentifier == "金属结构强度校核--金属曲板后驱曲强度校核":
                 location = ProfileDataProcessing("testCase", "metal_rearGuard").config_File()
             else:
-                print("没有地址:",sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
-                os._exit(0)
-        elif moduleName=="Aerocheck":
+                raise MyException("没有地址:%r"%sole_ModuleIdentifier)
+        elif moduleName=="Aerobook-Aerocheck":
             pass
         else:
-            print("没有找到执行模块的用例:",moduleName, __file__, sys._getframe().f_lineno)
-            os._exit(0)
+            raise MyException("没有找到执行模块的用例:%r"%moduleName)
         if list_tableName:
             for tableName in list_tableName:
                 dict_site={"详细地址": location,"表单名称": tableName, "初始行": 1,"初始列":1}
