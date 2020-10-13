@@ -13,11 +13,22 @@ class pywin_openAProgram:
     """打开Arobook"""
 
 
-    def __init__(self):
+    def __init__(self, module=None):
         # 从配置文件中获取应用程序地址
+        self.module=module
         self.location = ProfileDataProcessing("commonality", "exe").config_File()
-        self.aerocheck_title = ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
         self.aero_title = ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 从配置文件获取Aerobook窗口标题
+        if  module =="Aerobook-Aerocheck":
+            self.aero_module_title = ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+        elif module =="Aerobook-Fiberbook":
+            self.aero_module_title = ProfileDataProcessing("commonality", "FiberbookEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+        elif module == "Aerobook-Fembook":
+            self.aero_module_title = ProfileDataProcessing("commonality", "FembookEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+        else:
+            self.aero_module_title =None
+
+
+
 
 
     def open_accredit(self):
@@ -63,11 +74,10 @@ class pywin_openAProgram:
 
     def AeroB_console(self):
         """
-        操作Aerobook控制台
+        操作Aerobook控制台,并且最大化北侧系统
         :return:
         """
-        main_window = Application().connect(title_re=self.aero_title, timeout=10)
-        Aerobook_main = main_window.window(title_re=self.aero_title)
+        Aerobook_main=pywin_openAProgram().entrance_subroutine_title()
         Aerobook_main.maximize()
         # Aerobook_main.print_control_identifiers()
         return Aerobook_main
@@ -96,12 +106,16 @@ class pywin_openAProgram:
         aero_window = pywin_openAProgram().entrance_subroutine_title()
         # 切换到菜单栏
         dlg_spec = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
-        son_window = dlg_spec.child_window(title=self.aerocheck_title, class_name="wxWindowNR")
+        son_window = dlg_spec.child_window(title=self.aero_module_title, class_name="wxWindowNR")
         MenuOptions = testdicts["所在模块"]  # 取出菜单栏操作路径
         son_window.menu_select(MenuOptions) # 点击菜单选项
         print("\033[0;32;34m通过菜单栏正常打开被测模块\033[0m")
         print(" ")
         return aero_window,son_window
+
+
+
+
 
 
     def menuOpen_switchingWin_UIA(self, testdicts,operationWindow):
@@ -110,7 +124,7 @@ class pywin_openAProgram:
         然后通过uiautomation框架中的方法切换窗口，针对工作栏
         :return:
         """
-        aero_window, son_window=pywin_openAProgram().menuOpen(testdicts)
+        aero_window, son_window=pywin_openAProgram(self.module).menuOpen(testdicts)
         specialWay_OperatingControls(operationWindow).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
         return aero_window, son_window
 
@@ -147,11 +161,21 @@ class UIA_link:
 class execute_useCase_initialize:
     """执行用例之前初始化"""
 
-    def __init__(self):
-        # 读取配置文档信息
-        self.aero_title = ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 从配置文件获取Aerobook窗口标题
-        self.aerocheck_title = ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+
+
+    def __init__(self, module=None):
+        # 从配置文件中获取应用程序地址
+        self.module=module
         self.dict = {}
+        self.aero_title = ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 从配置文件获取Aerobook窗口标题
+        if  module =="Aerobook-Aerocheck":
+            self.aero_module_title = ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+        elif module =="Aerobook-Fiberbook":
+            self.aero_module_title = ProfileDataProcessing("commonality", "FiberbookEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+        elif module == "Aerobook-Fembook":
+            self.aero_module_title = ProfileDataProcessing("commonality", "FembookEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+        else:
+            self.aero_module_title =None
 
 
     def  link_window(self):
@@ -163,22 +187,22 @@ class execute_useCase_initialize:
         aero_window = pywin_openAProgram().entrance_subroutine_title()
         # 从Aerobook切换到子应用
         dlg_spec1 = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
-        son_window = dlg_spec1.child_window(title=self.aerocheck_title, class_name="wxWindowNR")
+        son_window = dlg_spec1.child_window(title=self.aero_module_title, class_name="wxWindowNR")
         return son_window
 
 
 
-    def clear_editWorkingCondition(self):
+    def clear_editWorkingCondition(self,moduleName):
         """
         编辑工况测试前清除所有的包络工况
         :return:
 
         """
-        from tool import folderFile_dispose, Check_winControl
+        from tool import  Check_winControl
         from OperatingControls.enterModule import BeingMeasured_popupWin
         Check_winControl("编辑工况", "关闭").popUp_Whether_close()
         self.dict["所在模块"]="载荷信息->编辑工况"
-        pywin_openAProgram().menuOpen(self.dict)
+        pywin_openAProgram(moduleName).menuOpen(self.dict)
         # 切换到编辑工况弹窗
         module_window = BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
         while True:
@@ -195,16 +219,17 @@ class execute_useCase_initialize:
         清除所有的许用值曲线
         :return:
         """
-        from OperatingControls.enterModule import specialWay_OperatingControls,BeingMeasured_work
+        from OperatingControls.enterModule import specialWay_OperatingControls,ctrW_AeroAerochcek
         from config.relative_location import path
         from PIL import Image
         from PIL import ImageChops
         relativeAddress = path.location()  # 获取相对位置
         operationWindow="编辑材料许用值"
         self.dict["所在模块"]="材料信息->定义复合材料参数"
-        aero_window, son_window = pywin_openAProgram().menuOpen(self.dict)
+        module = "Aerobook-Aerocheck"
+        aero_window, son_window = pywin_openAProgram(module).menuOpen(self.dict)
         specialWay_OperatingControls(operationWindow).uia_OperatingControls()
-        module_window= BeingMeasured_work(son_window).workField_composite_information()
+        module_window= ctrW_AeroAerochcek(son_window).workField_composite_information()
         dlg_spec=module_window.child_window(title="GridWindow", class_name="wxWindowNR")
         # 进行图片对比，来判断材料许用值曲线表是否为空
         # 预期截图位置location_expect

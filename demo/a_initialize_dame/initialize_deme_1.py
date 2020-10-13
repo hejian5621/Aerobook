@@ -51,8 +51,8 @@ MenuOptions="文件->项目->新建"   # 菜单栏点击按钮
 
 testdicts={"所在模块":"文件->项目->新建"}
 
-
-aero_window, module_window = pywin_openAProgram().menuOpen(testdicts)
+module="Aerobook-Aerocheck"
+aero_window, module_window = pywin_openAProgram(module).menuOpen(testdicts)
 
 source=r"F:\Aerobook\src\testCase\projectFile\automateFile"
 # 新建项目
@@ -66,5 +66,5 @@ ControlOperationSuite(aerocheck_title).childApp_newProject(module_window ,MenuOp
 #
 #
 # #  修改配置文件内容
-# ProfileDataProcessing("commonality","ProjectSave_path").\
+# ProfileDataProcessing("ProjectSave_path","ProjectSave_path").\
 #     config_File_amend(source)

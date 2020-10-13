@@ -322,6 +322,14 @@ class OperatingControls:
             self.dlg_spec = self.win_one.Static15
         elif str_Name == "路径Edit":
             self.dlg_spec = self.win_one.路径Edit
+        elif str_Name == "RESPRINTCheckBox":
+            self.dlg_spec = self.win_one.RESPRINTCheckBox
+        elif str_Name == "STRESSCheckBox":
+            self.dlg_spec = self.win_one.STRESSCheckBox
+        elif str_Name == "STRAINCheckBox":
+            self.dlg_spec = self.win_one.STRAINCheckBox
+        elif str_Name == "输出到include文件Edit":
+            self.dlg_spec = self.win_one.输出到include文件Edit
         elif str_Name == "两边各取蒙皮宽度一半":
             self.dlg_spec = self.win_one.两边各取蒙皮宽度一半
         elif str_Name == "极":

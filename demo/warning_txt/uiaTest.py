@@ -1,5 +1,7 @@
 
 
+# 获取警告弹窗文本
+
 import subprocess
 import uiautomation
 

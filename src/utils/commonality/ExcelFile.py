@@ -88,11 +88,35 @@ class read_excel():
 
 
 
-# #
-# dict1 = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\自动化测试公共属性.xlsx", "表单名称": "Aerobook-Aerocheck",
+    def readExcel_modularControl(self):
+        """
+        读取Excel表格内容，测试模块
+        :return:数据类型，字典嵌套字典
+        """
+        data = xlrd.open_workbook(self.CompleteAddress)  # 打开需要读取的电子表格
+        table = data.sheet_by_name(self.menu_table_name)  # 根据表单名称获取对应表单的数据
+        colns = table.nrows  # 获取总行数数
+        while self.onset<=colns:
+            list_row_one = table.row_values(self.onset - 1)  # 取出初始行的数据
+            row_one = list_row_one[0]  # 取出初始行第一列的数据
+            del list_row_one[0]  # 删除第一列的数据
+            list_row_two = table.row_values(self.onset)  # 取出初始行开始第二行的数据
+            del list_row_two[0]  # 删除第一列的数据
+            dicti_Excel = dict(zip(list_row_one,list_row_two))  # 标题列表跟值列表合并成字典
+            # 删除键值为空的键值
+            for k in list(dicti_Excel.keys()):
+                if not dicti_Excel[k]:
+                    del dicti_Excel[k]
+            # 把第一行和第二行的放入字典
+            self.list_dicti_dicti_Excel[row_one]=dicti_Excel
+            self.onset +=2
+        return  self.list_dicti_dicti_Excel
+
+
+# dict1 = {"详细地址": r"src\testCase\c_useCase_file\initialize\自动化测试公共属性.xlsx", "表单名称": "测试模块控制",
 #          "初始行": 1,"初始列":1}
-# dict2=read_excel(dict1).readExcel_common()
+# dict2=read_excel(dict1).readExcel_modularControl()
 # print("dict2:",dict2)
-# #
-#
+
+
 

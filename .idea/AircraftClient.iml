@@ -35,7 +35,7 @@
       <sourceFolder url="file://$MODULE_DIR$/demo/test" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/demo/test_Set" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/demo/testDate" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/demo/TXT" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/test_damo" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/demo/uiautomationTest" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/demo/文件对比" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/report/Aerocheck" isTestSource="false" />
@@ -49,7 +49,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/utils/OperatingControls" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/otherMethods" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/b_testCaseStep/Aerocheck" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/initialize" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/initialize" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/尺寸信息" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/求解计算" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/铺层信息" isTestSource="false" />
@@ -59,7 +59,7 @@
       <sourceFolder url="file://$MODULE_DIR$/demo/window_top" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/复材结构强度校核" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/demo/OperatingControls" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/demo/pywin_project" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/pywin_project_Aerocheck" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/紧固件强度校核" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/demo/testReport_screenshot" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/demo/ToGetAHandle" isTestSource="false" />
@@ -69,6 +69,20 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/a_useCaseSet/Perform_useCase" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/a_useCaseSet/Aerockeck/img" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Aerocheck/金属结构强度校核" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/丢成、厚度比设计响应" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/优化控制参数设置" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/全局设置" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/刚度约束设计响应" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/应力设计响应" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/应变设计响应" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/机翼优化响应" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/泊松比匹配响应" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/稳定性设计响应" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCase/c_useCase_file/Fiberbook/设置变量" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/else_damo" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/examine_LocatedModule" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/demo/pywin_project_Fiberbook" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (Aerobook) (2)" jdkType="Python SDK" />

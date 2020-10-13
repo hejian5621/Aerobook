@@ -94,8 +94,8 @@ class  ControlOperationSuite:
         except findwindows.ElementNotFoundError:
             raise MyException("没有找到“项目设置“窗口")
         else:
-            x = int(ProfileDataProcessing("commonality", "coord1_x").config_File()) # 从配置文件获取鼠标点击坐标
-            y = int(ProfileDataProcessing("commonality", "coord1_y").config_File())  # 从配置文件获取鼠标点击坐标
+            x = int(ProfileDataProcessing("commonality-Aerobook-Aerocheck", "coord1_x").config_File()) # 从配置文件获取鼠标点击坐标
+            y = int(ProfileDataProcessing("commonality-Aerobook-Aerocheck", "coord1_y").config_File())  # 从配置文件获取鼠标点击坐标
             self.dlg_spec.click_input(button='left', coords= (x, y) )  # 点击有限元模型路径对应的文本框，显示出文本框
             DetailedPath = source + "\Htail.fem"
             self.dlg_spec.Edit.wait("exists", timeout=60, retry_interval=1).set_text(DetailedPath)  # 在有限元模型路径对应的文本框中输入数据

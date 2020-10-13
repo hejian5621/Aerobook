@@ -51,7 +51,7 @@ class BeingMeasured_popupWin:
 
 
 """切换到被测工作栏"""
-class  BeingMeasured_work:
+class  ctrW_AeroAerochcek:
     """切换到被测工作栏"""
 
     def __init__(self,son_window):
@@ -191,6 +191,34 @@ class  BeingMeasured_work:
 
 
 
+
+
+"""切换到被测工作栏"""
+class  ctrW_AeroFiberbook:
+
+    def __init__(self, son_window):
+        self.workField = son_window.scrolledpanelwxWindowNR2  # 切换到被测工作
+        self.workField_son = None
+        self.win_one = None
+        self.win_two = None
+        self.win_three = None
+        self.win_four = None
+
+
+
+    def workField_general(self):
+        """
+        切换到工作栏窗口
+        :return:
+        """
+        # 切换到铺层库优化工作栏
+        return self.workField
+
+
+
+
+
+
 """特殊情况下的控件操作，一般是正常方法识别不了控件"""
 class specialWay_OperatingControls:
     """特殊情况下的控件操作，一般是正常方法识别不了控件"""
@@ -227,6 +255,7 @@ class GetWindowInstance:
         self.testWinTitle = property["操作窗口标题"]
         self.testWinTitle_son = property["操作子窗口标题"]
         self.ModuMarking = property["模块唯一标识"]
+        self.module = property["测试主模块"]
         self.win_one = None  # 窗口一
         self.win_two = None  # 窗口二
         self.win_three = None  # 窗口三
@@ -243,55 +272,60 @@ class GetWindowInstance:
         print("")
         from src.utils.otherMethods.initialize import pywin_openAProgram
         # 连接到被测程序，并且通过菜单栏打开被测模块
-        aero_window, son_window = pywin_openAProgram().menuOpen(self.property)
-        # 切换到被测模块窗口
-        if self.ModuMarking == "铺层信息--铺层库优化" or \
-                self.ModuMarking == "求解计算--求解计算" or \
-                self.ModuMarking == "紧固件强度校核--紧固件参数设置" or \
-                self.ModuMarking == "材料信息--定义金属材料参数" or \
-                self.ModuMarking == "金属结构强度校核--金属一维单元强度校核" or \
-                self.ModuMarking == "金属结构强度校核--金属二维单元强度校核" or \
-                self.ModuMarking == "金属结构强度校核--金属加筋板强度校核" or \
-                self.ModuMarking == "金属结构强度校核--金属曲板后驱曲强度校核":
-            self.win_one = BeingMeasured_work(son_window).workField_general()
-        elif self.ModuMarking == "尺寸信息--一维单元尺寸定义（模板）" or self.ModuMarking == "尺寸信息--二维单元尺寸定义（模板）":
-            self.win_one = BeingMeasured_work(son_window).workField_sizeInfo()
-        elif self.ModuMarking == "铺层信息--铺层数据库制作工具":
-            # 切入铺层数据库工具弹窗中
-            self.win_three = BeingMeasured_popupWin("铺层数据库制作工具").menu_LetsGoTopopover()
-            # 切入铺层数据库工具弹窗中控件中
-            self.win_one, self.win_two = BeingMeasured_popupWin(None).Laminatedata_popUp(self.win_three)
-        elif self.ModuMarking == "载荷信息--载荷数据库制作工具":
-            # 切入铺层数据库工具弹窗中
-            self.win_three = BeingMeasured_popupWin("载荷数据库制作工具").menu_LetsGoTopopover()
-            # 切入铺层数据库工具弹窗中控件中
-            self.win_one, self.win_two = BeingMeasured_popupWin(None).Laminatedata_popUp(self.win_three)
-        elif self.ModuMarking == "载荷信息--编辑工况":
-            self.win_one = BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
-        elif self.ModuMarking == "复材结构强度校核--复合材料强度校核1D" or \
-                self.ModuMarking == "复材结构强度校核--复合材料强度校核2D":
-            specialWay_OperatingControls(self.testWinTitle_son).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
-            self.win_one, self.win_two = BeingMeasured_work(son_window).workField_intensityCheck()
-        elif self.ModuMarking == "尺寸信息--一维单元尺寸定义":
-            self.win_one, self.win_two, self.win_three, self.win_four = BeingMeasured_work(son_window). \
-                workField_SizeDefinition_1D()
-        elif self.ModuMarking == "尺寸信息--二维单元尺寸定义":
-            self.win_one, self.win_two = BeingMeasured_work(son_window). \
-                workField_SizeDefinition_2D()
-        elif self.ModuMarking == "紧固件强度校核--紧固件信息输入":
-            if self.testWinTitle_son == "紧固件参数输入":
-                self.win_one = BeingMeasured_work(son_window).workField_general()
-            elif self.testWinTitle_son == "编辑参数弹框":
-                self.win_one = BeingMeasured_work(son_window).workField_Open_EditArgument()
-        elif self.ModuMarking == "紧固件强度校核--紧固件强度校核":
-            self.win_one = BeingMeasured_work(son_window).workField_general()
-        elif self.ModuMarking == "紧固件优化--紧固件参数优化":
-            self.win_one = BeingMeasured_work(son_window).workField_fastener_parOptimization()
-        elif self.ModuMarking == "材料信息--定义复合材料参数":
-            specialWay_OperatingControls(self.testWinTitle).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
-            self.win_one,self.win_two = BeingMeasured_work(son_window).workField_fastenerSEO(self.testWinTitle_son)
-        else:
-            raise MyException("没有找到需要切换的窗口：%r" % self.ModuMarking)
+        aero_window, son_window = pywin_openAProgram(self.module).menuOpen(self.property)
+        if self.module=="Aerobook-Aerocheck":
+            # 切换到被测模块窗口
+            if self.ModuMarking == "铺层信息--铺层库优化" or \
+                    self.ModuMarking == "求解计算--求解计算" or \
+                    self.ModuMarking == "紧固件强度校核--紧固件参数设置" or \
+                    self.ModuMarking == "材料信息--定义金属材料参数" or \
+                    self.ModuMarking == "金属结构强度校核--金属一维单元强度校核" or \
+                    self.ModuMarking == "金属结构强度校核--金属二维单元强度校核" or \
+                    self.ModuMarking == "金属结构强度校核--金属加筋板强度校核" or \
+                    self.ModuMarking == "金属结构强度校核--金属曲板后驱曲强度校核":
+                self.win_one = ctrW_AeroAerochcek(son_window).workField_general()
+            elif self.ModuMarking == "尺寸信息--一维单元尺寸定义（模板）" or self.ModuMarking == "尺寸信息--二维单元尺寸定义（模板）":
+                self.win_one = ctrW_AeroAerochcek(son_window).workField_sizeInfo()
+            elif self.ModuMarking == "铺层信息--铺层数据库制作工具":
+                # 切入铺层数据库工具弹窗中
+                self.win_three = BeingMeasured_popupWin("铺层数据库制作工具").menu_LetsGoTopopover()
+                # 切入铺层数据库工具弹窗中控件中
+                self.win_one, self.win_two = BeingMeasured_popupWin(None).Laminatedata_popUp(self.win_three)
+            elif self.ModuMarking == "载荷信息--载荷数据库制作工具":
+                # 切入铺层数据库工具弹窗中
+                self.win_three = BeingMeasured_popupWin("载荷数据库制作工具").menu_LetsGoTopopover()
+                # 切入铺层数据库工具弹窗中控件中
+                self.win_one, self.win_two = BeingMeasured_popupWin(None).Laminatedata_popUp(self.win_three)
+            elif self.ModuMarking == "载荷信息--编辑工况":
+                self.win_one = BeingMeasured_popupWin("编辑工况").menu_LetsGoTopopover()
+            elif self.ModuMarking == "复材结构强度校核--复合材料强度校核1D" or \
+                    self.ModuMarking == "复材结构强度校核--复合材料强度校核2D":
+                specialWay_OperatingControls(self.testWinTitle_son).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
+                self.win_one, self.win_two = ctrW_AeroAerochcek(son_window).workField_intensityCheck()
+            elif self.ModuMarking == "尺寸信息--一维单元尺寸定义":
+                self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroAerochcek(son_window).workField_SizeDefinition_1D()
+            elif self.ModuMarking == "尺寸信息--二维单元尺寸定义":
+                self.win_one, self.win_two = ctrW_AeroAerochcek(son_window).workField_SizeDefinition_2D()
+            elif self.ModuMarking == "紧固件强度校核--紧固件信息输入":
+                if self.testWinTitle_son == "紧固件参数输入":
+                    self.win_one = ctrW_AeroAerochcek(son_window).workField_general()
+                elif self.testWinTitle_son == "编辑参数弹框":
+                    self.win_one = ctrW_AeroAerochcek(son_window).workField_Open_EditArgument()
+            elif self.ModuMarking == "紧固件强度校核--紧固件强度校核":
+                self.win_one = ctrW_AeroAerochcek(son_window).workField_general()
+            elif self.ModuMarking == "紧固件优化--紧固件参数优化":
+                self.win_one = ctrW_AeroAerochcek(son_window).workField_fastener_parOptimization()
+            elif self.ModuMarking == "材料信息--定义复合材料参数":
+                specialWay_OperatingControls(self.testWinTitle).uia_OperatingControls()  # 使用uiautomation框架点击切换模块
+                self.win_one,self.win_two = ctrW_AeroAerochcek(son_window).workField_fastenerSEO(self.testWinTitle_son)
+            else:
+                raise MyException("没有找到需要切换的窗口：%r" % self.ModuMarking)
+        elif self.module=="Aerobook-Fiberbook":
+            if self.ModuMarking == "优化设置--全局设置":
+                self.win_one =ctrW_AeroFiberbook(son_window).workField_general()
+            else:
+                raise MyException("没有找到需要切换的窗口：%r" % self.ModuMarking)
+
         print("\033[0;34m窗口标识一：%r，窗口标识二：%r，窗口标识三：%r，窗口标识四：%r"%(self.win_one,self.win_two,self.win_three,self.win_four), __file__, sys._getframe().f_lineno)
         print("")
         print("\033[0;32;35m{{窗口标识获取完毕}}\033[0m", __file__, sys._getframe().f_lineno)

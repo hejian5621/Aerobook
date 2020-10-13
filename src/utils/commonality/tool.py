@@ -434,6 +434,38 @@ class  Check_winControl:
         return retur
 
 
+    def handle_win(self):
+        """
+        通过窗口标题获取句柄来判断窗口是否存在，依次来判断程序是否打开
+        :return:
+        """
+        retur = False
+        import win32gui
+        hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的类名获取弹窗的句柄
+        print("hwnd:",hwnd)
+        if hwnd==0 :  # hwnd等于0代表没有找到窗口
+            retur = True
+        else:
+            retur = False
+        return retur
+
+
+    def uia_examine_control(self,control_Name):
+        """
+        检查控件是否存在
+        :return:
+        """
+        import uiautomation
+        Use = uiautomation.WindowControl(searchDepth=1, Name=self.title)
+        try:
+            Use.Control(searchDepth=9, Name=control_Name).SetWindowText(control_Name)
+        except LookupError :
+            retur = True
+        else:
+            retur = False
+        return retur
+
+
     """确认勾选框是否勾选，如果没有勾选，就勾选"""
     def Verify_CheckBox_Status(self):
         """
@@ -495,7 +527,7 @@ class  Check_winControl:
 
 
 
-    """检查被系统是否在被模块（Aerocherk、frmbook等）"""
+    """检查被系统是否在主模块（Aerocherk、frmbook等）"""
     def examine_LocatedModule(self):
         """
         检查被系统是否在被模块（Aerocherk、frmbook等）
@@ -524,18 +556,6 @@ class  Check_winControl:
                 dlg_spec.child_window(title=titleName, class_name="wxWindowNR",).wait("exists", timeout=60, retry_interval=0.5)  # 等待被测模块出现
             except Exception:   # 如果抛出异常说明没有找到被测模块
                 raise MyException("没有找到被测试模块:%r"%titleName)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -635,7 +655,6 @@ class htmlFormat:
         with open(txt_location, 'r') as f:
             content = list(f)
         for con in content:
-
             zhmodel = re.compile(u'[\u4e00-\u9fa5]')  # 检查中文
             # zhmodel = re.compile(u'[^\u4e00-\u9fa5]')  #检查非中文
             match = zhmodel.search(con)
@@ -742,53 +761,58 @@ class UseCase_parameterization:
         location=None
         if moduleName=="Aerobook-Aerocheck":
             if sole_ModuleIdentifier=="程序初始化用例":
-                location = ProfileDataProcessing("testCase", "initializeUsecase").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "initializeUsecase").config_File()
             elif sole_ModuleIdentifier=="铺层信息--铺层库优化":
-                location = ProfileDataProcessing("testCase", "LaminateOptimize").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "LaminateOptimize").config_File()
             elif sole_ModuleIdentifier=="铺层信息--铺层数据库制作工具":
-                location = ProfileDataProcessing("testCase", "LaminatedataPopup").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "LaminatedataPopup").config_File()
             elif sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义":
-                location = ProfileDataProcessing("testCase", "SizeDefinition_1D").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "SizeDefinition_1D").config_File()
             elif sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义":
-                location = ProfileDataProcessing("testCase", "SizeDefinition_2D").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "SizeDefinition_2D").config_File()
             elif sole_ModuleIdentifier=="尺寸信息--一维单元尺寸定义（模板）":
-                location = ProfileDataProcessing("testCase", "sizeInfo_1DXls").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "sizeInfo_1DXls").config_File()
             elif sole_ModuleIdentifier=="尺寸信息--二维单元尺寸定义（模板）":
-                location = ProfileDataProcessing("testCase", "sizeInfo_2DXls").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "sizeInfo_2DXls").config_File()
             elif sole_ModuleIdentifier == "求解计算--求解计算":
-                location = ProfileDataProcessing("testCase", "solveCalculation").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "solveCalculation").config_File()
             elif sole_ModuleIdentifier == "载荷信息--载荷数据库制作工具":
-                location = ProfileDataProcessing("testCase", "loaddatabase_popUp").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "loaddatabase_popUp").config_File()
             elif sole_ModuleIdentifier == "载荷信息--编辑工况":
-                location = ProfileDataProcessing("testCase", "editWorkingCondition").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "editWorkingCondition").config_File()
             elif sole_ModuleIdentifier == "材料信息--定义复合材料参数":
-                location = ProfileDataProcessing("testCase", "compositeMaterial").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "compositeMaterial").config_File()
             elif sole_ModuleIdentifier == "材料信息--定义金属材料参数":
-                location = ProfileDataProcessing("testCase", "definitionMetalMaterial").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "definitionMetalMaterial").config_File()
             elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核1D":
-                 location= ProfileDataProcessing("testCase", "CompoundStrengthCheck_1D").config_File()
+                 location= ProfileDataProcessing("testCase-Aerobook-Aerocheck", "CompoundStrengthCheck_1D").config_File()
             elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核2D":
-                location = ProfileDataProcessing("testCase", "CompoundStrengthCheck_2D").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "CompoundStrengthCheck_2D").config_File()
             elif sole_ModuleIdentifier == "紧固件强度校核--紧固件信息输入":
-                location = ProfileDataProcessing("testCase", "fastener_parameterInput").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "fastener_parameterInput").config_File()
             elif sole_ModuleIdentifier == "紧固件强度校核--紧固件参数设置":
-                location = ProfileDataProcessing("testCase", "fastener_parameterSetting").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "fastener_parameterSetting").config_File()
             elif sole_ModuleIdentifier == "紧固件强度校核--紧固件强度校核":
-                location = ProfileDataProcessing("testCase", "fastener_intensityCheck").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "fastener_intensityCheck").config_File()
             elif sole_ModuleIdentifier == "紧固件优化--紧固件参数优化":
-                location = ProfileDataProcessing("testCase", "fastener_parOptimization").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "fastener_parOptimization").config_File()
             elif sole_ModuleIdentifier == "金属结构强度校核--金属一维单元强度校核":
-                location = ProfileDataProcessing("testCase", "metal_intensityCheck1D").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "metal_intensityCheck1D").config_File()
             elif sole_ModuleIdentifier == "金属结构强度校核--金属二维单元强度校核":
-                location = ProfileDataProcessing("testCase", "metal_intensityCheck2D").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "metal_intensityCheck2D").config_File()
             elif sole_ModuleIdentifier == "金属结构强度校核--金属加筋板强度校核":
-                location = ProfileDataProcessing("testCase", "metal_stiffenedPlate").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "metal_stiffenedPlate").config_File()
             elif sole_ModuleIdentifier == "金属结构强度校核--金属曲板后驱曲强度校核":
-                location = ProfileDataProcessing("testCase", "metal_rearGuard").config_File()
+                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "metal_rearGuard").config_File()
             else:
                 raise MyException("没有地址:%r"%sole_ModuleIdentifier)
-        elif moduleName=="Aerobook-Aerocheck":
-            pass
+        elif moduleName=="Aerobook-Fiberbook":
+            if sole_ModuleIdentifier=="程序初始化用例":
+                location = ProfileDataProcessing("testCase-Aerobook-Fiberbook", "initializeUsecase").config_File()
+            elif sole_ModuleIdentifier=="优化设置--全局设置":
+                location = ProfileDataProcessing("testCase-Aerobook-Fiberbook", "globalSetting").config_File()
+            else:
+                raise MyException("没有地址:%r"%sole_ModuleIdentifier)
         else:
             raise MyException("没有找到执行模块的用例:%r"%moduleName)
         if list_tableName:
@@ -798,23 +822,25 @@ class UseCase_parameterization:
         return self.list_dict_site
 
 
-    def parameterization_data(self,moduleName,list_dicti_argument):
+    def parameterization_data(self):
         """
          用例参数化
         :return:
         """
-        for dicti_argument in list_dicti_argument :
-            for  sole_ModuleIdentifier, tableName in dicti_argument.items():
-                # 获取读取电子表格的路径和相关参数
-                list_dict=UseCase_parameterization().parameterization_location(moduleName,sole_ModuleIdentifier,tableName)
-                for site in list_dict:
-                    dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
-                    ar_testdicts = FormatConversion().RemoveSubscript(dicts)
-                    self.list_dict_site = self.list_dict_site + ar_testdicts
-        for dict_site in self.list_dict_site:
-            dict = {}
-            dict["测试点"] = dict_site["测试点"]
-            self.list_testPoint.append(dict)
-        return self.list_dict_site,self.list_testPoint
+        # 读取“自动化测试公共属性”电子表格“测试模块控制”表中的数据
+        ParameterTable = {"详细地址": r"src\testCase\c_useCase_file\initialize\自动化测试公共属性.xlsx", "表单名称": "测试模块控制",
+                 "初始行": 1, "初始列": 1}
+        Table_dict = read_excel(ParameterTable).readExcel_modularControl()
+        # 处理数据的数据类型
+        list_dicti_argument = FormatConversion().UseCase_dataProcessing(Table_dict)
+        for dicti_argument, submodulein in list_dicti_argument.items() :  # 循环取出主模块名称
+            for  moduleName, list_submodule in submodulein.items():  # 循环取出子模块名称
+                    # 获取读取电子表格的路径和相关参数
+                    list_dict=UseCase_parameterization().parameterization_location(dicti_argument,moduleName,list_submodule)
+                    for site in list_dict:
+                        dicts = read_excel(site).readExcel_testCase()  # 读取测试用例
+                        ar_testdicts = FormatConversion().RemoveSubscript(dicts,dicti_argument)  # 过滤掉不执行的用例，并且把所有模块名称放入用例中
+                        self.list_dict_site = self.list_dict_site + ar_testdicts
+        return self.list_dict_site
 
 

@@ -8,6 +8,16 @@ from utils.commonality.tool import UseCase_parameterization
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from tool import pictureProcessing
 import os,sys
+from config.relative_location import path
+from src.utils.otherMethods.initialize import pywin_openAProgram
+from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
+
+
+
+
+
+
+
 import time
 
 
@@ -31,39 +41,29 @@ class Initializing:
         """
         print("\033[0;32;35m《开始进行执行用例前的准备工作》\033[0m", __file__, sys._getframe().f_lineno)
         print("")
+        """取出参数"""
+        global_hostModule = dictSet["全局主模块名称"]
+        real_hostModule = dict_testCase["测试主模块"]
         title=ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 读取配置文件信息
-        WindowTop(title).console()    # 把被测系统页面置顶
-        number=dictSet["全局参数"]
-        global_UseCase_Name = dictSet["全局用例集名称"]
-        sole_ModuleIdentifier = dict_testCase["模块唯一标识"]
-        self.testCase = dictSet["控件属性已经操作方法"]
-        moduleName=dict_testCase["测试模块"]
-        # 用例运行前首先检查有没有弹窗没有关闭
-        handlingMethod().Loop_closeWindow(global_UseCase_Name,moduleName)
-        # 在运行每一个用例集之前初始化全局变量参数
-        number,global_Name = handlingMethod().initialize_globalVariable(number, global_UseCase_Name, sole_ModuleIdentifier)
-        # 获取项目所在路径
-        ProjectPath = ProfileDataProcessing("commonality", "ProjectSave_path").config_File()
-        # 用例在执行前，首先获取信息窗口的文本信息，用于获取最新的信息窗口文本信息
+        """在全部用例运行前，检查Aerobook窗口是否打开"""
+        handlingMethod().inspect_Aerobook(title, dictSet)
+        """在执行每一条用例之前，首先把被测窗口置顶"""
+        WindowTop(title).console()
+        """在主模块第一次运行用例前需要做的准备工作（Aerocheck、Fiberbook等为主模块）"""
+        global_hostModule = handlingMethod().host_Module_one(real_hostModule, global_hostModule)
+        """在子模块第一次运行用例前需要做的准备工作"""
+        testCase, global_sonmoduleName = handlingMethod().son_Module_one(dictSet, dict_testCase)
+        """ 用例运行前首先检查有没有弹窗没有关闭"""
+        handlingMethod().Loop_closeWindow(global_sonmoduleName,real_hostModule)
+        """获取项目所在路径 """
+        ProjectPath =handlingMethod().Get_Project_path(real_hostModule)
+        """ 用例在执行前，首先获取信息窗口的文本信息，用于获取最新的信息窗口文本信息"""
         old_content = Information_Win().acquire_HTML_TXT(ProjectPath)
-        # 用例运行前删除指定的文件
+        """用例运行前删除指定的文件"""
         folderFile_dispose(ProjectPath).delfile(dict_testCase)
-        if number == 1:  # 在执行该模块第一条用例前执行下面操作
-            # 取出“控件属性已经操作方法”
-            tableName=["控件属性已经操作方法"]
-            site = UseCase_parameterization().parameterization_location(moduleName,sole_ModuleIdentifier, tableName)
-            self.testCase = read_excel(site[0]).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
-            print("\033[0;32;34m获取到的Excel文档中控件属性和操作方法：\033[0m",self.testCase, __file__, sys._getframe().f_lineno)
-            print(" ")
-            # 在模块开始前数据清理
-            if sole_ModuleIdentifier=="载荷信息--编辑工况":
-                print("\033[0;32;34m清除包络工况：\033[0m", self.testCase, __file__, sys._getframe().f_lineno)
-                print(" ")
-                execute_useCase_initialize().clear_editWorkingCondition()    # 清除所有的包络工况
-        print("\033[0;32;35m{{准备工作准备完毕}}\033[0;32;35m", __file__, sys._getframe().f_lineno)
-        print("")
-        print(" ")
-        return number,global_Name,ProjectPath,old_content,self.testCase
+        """打包参数"""
+        pack_dict={"全局子模块名称":global_sonmoduleName,"全局主模块名称":global_hostModule,"项目保存路径":ProjectPath,"信息窗口旧的数据":old_content,"控件属性已经操作方法":testCase}
+        return pack_dict
 
 
 
@@ -83,7 +83,7 @@ class finish_clear:
         print("")
         actual_result = dictSet["实际值"]
         sole_ModuleIdentifier = dictSet["模块唯一标识"]
-        moduleName=dictSet["测试模块"]
+        moduleName=dictSet["测试主模块"]
         """在关闭弹窗前首先截图，用于如果断言失败后，在测试报告上显示测试失败的截图"""
         actuals = pictureProcessing(None).BeingMeasured_system_screenshot()
         """ 收尾，如果有警告弹框就关掉"""
@@ -110,22 +110,22 @@ class handlingMethod:
 
 
     def __init__(self):
-        self.list_CloseWindows=None
+        self.list_CloseWindows=[]
+        self.ProjectPath=None
 
 
-    def initialize_globalVariable(self, reset_arg, global_UseCase_Name, real_UseCase_Name):
+    def initialize_globalVariable(self, global_UseCase_Name, real_UseCase_Name):
         """
         在每一次运行用例集之前都初始化一次全局变量
-        :param reset_arg: 需要初始化得参数
-        :param global_UseCase_Name: 全局变量的用例集名称
-        :param real_UseCase_Name:  正在执行用例集的用例集名称
+        :param global_UseCase_Name: 全局变量
+        :param real_UseCase_Name:  实时变量
         :return:
         """
-        if global_UseCase_Name == real_UseCase_Name:
-            real_arg = reset_arg + 1
+        if global_UseCase_Name == real_UseCase_Name :
+            real_arg= False
         else:
             global_UseCase_Name = real_UseCase_Name
-            real_arg = 1
+            real_arg = True
         print("\033[0;32;34m初始化全局变量，全局变量参数：%r，全局变量模块名称：%r\033[0m" % (real_arg, global_UseCase_Name), __file__, sys._getframe().f_lineno)
         print("")
         return real_arg, global_UseCase_Name
@@ -137,12 +137,14 @@ class handlingMethod:
         根据被测模块，检查特定模块的特定窗口
         :return:
         """
-        site = {"详细地址": r"src\testCase\c_useCase_file\Aerocheck\initialize\自动化测试公共属性.xlsx", "表单名称": moduleName,
+        site = {"详细地址": r"src\testCase\c_useCase_file\initialize\自动化测试公共属性.xlsx", "表单名称": moduleName,
                  "初始行": 1,"初始列":1}
         dicts_title = read_excel(site).readExcel_common()  # 从Excel表格中取出要关闭窗口的标题
         # 根据模块名称取出对应模块应该检查的弹窗标题
+        print("dicts_title:",dicts_title)
         if sole_ModuleIdentifier in dicts_title:
             CloseWindows=dicts_title[sole_ModuleIdentifier]
+            print("CloseWindows:",CloseWindows)
             if "；" in CloseWindows:    # 如果字典的值里有“；”，就转化成列表
                 self.list_CloseWindows = CloseWindows.split("；")
             else:  # 如果字典的值里没有“；”，就强行转化成列表
@@ -164,5 +166,105 @@ class handlingMethod:
         print("")
 
 
+    def Get_Project_path(self,moduleName):
+        """
+        获取项目的所在路径
+        :return:
+        """
+        # 获取项目所在路径
+        if moduleName=="Aerobook-Aerocheck":
+            self.ProjectPath = ProfileDataProcessing("commonality-Aerobook-Aerocheck", "ProjectSave_path").config_File()
+        elif moduleName=="Aerobook-Fiberbook":
+            self.ProjectPath = ProfileDataProcessing("commonality-Aerobook-Fiberbook", "ProjectSave_path").config_File()
+        return  self.ProjectPath
 
 
+
+    def host_Module_one(self,moduleName,host_Module):
+        """
+        在主模块第运行第一条用例时需要做的准备工作
+        :return:
+        """
+        real_arg, global_Name = handlingMethod().initialize_globalVariable(host_Module, moduleName)
+        if real_arg :
+            """检查窗口是否在被测组模块（Aerocheck、Fiberbook等为主模块）"""
+            Check_winControl(moduleName).examine_LocatedModule()
+            """检查模型是否导入，老判断项目有没有你新建"""
+            handlingMethod().inspect_model()  # 检查模型是否被导入
+            """在每个主模块运行前先检查是否有窗口没有关闭"""
+            handlingMethod().Loop_closeWindow("全部模块", moduleName)
+        return global_Name
+
+
+    def son_Module_one(self,dictSet,dict_testCase):
+        """
+
+        :return:
+        """
+        global_sonmoduleName = dictSet["全局用例集名称"]
+        real_sonmoduleName = dict_testCase["模块唯一标识"]  # 实际的子模块名称
+        real_hostModule = dict_testCase["测试主模块"]
+        testCase = dictSet["控件属性已经操作方法"]
+        """在执行子模块第一条用例前执行下面操作"""
+        real_arg, global_sonmoduleName = handlingMethod().initialize_globalVariable(global_sonmoduleName, real_sonmoduleName)
+        if real_arg :   # real_arg等于True，说明该模块是运行的第一条用例
+            """ 取出“控件属性已经操作方法”"""
+            tableName=["控件属性已经操作方法"]
+            site = UseCase_parameterization().parameterization_location(real_hostModule,real_sonmoduleName, tableName)
+            testCase = read_excel(site[0]).readExcel_ControlProperties()  # 读取该测试用例中控件的操作属性
+            print("\033[0;32;34m获取到的Excel文档中控件属性和操作方法：\033[0m",testCase, __file__, sys._getframe().f_lineno)
+            print(" ")
+            """ 在模块开始前数据清理 """
+            if real_sonmoduleName=="载荷信息--编辑工况":
+                print("\033[0;32;34m清除包络工况：\033[0m", __file__, sys._getframe().f_lineno)
+                print(" ")
+                execute_useCase_initialize().clear_editWorkingCondition(real_hostModule)    # 清除所有的包络工况
+        return testCase,global_sonmoduleName
+
+
+
+    def inspect_Aerobook(self,title,dictSet):
+        """
+        检查Aerobook窗口是否打开
+        :return:
+        """
+        from src.utils.otherMethods.initialize import pywin_openAProgram
+        sum_number=dictSet["用例运行总次数"]
+        print("sum_number:",sum_number)
+        if sum_number==0 :   # 用例运行第一次
+            print("title:",title)
+            state = Check_winControl(title).handle_win()  # 通过弹窗的类名获取弹窗的句柄
+            print()
+            if state:  # 如果state的值是True,就说明Aerobook窗口没有打开
+                print("是否启动")
+                pywin_openAProgram().open_accredit()  # 启动Aerobook应用程序
+
+
+
+    def inspect_model(self):
+        """
+        检查模型是否被导入
+        :return:
+        """
+        title = ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 从配置文件获取Aerobook窗口标题
+        control_Name = "部件(1)"
+        state = Check_winControl(title).uia_examine_control(control_Name)  # 通过弹窗的类名获取弹窗的句柄
+        if state: # 如果模型没有导入就说明没有新建项目，下面就新建项目
+            relativeAddress = path.location()  # 获取项目相对位置
+            # 初始化项目的存放位置
+            sourceDir = relativeAddress + r"src\testCase\projectFile\自动化测试相关文件"  # 项目有关的模板文件
+            source = relativeAddress + r"src\testCase\projectFile\automateFile"  # 新建项目的保存地址
+            folderFile_dispose(source).delfolder()  # 删除已有的项目文件夹
+            folderFile_dispose(sourceDir).copyFile(source)  # 生成新的项目文件夹，并返回文件夹路径
+            # 读取配置文档信息里的Aerobook和Aerocheck窗口的标题
+            aero_title = ProfileDataProcessing("commonality", "AerobookEdition").config_File()  # 从配置文件获取Aerobook窗口标题
+            aerocheck_title = ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
+            # 链接被测系统
+            # 通过Aerobook标题链接Aerobook进行，并切换到Aerobook窗口
+            py_app = pywin_openAProgram().entrance_subroutine_title()
+            # 新建项目
+            ControlOperationSuite(aerocheck_title).childApp_newProject(py_app, "文件->项目->新建", source)
+            # 独立显示底部蒙皮
+            ControlOperationSuite(py_app).uia_ShowSkinSeparately(aero_title)
+            #  修改配置文件内容用于执行用例的时候获取项目所在地址
+            ProfileDataProcessing("commonality-Aerobook-Aerocheck", "ProjectSave_path").config_File_amend(source)

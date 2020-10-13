@@ -11,9 +11,10 @@ class FormatConversion:
     def __init__(self):
         pass
 
-    def RemoveSubscript(self,testdicts):
+    def RemoveSubscript(self,testdicts,dicti_argument):
         """
-        取出列表嵌套字典，取出不需要执行用例的下标
+        过滤掉不执行的用例
+        并且把所有模块名称放入用例中
         :return:
         """
         list1=[]
@@ -21,32 +22,10 @@ class FormatConversion:
             if date["用例状态"] == "不执行":
                 Angle = testdicts.index(date)
                 del testdicts[Angle]
+            date["测试主模块"]=dicti_argument
         return testdicts
 
 
-    def SelectFile(self,testdicts,actual_editlist,source):
-        """
-
-        :return:
-        """
-        expect1 = None
-        expect2 = None
-        actual1 = None
-        actual2 = None
-        expect1_binrowseButton=testdicts["选择铺层Excel文件浏览按钮对应文本框预期"]
-        expect2_binrowseButton = testdicts["铺层数据保存路径浏览对应文本框预期"]
-        if expect1_binrowseButton != "默认" and expect2_binrowseButton=="默认":
-            expect1 = source + expect1_binrowseButton
-            actual1=actual_editlist["选择铺层Excel文件浏览按钮对应文本框实际"]
-        elif expect1_binrowseButton == "默认" and expect2_binrowseButton!="默认":
-            expect2 = source + expect2_binrowseButton
-            actual2 = actual_editlist["铺层数据保存路径浏览对应文本框实际"]
-        elif expect1_binrowseButton != "默认" and expect2_binrowseButton!="默认":
-            expect1 = source + expect1_binrowseButton
-            expect2 = source + expect2_binrowseButton
-            actual1 = actual_editlist["选择铺层Excel文件浏览按钮对应文本框实际"]
-            actual2 = actual_editlist["铺层数据保存路径浏览对应文本框实际"]
-        return actual1,actual2,expect1,expect2
 
 
 
@@ -125,13 +104,6 @@ class FormatConversion:
                 break
         return list_new
 
-
-
-
-
-
-
-
     def takeOut_space(self,str_spacing):
         """
         去掉空格
@@ -144,6 +116,59 @@ class FormatConversion:
             str = str.strip()
             list_NoSpace.append(str)
         return list_NoSpace
+
+
+
+    def UseCase_dataProcessing(self,str_spacing):
+        """
+        用例数据处理
+        :param str_spacing:
+        :return:
+        """
+        module_dict={}
+        sonModuleName_list=[]
+        sonModule_list=[]
+        useCase_module_dict = {}
+        if "测试主模块" in str_spacing:  # 取出主模块名称
+            module_dict=str_spacing["测试主模块"]
+        else:
+           pass
+        # 过滤掉不需要执行的主模块
+        moduleName_list=FormatConversion().filtration_executingState(module_dict)
+        # 根据主模块名取出对应的子模块名，放入列表
+        for moduleName in moduleName_list:  # 循环取出主模块名称
+            useCase_sonModule_dict = {}
+            if moduleName in str_spacing:  # 取出子模块名称
+                sonModule_dict = str_spacing[moduleName] # 取出子模块
+                # 过滤掉不需要执行的子模块
+                sonModule_list = FormatConversion().filtration_executingState(sonModule_dict)
+                # 根据子模块名取表名
+                for sonModule in sonModule_list:
+                    if sonModule in str_spacing:  # 取出子模块名称
+                        tableName_dict = str_spacing[sonModule]  # 取出子模块对应的表名称
+                        # 过滤掉不需要执行的表名
+                        tableName_list = FormatConversion().filtration_executingState(tableName_dict)
+                        # 把表名放入子模块字典中
+                        useCase_sonModule_dict[sonModule]=tableName_list
+                # 最后生成字典嵌套字典嵌套列表数据类型的被测模块
+                useCase_module_dict[moduleName]=useCase_sonModule_dict
+        return useCase_module_dict
+
+
+    # {"Aerobook-Aerocheck":{"铺层信息--铺层库优化":["表名一","表名二"],"铺层信息--铺层库优化":["表名一","表名二"]},"Aerobook-Fiberbook":{"铺层信息--铺层库优化":["表名一","表名二"]}}
+
+
+
+    def filtration_executingState(self,dict_module):
+        """
+        过滤执行状态
+        :return:
+        """
+        moduleName_list = []
+        for run_state, moduleName in dict_module.items():  # 循环取出模块执行状态和模块名称
+            if "不执行" not in run_state:  # 筛选出带“执行”的模块
+                moduleName_list.append(moduleName)
+        return  moduleName_list
 
 
 
