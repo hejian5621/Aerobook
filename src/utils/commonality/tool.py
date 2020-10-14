@@ -12,7 +12,7 @@ from pathlib import Path
 from src.utils.commonality.ExcelFile import read_excel
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from pywinauto import  findwindows
-
+from functools import wraps
 
 
 
@@ -842,5 +842,9 @@ class UseCase_parameterization:
                         ar_testdicts = FormatConversion().RemoveSubscript(dicts,dicti_argument)  # 过滤掉不执行的用例，并且把所有模块名称放入用例中
                         self.list_dict_site = self.list_dict_site + ar_testdicts
         return self.list_dict_site
+
+
+"""统计函数运行的时间"""
+
 
 

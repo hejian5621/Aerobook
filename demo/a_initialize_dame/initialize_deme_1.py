@@ -1,5 +1,5 @@
 from src.utils.otherMethods.initialize import UIA_link,pywin_openAProgram
-from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
+from src.utils.otherMethods.ControlOperationSuite_Aercheck import ControlOperationSuite_Aercheck
 from config.configurationFile import ProfileDataProcessing
 from tool import folderFile_dispose
 from config.relative_location import path
@@ -56,11 +56,11 @@ aero_window, module_window = pywin_openAProgram(module).menuOpen(testdicts)
 
 source=r"F:\Aerobook\src\testCase\projectFile\automateFile"
 # 新建项目
-ControlOperationSuite(aerocheck_title).childApp_newProject(module_window ,MenuOptions,source)
+ControlOperationSuite_Aercheck(aerocheck_title).childApp_newProject(module_window ,MenuOptions,source)
 
 
 # # 独立显示底部蒙皮
-# ControlOperationSuite(py_app).uia_ShowSkinSeparately(aero_title)
+# ControlOperationSuite_Aercheck(py_app).uia_ShowSkinSeparately(aero_title)
 #
 #
 #

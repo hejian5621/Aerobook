@@ -1,8 +1,9 @@
 # 铺层库优化工作栏，对应Aerobook路径：铺层信息--》铺层库优化
 import time,sys, os
-from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
+from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite_Aercheck,ControlOperationSuite_Fiberbook
 from tool import KeyboardMouse,Check_winControl
 from tool import MyException
+from src.utils.otherMethods.dataFormatConversion import FormatConversion
 
 
 class OperatingControls:
@@ -31,69 +32,74 @@ class OperatingControls:
         print("\033[0;32;35m《进入操作控件函数开始操作控件》\033[0m", __file__, sys._getframe().f_lineno)
         print(" ")
         location = argument["被测程序文件地址"]
-        els = argument["其他"]
+        # 在用例字典中取出跟属性方法字典中相同键的键值
+        Controls_v = FormatConversion().takeOut_dict_SameKey(Silverlight,argument)
         # 循环取出“控件属性已经操作方法”内的数据
-        for ControlsName, ControlProperties in Silverlight.items():  # 循环取出控件
-            if ControlsName in argument:
-                operational = argument[ControlsName]
-                print("\033[0;34m开始操作控件：%r 值：%r\033[0m" % (ControlsName, operational), __file__, sys._getframe().f_lineno)
-                if operational != "默认":  # 当控件不等于默认（默认代表不用操作控件）
-                    ControlTypes = ControlProperties["控件类型"]
-                    operateWin = ControlProperties["所操作实例"]
-                    Controlmethod = ControlProperties["唯一标识方法"]
-                    discern = ControlProperties["唯一标识"]
-                    waitingTime = ControlProperties["操作控件后等待时间"]
-                    Control_mode = ControlProperties["唯一标识方法"]
-                    ControlWin = OperatingControls(self.win_one,self.win_two,self.win_three,self.win_four).acquire_controlWin(operateWin) # 获取操作控件实例
-                    dlg_spec = OperatingControls(ControlWin).IdentificationMethod(Controlmethod, discern)  # 获取操作控件实例
+        for UseCase_ControlsName, UseCase_Controlsvalue in Controls_v.items():  # 在用例中循环取出控件的名称
+            if UseCase_ControlsName in  Silverlight:                            # 在控件属性字典中取出控件的属性
+                attribute_ControlsName = Silverlight[UseCase_ControlsName]
+                print("\033[0;34m开始操作控件：%r 用例的值：%r\033[0m" % (UseCase_ControlsName, UseCase_Controlsvalue), __file__, sys._getframe().f_lineno)
+                if UseCase_ControlsName != "默认":    # 当该控件的用例值为“默认”，就不做任何操作
+                    # 取出控件的操作属性
+                    ControlTypes = attribute_ControlsName["控件类型"]
+                    operateWin = attribute_ControlsName["所操作实例"]
+                    Controlmethod = attribute_ControlsName["唯一标识方法"]
+                    discern = attribute_ControlsName["唯一标识"]
+                    waitingTime = attribute_ControlsName["操作控件后等待时间"]
+                    Control_mode = attribute_ControlsName["唯一标识方法"]
+                    # 获取操作的控件的所在窗口
+                    ControlWin = OperatingControls(self.win_one, self.win_two, self.win_three, self.win_four).acquire_controlWin(operateWin)
+                    # 获取操作控件的唯一标识
+                    dlg_spec = OperatingControls(ControlWin).IdentificationMethod(Controlmethod, discern)
+                    # 具体的操作控件
                     if ControlTypes == "文本框":  # 当控件是文本框的时候
-                        if "][" in str(operational):  # 当输入的参数中有“][”符号，代表此文本框为路径文本框，并且需要拼接路径
-                            list_operational = operational.split("][")
-                            operational  = list_operational[0]
-                            operational = location + operational    # 拼接路径
-                        Check_winControl(None, dlg_spec).Verify_inputBox(operational)   # 向文本框中输入数据
-                        print("在控件”%r“文本框中输入：%r" % (ControlsName, operational))
+                        if "][" in str(UseCase_Controlsvalue):  # 当输入的参数中有“][”符号，代表此文本框为路径文本框，并且需要拼接路径
+                            list_operational = UseCase_Controlsvalue.split("][")
+                            UseCase_Controlsvalue  = list_operational[0]
+                            UseCase_Controlsvalue = location + UseCase_Controlsvalue    # 拼接路径
+                        Check_winControl(None, dlg_spec).Verify_inputBox(UseCase_Controlsvalue)   # 向文本框中输入数据
+                        print("在控件”%r“文本框中输入：%r" % (UseCase_ControlsName, UseCase_Controlsvalue))
                     elif ControlTypes == "勾选框" or ControlTypes == "单选框" or ControlTypes == "复选框":
-                        Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
-                        print("控件%r成功勾选" % ControlsName)
-                    elif ControlTypes == "按钮" :
+                            Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
+                            print("控件%r成功勾选" % UseCase_ControlsName)
+                    elif ControlTypes == "按钮":
                         dlg_spec.click_input()
-                        print("控件”%r“按钮点击成功" % ControlsName)
+                        print("控件”%r“按钮点击成功" % UseCase_ControlsName)
                     elif ControlTypes == "按钮--弹窗套件":  # 操作套件
-                        OperatingControls(dlg_spec).button_popUp(ControlProperties, location)
-                        PopupTitle = ControlProperties["套件参数一"]
-                        print("控件%r按钮点击后，成功弹出“%r”弹窗" % (ControlsName, PopupTitle), __file__, sys._getframe().f_lineno)
+                        OperatingControls(dlg_spec).button_popUp(attribute_ControlsName, location)
+                        print("控件%r按钮点击后，成功弹出“%r”弹窗" % (UseCase_ControlsName, attribute_ControlsName["套件参数一"]), __file__, sys._getframe().f_lineno)
                     elif ControlTypes == "坐标--单击--文本框":
-                        OperatingControls(ControlWin).coord_click_textbox(ControlProperties,operational)
-                        print("控件%r坐标选择正确，并且在文本框中正确输入数据" % ControlsName, __file__, sys._getframe().f_lineno)
+                        OperatingControls(ControlWin).coord_click_textbox(attribute_ControlsName,UseCase_Controlsvalue)
+                        print("控件%r坐标选择正确，并且在文本框中正确输入数据" % UseCase_ControlsName, __file__, sys._getframe().f_lineno)
                     elif ControlTypes == "坐标--双击--弹窗套件":
-                        OperatingControls(ControlWin).coord_dblclick_popUp(ControlProperties,operational)
-                        print("控件%r操作成功" % ControlsName, __file__, sys._getframe().f_lineno)
+                        OperatingControls(ControlWin).coord_dblclick_popUp(attribute_ControlsName, UseCase_Controlsvalue)
+                        print("控件%r操作成功" % UseCase_ControlsName, __file__, sys._getframe().f_lineno)
                     elif ControlTypes == "坐标--三击--文本框":
-                        OperatingControls(ControlWin).coord_click_textbox(ControlProperties,operational)
-                        print("控件%r操作成功" % ControlsName, __file__, sys._getframe().f_lineno)
+                        OperatingControls(ControlWin).coord_click_textbox(attribute_ControlsName,UseCase_Controlsvalue)
+                        print("控件%r操作成功" %UseCase_ControlsName, __file__, sys._getframe().f_lineno)
                     elif ControlTypes == "坐标--键盘--文本框":
-                        OperatingControls(ControlWin).coord_click_textbox(ControlProperties,operational)
-                        print("控件%r操作成功" % ControlsName, __file__, sys._getframe().f_lineno)
+                        OperatingControls(ControlWin).coord_click_textbox(attribute_ControlsName, UseCase_Controlsvalue)
+                        print("控件%r操作成功" % UseCase_ControlsName, __file__, sys._getframe().f_lineno)
                     elif ControlTypes == "下拉框":
-                        if Control_mode=="方式二":
-                            Check_winControl(None, dlg_spec).Verify_dropDownBox_change(operational)
+                        if Control_mode == "方式二":
+                            Check_winControl(None, dlg_spec).Verify_dropDownBox_change(UseCase_Controlsvalue)
                         else:
-                            Check_winControl(None, dlg_spec).Verify_dropDownBox(operational)
-                        print("控件%r下拉框选择数据成功" % ControlsName, __file__, sys._getframe().f_lineno)
+                            Check_winControl(None, dlg_spec).Verify_dropDownBox(UseCase_Controlsvalue)
+                        print("控件%r下拉框选择数据成功" %UseCase_ControlsName, __file__, sys._getframe().f_lineno)
                     elif ControlTypes == "滚动鼠标":
                         OperatingControls(dlg_spec).scrollMouse()
                     else:
                         raise MyException("说明控件属性")
                     time.sleep(waitingTime)
                 else:
-                    print("不操作控件“%r”：%r" % (ControlsName,operational), __file__, sys._getframe().f_lineno)
+                    print("不操作控件“%r”：%r" % (UseCase_ControlsName, UseCase_Controlsvalue), __file__, sys._getframe().f_lineno)
             else:
-                print("\033[0;34m不操作控件“%r”\033[0m" %ControlsName, __file__, sys._getframe().f_lineno)
+                print("\033[0;34m不操作控件“%r”\033[0m" % UseCase_ControlsName, __file__, sys._getframe().f_lineno)
             print(" ")
         print("\033[0;32;35m{{控件操作完成}} \033[0m", __file__, sys._getframe().f_lineno)
         print(" ")
         print(" ")
+
 
 
 
@@ -360,14 +366,14 @@ class OperatingControls:
         if Popup_type=="路径弹窗":  # 操作弹窗套件
             Popup_type2=ControlProperties["套件类型二"]
             Popup_parameter2 = ControlProperties["套件参数二"]
-            ControlOperationSuite(None).SelectFile_Popover(self.list_AfterParsing,location,Popup_type2,Popup_parameter2,self.win_one)
+            ControlOperationSuite_Aercheck(None).SelectFile_Popover(self.list_AfterParsing,location,Popup_type2,Popup_parameter2,self.win_one)
         elif Popup_type == "选择材料许用值曲线":  # 操作弹窗套件
             str_coord = ControlProperties["唯一标识"]
             Check_winControl(Popup_parameter, self.win_one).window_WhetherOpen()  # 判断预期窗口是否出现
-            ControlOperationSuite(None).select_AllowableCurve(str_coord)
+            ControlOperationSuite_Aercheck(None).select_AllowableCurve(str_coord)
         elif Popup_type == "选择校核工况" or Popup_type == "选择优化工况":  # 操作弹窗套件
             Check_winControl(Popup_type, self.win_one).window_WhetherOpen()  # 判断选择校核工况是否出现
-            ControlOperationSuite(None).select_workingCondition(Popup_type)
+            ControlOperationSuite_Aercheck(None).select_workingCondition(Popup_type)
         elif Popup_type == "选择结构单元":  # 操作弹窗套件
             time.sleep(0.3)
             self.win_one.click_input()
@@ -413,7 +419,9 @@ class OperatingControls:
         Popup_type =ControlProperties["套件类型一"]
         OperatingControls(self.win_one).coord_dblclick(discern)
         if Popup_type=="选择铺层库信息":
-            ControlOperationSuite(None).select_Laminatedata(argument)
+            ControlOperationSuite_Aercheck(None).select_Laminatedata(argument)
+        elif Popup_type=="1D截面参数定义":
+            ControlOperationSuite_Fiberbook(None).designVariableSection_definition()
         else:
             raise MyException("没有弹窗类型：%r"%Popup_type)
 
@@ -485,3 +493,5 @@ class OperatingControls:
         self.win_one.click_input()
         import win32api, win32con
         win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -1000)  # 滚动鼠标
+
+

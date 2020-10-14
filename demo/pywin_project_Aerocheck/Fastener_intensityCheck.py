@@ -41,8 +41,8 @@ workField1.Button1.click_input()
 
 
 
-from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
-ControlOperationSuite(None).select_workingCondition("选择优化工况")
+from src.utils.otherMethods.ControlOperationSuite_Aercheck import ControlOperationSuite_Aercheck
+ControlOperationSuite_Aercheck(None).select_workingCondition("选择优化工况")
 
 
 

@@ -8,7 +8,7 @@ import uiautomation
 from pywinauto.application import Application
 import time
 from src.utils.OperatingControls.moduleControlOperation import OperatingControls
-from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
+from src.utils.otherMethods.ControlOperationSuite_Aercheck import ControlOperationSuite_Aercheck
 
 testCase_dict={"所在模块":"材料信息->定义复合材料参数"}
 
@@ -125,7 +125,7 @@ dlg1_spec= OperatingControls(dlg_spec3).ExpressionAssembly("Edit")
 # OperatingControls(dlg_spec5).Coordinate_Textbox(list2,"Edit")
 valu="150；10；第一行"
 
-# ControlOperationSuite(None).select_AllowableCurve(valu)
+# ControlOperationSuite_Aercheck(None).select_AllowableCurve(valu)
 
 
 # # 在第一行,X轴

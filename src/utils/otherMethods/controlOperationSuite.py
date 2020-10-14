@@ -11,9 +11,9 @@ from tool import MyException
 
 
 
-
-class  ControlOperationSuite:
-    """控件操作套件"""
+"""Aercheck控件操作套件"""
+class  ControlOperationSuite_Aercheck:
+    """Aercheck控件操作套件"""
 
 
 
@@ -85,7 +85,7 @@ class  ControlOperationSuite:
         # 选择项目的保存路径
         Popup_type2="无"
         list_AfterParsing = ["新建项目: 指定项目保存路径", "test_1", "保存"]
-        ControlOperationSuite(None).SelectFile_Popover(list_AfterParsing, source,Popup_type2)
+        ControlOperationSuite_Aercheck(None).SelectFile_Popover(list_AfterParsing, source,Popup_type2)
         # 项目设置，增加有限元模型路径
         try:
             app = Application().connect(title="项目设置",timeout=5)  # 连接项目设置弹窗
@@ -240,7 +240,7 @@ class  ControlOperationSuite:
             Check_winControl(title_name, "确认").popUp_Whether_close()
 
 
-    """尺寸信息--1D尺寸定义--选择铺层库信息"""
+    """Aerocheck--尺寸信息--1D尺寸定义--选择铺层库信息"""
     def select_Laminatedata(self,line):
         """
         尺寸信息--1D尺寸定义--选择铺层库信息
@@ -268,3 +268,20 @@ class  ControlOperationSuite:
             self.dlg_spec.Button0.click_input()
 
 
+"""Fiberbook控件操作套件"""
+class ControlOperationSuite_Fiberbook:
+    """Fiberbook控件操作套件"""
+
+
+    def __init__(self, windowTitle):
+        # 窗口标题
+        self.windowTitle = windowTitle
+        self.dlg_spec=None
+
+
+    """设计变量--一维单元设计变量（截面尺寸）--1D截面参数定义"""
+    def designVariableSection_definition(self):
+        """
+        设计变量--一维单元设计变量（截面尺寸）--1D截面参数定义
+        :return:
+        """

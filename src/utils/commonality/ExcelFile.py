@@ -2,6 +2,7 @@
 #coding:utf-8
 import sys,os,xlrd
 from config.relative_location import  path
+from time import *
 
 
 
@@ -36,15 +37,20 @@ class read_excel():
         读取电子表格里的内容生成列表嵌套字典数据类型的值
         :return:
         """
+
         data = xlrd.open_workbook(self.CompleteAddress)  # 打开需要读取的电子表格
         table = data.sheet_by_name(self.menu_table_name)  # 根据表单名称获取对应表单的数据
         rowns = table.nrows  # 获取总行数
         list_row_title = table.row_values(self.onset - 1)  # 取出标题行一行的数据
+        begin_time = time()
         while rowns > self.onset:
             list_row_value = table.row_values(self.onset)  # 获取整行的值
             dicti_Excel = dict(zip(list_row_title, list_row_value))  # 标题列表跟值列表合并成字典
             self.onset = self.onset + 1
             self.list_dicti_Excel.append(dicti_Excel)
+        end_time = time()
+        run_time = end_time - begin_time
+        print('该循环程序运行时间：', run_time)
         return  self.list_dicti_Excel
 
 
@@ -113,10 +119,66 @@ class read_excel():
         return  self.list_dicti_dicti_Excel
 
 
-# dict1 = {"详细地址": r"src\testCase\c_useCase_file\initialize\自动化测试公共属性.xlsx", "表单名称": "测试模块控制",
+
+
+    def readExcel_testCase_blank(self):
+        """
+        读取测试用例，控件与其他方法区分开
+        :return:
+        """
+        dicti_dicti_Excel={}
+        dicti_Excel={}
+        arg=None
+        row_one=None
+        row_two=None
+        row_three=None
+        lis55=[]
+        data = xlrd.open_workbook(self.CompleteAddress)  # 打开需要读取的电子表格
+        table = data.sheet_by_name(self.menu_table_name)  # 根据表单名称获取对应表单的数据
+        list_row_one = table.row_values(self.onset-1)  # 取出初始行的数据
+        list_row_two = table.row_values(self.onset)  # 取出初始行的数据
+        begin_time = time()
+        # print('该循环程序运行时间1：', run_time1)
+        colns = table.nrows  # 获取总行数数
+        onse = self.onset + 1
+        print("colns:",colns)
+        while onse <colns:
+            dicti_dicti_Excel = {}
+            list_row_three = table.row_values(onse)  # 取出初始行的数据
+            # 获取第一行数据列表的元素总数
+            sun=len(list_row_one)
+            n =0
+            while n <=sun:
+                if n <sun:
+                    row_one=list_row_one[n]  # 取出第一列的标题
+                    row_two=list_row_two[n]  # 取出第二列的标题
+                    row_three=list_row_three[n]  # 取出值
+                else:
+                    row_one = arg
+                if row_one!="":
+                    if n != 0:
+                        dicti_dicti_Excel[arg] = dicti_Excel
+                    arg = row_one      # 把第一行的标题复制个定值
+                    dicti_Excel = {}   # 情况字典
+                dicti_Excel[row_two] = row_three  # 把每一列的数据跟标题生成字典
+                n+=1
+            onse+=1
+            lis55.append(dicti_dicti_Excel)
+        print("lis.append:", lis55)
+        end_time = time()
+        run_time = end_time - begin_time
+        print ('该循环程序运行时间：',run_time)
+
+
+
+
+
+#
+# dict1 = {"详细地址": r"src\testCase\c_useCase_file\Fiberbook\设置变量\一维单元设计参数（截面尺寸）.xlsx", "表单名称": "测试一",
 #          "初始行": 1,"初始列":1}
-# dict2=read_excel(dict1).readExcel_modularControl()
-# print("dict2:",dict2)
+# read_excel(dict1).readExcel_testCase_blank()
+#
+# read_excel(dict1).readExcel_testCase()
 
 
 

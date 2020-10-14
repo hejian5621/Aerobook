@@ -1,7 +1,7 @@
 
 
 from src.utils.otherMethods.initialize import UIA_link,pywin_openAProgram
-from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite
+from src.utils.otherMethods.ControlOperationSuite_Aercheck import ControlOperationSuite_Aercheck
 from tool import folderFile_dispose
 from config.relative_location import path
 from config.configurationFile import ProfileDataProcessing
@@ -40,9 +40,9 @@ class  module_initialize:
         py_app = pywin_openAProgram().open_accredit()  # 启动Aerobook应用程序
         uia_app = UIA_link().EntrySubapplication("Aerocheck")  # 点击Aerocheck进入Aerocheck页面
         # 新建项目
-        ControlOperationSuite(aerocheck_title).childApp_newProject(py_app, "文件->项目->新建", source)
+        ControlOperationSuite_Aercheck(aerocheck_title).childApp_newProject(py_app, "文件->项目->新建", source)
         # 独立显示底部蒙皮
-        ControlOperationSuite(py_app).uia_ShowSkinSeparately(aero_title)
+        ControlOperationSuite_Aercheck(py_app).uia_ShowSkinSeparately(aero_title)
         #  修改配置文件内容用于执行用例的时候获取项目所在地址
         ProfileDataProcessing("commonality-Aerobook-Aerocheck", "ProjectSave_path").config_File_amend(source)
 

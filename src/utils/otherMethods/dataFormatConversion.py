@@ -172,7 +172,17 @@ class FormatConversion:
 
 
 
-
+    def takeOut_dict_SameKey(self,dict_one,dict_two):
+        """
+        两个字典取出相同的键值
+        :return:
+        """
+        new_dict={}
+        for k ,v in dict_one.items():
+            if k in dict_two:
+                v1=dict_two[k]
+                new_dict[k]=v1
+        return new_dict
 
 
 
