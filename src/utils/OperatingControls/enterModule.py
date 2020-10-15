@@ -215,7 +215,18 @@ class  ctrW_AeroFiberbook:
         return self.workField
 
 
-
+    def workField_1DdesignParam_sectionalSize(self):
+        """
+        一维单元设计参数（截面尺寸）
+        :return:
+        """
+        # 窗口二
+        self.win_two=self.workField.gridwxWindowNR1.GridWindowwxWindowNR1
+        # 窗口三
+        self.win_three=self.workField.panelwxWindowNR4.GridWindow2
+        # 窗口四
+        self.win_four=self.workField.panelwxWindowNR4
+        return self.workField,self.win_two,self.win_three,self.win_four
 
 
 
@@ -323,9 +334,12 @@ class GetWindowInstance:
         elif self.module=="Aerobook-Fiberbook":
             if self.ModuMarking == "优化设置--全局设置":
                 self.win_one =ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "设计变量--一维单元设计变量（截面尺寸）":
+                self.win_one,self.win_two,self.win_three,self.win_four = ctrW_AeroFiberbook(son_window).workField_1DdesignParam_sectionalSize()
             else:
                 raise MyException("没有找到需要切换的窗口：%r" % self.ModuMarking)
-
+        else:
+            raise MyException("没有找到主模块名称：%r" % self.module)
         print("\033[0;34m窗口标识一：%r，窗口标识二：%r，窗口标识三：%r，窗口标识四：%r"%(self.win_one,self.win_two,self.win_three,self.win_four), __file__, sys._getframe().f_lineno)
         print("")
         print("\033[0;32;35m{{窗口标识获取完毕}}\033[0m", __file__, sys._getframe().f_lineno)

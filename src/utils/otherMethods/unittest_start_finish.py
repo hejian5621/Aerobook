@@ -10,7 +10,7 @@ from tool import pictureProcessing
 import os,sys
 from config.relative_location import path
 from src.utils.otherMethods.initialize import pywin_openAProgram
-from src.utils.otherMethods.ControlOperationSuite_Aercheck import ControlOperationSuite_Aercheck
+from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite_Aercheck
 
 
 
@@ -232,11 +232,9 @@ class handlingMethod:
         sum_number=dictSet["用例运行总次数"]
         print("sum_number:",sum_number)
         if sum_number==0 :   # 用例运行第一次
-            print("title:",title)
             state = Check_winControl(title).handle_win()  # 通过弹窗的类名获取弹窗的句柄
-            print()
             if state:  # 如果state的值是True,就说明Aerobook窗口没有打开
-                print("是否启动")
+                print("启动%r模块"%title)
                 pywin_openAProgram().open_accredit()  # 启动Aerobook应用程序
 
 

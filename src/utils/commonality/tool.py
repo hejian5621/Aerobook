@@ -442,7 +442,6 @@ class  Check_winControl:
         retur = False
         import win32gui
         hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的类名获取弹窗的句柄
-        print("hwnd:",hwnd)
         if hwnd==0 :  # hwnd等于0代表没有找到窗口
             retur = True
         else:
@@ -467,18 +466,26 @@ class  Check_winControl:
 
 
     """确认勾选框是否勾选，如果没有勾选，就勾选"""
-    def Verify_CheckBox_Status(self):
+    def Verify_CheckBox_Status(self,UseCase_ControlsName=None):
         """
         确认勾选框是否勾选，如果没有勾选，就勾选
         :return:
         """
+        print("UseCase_ControlsName:",UseCase_ControlsName)
         self.triggerButton.click_input()  # 勾选勾选框
         while self.CircleInitial<self.cycleIndex:
             State=self.triggerButton.get_check_state()   # 返回勾选框的勾选状态
-            if State==0:  # 0 表示没有勾选上
-                self.triggerButton.click_input()
+            print("State:",State)
+            if  UseCase_ControlsName=="不勾选":
+                if State==1:  # 0 表示没有勾选上
+                    self.triggerButton.click_input()
+                else:
+                    break
             else:
-                break
+                if State==0:  # 0 表示没有勾选上
+                    self.triggerButton.click_input()
+                else:
+                    break
             self.CircleInitial = self.CircleInitial + 1
 
 
@@ -582,6 +589,7 @@ class WindowTop:
         else:            # 如果不是最大化
             Aerobook_main.maximize()  # 窗口最大化
         WindowTop(self.window_name).EnumWindows()  # 窗口置顶显示
+
 
     def window_enum_callback(self,hwnd, wildcard):
         """
@@ -811,6 +819,8 @@ class UseCase_parameterization:
                 location = ProfileDataProcessing("testCase-Aerobook-Fiberbook", "initializeUsecase").config_File()
             elif sole_ModuleIdentifier=="优化设置--全局设置":
                 location = ProfileDataProcessing("testCase-Aerobook-Fiberbook", "globalSetting").config_File()
+            elif sole_ModuleIdentifier=="设计变量--一维单元设计变量（截面尺寸）":
+                location = ProfileDataProcessing("testCase-Aerobook-Fiberbook", "1DdesignParam_sectionalSize").config_File()
             else:
                 raise MyException("没有地址:%r"%sole_ModuleIdentifier)
         else:

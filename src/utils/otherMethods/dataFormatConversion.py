@@ -178,8 +178,8 @@ class FormatConversion:
         :return:
         """
         new_dict={}
-        for k ,v in dict_one.items():
-            if k in dict_two:
+        for k ,v in dict_two.items():
+            if k in dict_one:
                 v1=dict_two[k]
                 new_dict[k]=v1
         return new_dict

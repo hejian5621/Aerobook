@@ -8,7 +8,7 @@ from pykeyboard import PyKeyboard
 from pywinauto  import  findwindows
 from OperatingControls.enterModule import BeingMeasured_popupWin
 from tool import MyException
-
+import  win32gui
 
 
 """Aercheck控件操作套件"""
@@ -250,7 +250,6 @@ class  ControlOperationSuite_Aercheck:
             app = Application().connect(title="选择铺层库信息",timeout=20)
             self.dlg_spec = app.window(title="选择铺层库信息")  # 切换到选择文件弹窗窗口
         except findwindows.ElementNotFoundError:
-            import sys, os
             print("没有找到“选择铺层库信息“窗口"% __file__, sys._getframe().f_lineno)
         else:
             dlg_spec=self.dlg_spec.child_window(title="GridWindow", class_name="wxWindowNR")  # 切换到网格窗口
@@ -280,8 +279,37 @@ class ControlOperationSuite_Fiberbook:
 
 
     """设计变量--一维单元设计变量（截面尺寸）--1D截面参数定义"""
-    def designVariableSection_definition(self):
+    def designVariableSection_definition(self, title):
         """
         设计变量--一维单元设计变量（截面尺寸）--1D截面参数定义
         :return:
         """
+        try:
+            wnd = win32gui.FindWindow(None,  title)  # 通过弹窗的类名获取弹窗的句柄
+            if wnd==0:                                       # 如果句柄是0，就说明没有找到窗口，就抛出异常
+                raise MyException("没有找到弹窗“%r”"% title)
+        except Exception:
+            pass
+        else:
+            app = Application().connect(handle=wnd)
+            self.dlg_spec = app.window(handle=wnd)  # 切换到选择文件弹窗窗口
+            self.dlg_spec.Button3.click_input()
+
+    """设计变量--一维单元设计变量（截面尺寸）--铺层比定义"""
+    def designVariableSection_LayUp(self):
+        """
+        设计变量--一维单元设计变量（截面尺寸）--铺层比定义
+        :return:
+        """
+        try:
+            wnd = win32gui.FindWindow(None, "铺层比定义")  # 通过弹窗的类名获取弹窗的句柄
+            if wnd == 0:  # 如果句柄是0，就说明没有找到窗口，就抛出异常
+                raise MyException("没有找到弹窗“1D截面参数定义”")
+        except Exception:
+            pass
+        else:
+            app = Application().connect(handle=wnd)
+            self.dlg_spec = app.window(handle=wnd)  # 切换到选择文件弹窗窗口
+            self.dlg_spec.Button3.click_input()
+
+

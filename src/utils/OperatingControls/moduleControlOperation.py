@@ -39,10 +39,10 @@ class OperatingControls:
             if UseCase_ControlsName in  Silverlight:                            # 在控件属性字典中取出控件的属性
                 attribute_ControlsName = Silverlight[UseCase_ControlsName]
                 print("\033[0;34m开始操作控件：%r 用例的值：%r\033[0m" % (UseCase_ControlsName, UseCase_Controlsvalue), __file__, sys._getframe().f_lineno)
-                if UseCase_ControlsName != "默认":    # 当该控件的用例值为“默认”，就不做任何操作
+                if UseCase_Controlsvalue != "默认":    # 当该控件的用例值为“默认”，就不做任何操作
                     # 取出控件的操作属性
                     ControlTypes = attribute_ControlsName["控件类型"]
-                    operateWin = attribute_ControlsName["所操作实例"]
+                    operateWin = attribute_ControlsName["所操作控件窗口"]
                     Controlmethod = attribute_ControlsName["唯一标识方法"]
                     discern = attribute_ControlsName["唯一标识"]
                     waitingTime = attribute_ControlsName["操作控件后等待时间"]
@@ -60,7 +60,7 @@ class OperatingControls:
                         Check_winControl(None, dlg_spec).Verify_inputBox(UseCase_Controlsvalue)   # 向文本框中输入数据
                         print("在控件”%r“文本框中输入：%r" % (UseCase_ControlsName, UseCase_Controlsvalue))
                     elif ControlTypes == "勾选框" or ControlTypes == "单选框" or ControlTypes == "复选框":
-                            Check_winControl(None, dlg_spec).Verify_CheckBox_Status()
+                            Check_winControl(None, dlg_spec).Verify_CheckBox_Status(UseCase_Controlsvalue)
                             print("控件%r成功勾选" % UseCase_ControlsName)
                     elif ControlTypes == "按钮":
                         dlg_spec.click_input()
@@ -90,7 +90,8 @@ class OperatingControls:
                         OperatingControls(dlg_spec).scrollMouse()
                     else:
                         raise MyException("说明控件属性")
-                    time.sleep(waitingTime)
+                    if type(waitingTime)==int:
+                        time.sleep(waitingTime)
                 else:
                     print("不操作控件“%r”：%r" % (UseCase_ControlsName, UseCase_Controlsvalue), __file__, sys._getframe().f_lineno)
             else:
@@ -420,8 +421,8 @@ class OperatingControls:
         OperatingControls(self.win_one).coord_dblclick(discern)
         if Popup_type=="选择铺层库信息":
             ControlOperationSuite_Aercheck(None).select_Laminatedata(argument)
-        elif Popup_type=="1D截面参数定义":
-            ControlOperationSuite_Fiberbook(None).designVariableSection_definition()
+        elif Popup_type=="1D截面参数定义" or Popup_type=="铺层比定义":
+            ControlOperationSuite_Fiberbook(None).designVariableSection_definition(Popup_type)
         else:
             raise MyException("没有弹窗类型：%r"%Popup_type)
 
