@@ -5,7 +5,7 @@ import uiautomation
 from config.configurationFile import ProfileDataProcessing
 import time,os
 from OperatingControls.enterModule import specialWay_OperatingControls
-
+import win32gui
 
 
 """打开Arobook"""
@@ -38,6 +38,7 @@ class pywin_openAProgram:
         """
         app_window=pywin_openAProgram().passExe_open('Aerobook平台启动器')  # 打开Aerobook应用程序
         pywin_openAProgram().AuthorizedOperation(app_window)              # 进行授权操作
+        time.sleep(1)
         Aerobook_main=pywin_openAProgram().AeroB_console()      # 链接Aerbook控制台并最大化
         return Aerobook_main
 
@@ -89,8 +90,10 @@ class pywin_openAProgram:
         进入子程序,通过标题链接
         :return:
         """
-        main_window = Application().connect(title_re=self.aero_title, timeout=10)
-        Aerobook_main = main_window.window(title_re=self.aero_title)
+        time.sleep(0.2)
+        hwnd = win32gui.FindWindow(None, self.aero_title)
+        main_window = Application().connect(handle=hwnd, timeout=10)
+        Aerobook_main = main_window.window(handle=hwnd)
         return Aerobook_main
 
 
@@ -147,12 +150,12 @@ class UIA_link:
         :param childApp_Title:
         :return:
         """
+        hwnd = win32gui.FindWindow(None, self.aero_title)
         # 连接Aerobook控制台窗口进程
-        Use = uiautomation.WindowControl(searchDepth=1, Name=self.aero_title )
+        Use = uiautomation.WindowControl(searchDepth=1, handle=hwnd)
         # 点击子应用，进入子应用
-        Use.Control(searchDepth=4,Name=childApp_Title).Click()
+        Use.Control(searchDepth=4, Name=childApp_Title).Click()
         return Use
-
 
 
 

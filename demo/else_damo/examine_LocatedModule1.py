@@ -4,6 +4,6 @@ from tool import Check_winControl
 
 
 
-title="Aerocheck"
+title="Aerobook-Aerocheck"
 
 Check_winControl(title).examine_LocatedModule()

@@ -29,7 +29,7 @@ class OperatingControls:
         :param argument: 控件输入参数和需不要操作
         :return:
         """
-        print("\033[0;32;35m《进入操作控件函数开始操作控件》\033[0m", __file__, sys._getframe().f_lineno)
+        print("\033[0;32;33m《进入操作控件函数开始操作控件》\033[0m", __file__, sys._getframe().f_lineno)
         print(" ")
         location = argument["被测程序文件地址"]
         # 在用例字典中取出跟属性方法字典中相同键的键值
@@ -90,7 +90,7 @@ class OperatingControls:
                         OperatingControls(dlg_spec).scrollMouse()
                     else:
                         raise MyException("说明控件属性")
-                    if type(waitingTime)==int:
+                    if type(waitingTime)==int or type(waitingTime)==float :
                         time.sleep(waitingTime)
                 else:
                     print("不操作控件“%r”：%r" % (UseCase_ControlsName, UseCase_Controlsvalue), __file__, sys._getframe().f_lineno)

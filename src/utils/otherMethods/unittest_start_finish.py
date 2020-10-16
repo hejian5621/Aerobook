@@ -39,7 +39,7 @@ class Initializing:
         :param dict_testCase:
         :return:
         """
-        print("\033[0;32;35m《开始进行执行用例前的准备工作》\033[0m", __file__, sys._getframe().f_lineno)
+        print("\033[0;32;33m《开始进行执行用例前的准备工作》\033[0m", __file__, sys._getframe().f_lineno)
         print("")
         """取出参数"""
         global_hostModule = dictSet["全局主模块名称"]
@@ -59,10 +59,13 @@ class Initializing:
         ProjectPath =handlingMethod().Get_Project_path(real_hostModule)
         """ 用例在执行前，首先获取信息窗口的文本信息，用于获取最新的信息窗口文本信息"""
         old_content = Information_Win().acquire_HTML_TXT(ProjectPath)
+        """在用例执行前取出信息窗口里面最新的日期时间"""
+        newTime=handlingMethod().infoWin_new_dateAndTime()
         """用例运行前删除指定的文件"""
         folderFile_dispose(ProjectPath).delfile(dict_testCase)
         """打包参数"""
-        pack_dict={"全局子模块名称":global_sonmoduleName,"全局主模块名称":global_hostModule,"项目保存路径":ProjectPath,"信息窗口旧的数据":old_content,"控件属性已经操作方法":testCase}
+        pack_dict={"全局子模块名称":global_sonmoduleName,"全局主模块名称":global_hostModule,"项目保存路径":ProjectPath,
+                   "信息窗口旧的数据":old_content,"控件属性已经操作方法":testCase,"信息窗口最新的日期时间":newTime}
         return pack_dict
 
 
@@ -79,7 +82,7 @@ class finish_clear:
         :param dictSet:字典类型的数据集
         :return: 返回格式规范化的实际值和预期值
         """
-        print("\033[0;32;35m《开始进行用例的收尾工作》\033[0m", __file__, sys._getframe().f_lineno)
+        print("\033[0;32;33m《开始进行用例的收尾工作》\033[0m", __file__, sys._getframe().f_lineno)
         print("")
         actual_result = dictSet["实际值"]
         sole_ModuleIdentifier = dictSet["模块唯一标识"]
@@ -141,10 +144,8 @@ class handlingMethod:
                  "初始行": 1,"初始列":1}
         dicts_title = read_excel(site).readExcel_common()  # 从Excel表格中取出要关闭窗口的标题
         # 根据模块名称取出对应模块应该检查的弹窗标题
-        print("dicts_title:",dicts_title)
         if sole_ModuleIdentifier in dicts_title:
             CloseWindows=dicts_title[sole_ModuleIdentifier]
-            print("CloseWindows:",CloseWindows)
             if "；" in CloseWindows:    # 如果字典的值里有“；”，就转化成列表
                 self.list_CloseWindows = CloseWindows.split("；")
             else:  # 如果字典的值里没有“；”，就强行转化成列表
@@ -160,6 +161,7 @@ class handlingMethod:
                 else:  # 如果字典的值里没有“；”，就强行转化成列表
                     self.list_CloseWindows.append(CloseWindows)
                 print("\033[0;32;34m因为该被测模块名没有找到对应关闭窗口的名称，所以全部关闭一遍，被测模块名称：%r\033[0m" % sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
+                time.sleep(0.1)
                 for title in self.list_CloseWindows:  # 依次取出预期关闭的弹窗的标题
                     Check_winControl(title).Force_close_popUp()  # 关闭弹窗
         print("\033[0;32;34m%r模块弹窗检查完毕\033[0m" % sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
@@ -185,7 +187,7 @@ class handlingMethod:
         在主模块第运行第一条用例时需要做的准备工作
         :return:
         """
-        real_arg, global_Name = handlingMethod().initialize_globalVariable(host_Module, moduleName)
+        real_arg, global_Name = handlingMethod().initialize_globalVariable(host_Module, moduleName)  # 初始化全局变量
         if real_arg :
             """检查窗口是否在被测组模块（Aerocheck、Fiberbook等为主模块）"""
             Check_winControl(moduleName).examine_LocatedModule()
@@ -230,7 +232,6 @@ class handlingMethod:
         """
         from src.utils.otherMethods.initialize import pywin_openAProgram
         sum_number=dictSet["用例运行总次数"]
-        print("sum_number:",sum_number)
         if sum_number==0 :   # 用例运行第一次
             state = Check_winControl(title).handle_win()  # 通过弹窗的类名获取弹窗的句柄
             if state:  # 如果state的值是True,就说明Aerobook窗口没有打开
@@ -266,3 +267,15 @@ class handlingMethod:
             ControlOperationSuite_Aercheck(py_app).uia_ShowSkinSeparately(aero_title)
             #  修改配置文件内容用于执行用例的时候获取项目所在地址
             ProfileDataProcessing("commonality-Aerobook-Aerocheck", "ProjectSave_path").config_File_amend(source)
+
+
+    def infoWin_new_dateAndTime(self):
+        """
+        取出信息窗口最新的时间
+        :return:
+        """
+        from utils.commonality.tool import htmlFormat
+        HTML_address = r"F:\Aerobook\src\testCase\projectFile\automateFile\Aerocheck_prjLog_2020-10-16.html"
+        list_time=htmlFormat().takeOut_html_dateAndtime(HTML_address)
+        newTime=list_time[-1]
+        return newTime

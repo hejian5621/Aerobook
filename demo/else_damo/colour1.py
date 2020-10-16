@@ -9,7 +9,7 @@ print("")
 print("\033[0;33m$$$《“%r”模块开始测试，执行用例：%r》\033[0m" % (tested_Module, UseCase_Number), __file__, sys._getframe().f_lineno)
 print("")
 print("")
-print("\033[0;32;35m《开始进行执行用例前的准备工作》\033[0m", __file__, sys._getframe().f_lineno)
+print("\033[0;32;33m《开始进行执行用例前的准备工作》\033[0m", __file__, sys._getframe().f_lineno)
 print("")
 real_arg=0
 global_UseCase_Name="铺层信息--铺层库优化"

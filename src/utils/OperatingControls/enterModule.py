@@ -4,6 +4,9 @@ from pywinauto.application import Application
 from pywinauto import findwindows
 from config.configurationFile import ProfileDataProcessing
 from tool import MyException
+import win32gui
+
+
 
 """进入被测弹窗"""
 class BeingMeasured_popupWin:
@@ -25,13 +28,14 @@ class BeingMeasured_popupWin:
 
         while self.CircleInitial<=self.cycleIndex:
             try:
-                app = Application().connect(title_re=self.window_title)
-                self.popupWin = app.window(title=self.window_title)
-            except findwindows.ElementNotFoundError as err:   # 如果没有找到弹窗继续循环找
+                hwnd = win32gui.FindWindow(None, self.window_title)
+                if hwnd == 0:
+                    raise MyException("窗口没有关闭")  # 实例化一个异常,实例化的时候需要传参数
+            except Exception as obj:  # 如果没有找到弹窗继续循环找
                 time.sleep(0.1)
-            except Exception :
-                raise MyException("没有找到”%r“弹窗"%self.window_title)
             else:
+                app = Application().connect(handle=hwnd)
+                self.popupWin = app.window(handle=hwnd)
                 break
             self.CircleInitial = self.CircleInitial + 1
             if self.CircleInitial == (self.cycleIndex + 1):
@@ -157,7 +161,6 @@ class  ctrW_AeroAerochcek:
         from tool import Check_winControl
         workField=self.workField.Button2
         Check_winControl(None,workField).window_handle_WhetherOpen("#32770","Edit4")  # 编辑参数是否打开
-        import win32gui
         hwnd = win32gui.FindWindow("#32770", None)  # 获取窗体的句柄
         app = Application().connect(handle=hwnd, timeout=20)
         dlg_spec = app.window(handle=hwnd)  # 切换到选择文件弹窗窗口
@@ -229,6 +232,30 @@ class  ctrW_AeroFiberbook:
         return self.workField,self.win_two,self.win_three,self.win_four
 
 
+    def workField_1DSection_popUps(self):
+        """
+        一维单元设计参数（截面尺寸）--》1D截面参数定义弹窗
+        :return:
+        """
+        win = self.workField.gridwxWindowNR1.GridWindowwxWindowNR1
+        # 打开“1D截面参数定义弹窗”
+        win.double_click_input(coords=(60, 10), button="left")
+        self.win_one = BeingMeasured_popupWin("1D截面参数定义").menu_LetsGoTopopover()
+        return self.win_one,self.win_two,self.win_three,self.win_four
+
+
+    def workField_LayerThan_popUps(self):
+        """
+        一维单元设计参数（截面尺寸）--》铺层比定义弹窗
+        :return:
+        """
+        win = self.workField.panelwxWindowNR4.GridWindow2
+        # 打开“1D截面参数定义弹窗”
+        win.double_click_input(coords=(60, 10), button="left")
+        self.win_one = BeingMeasured_popupWin("铺层比定义").menu_LetsGoTopopover()
+        return self.win_one,self.win_two,self.win_three,self.win_four
+
+
 
 """特殊情况下的控件操作，一般是正常方法识别不了控件"""
 class specialWay_OperatingControls:
@@ -279,7 +306,7 @@ class GetWindowInstance:
         获取操作控件的各个窗口
         :return:
         """
-        print("\033[0;32;35m《开始获取“%r”模块窗口标识》\033[0m"%self.ModuMarking, __file__, sys._getframe().f_lineno)
+        print("\033[0;32;33m《开始获取“%r”模块窗口标识》\033[0m"%self.ModuMarking, __file__, sys._getframe().f_lineno)
         print("")
         from src.utils.otherMethods.initialize import pywin_openAProgram
         # 连接到被测程序，并且通过菜单栏打开被测模块
@@ -335,7 +362,14 @@ class GetWindowInstance:
             if self.ModuMarking == "优化设置--全局设置":
                 self.win_one =ctrW_AeroFiberbook(son_window).workField_general()
             elif self.ModuMarking == "设计变量--一维单元设计变量（截面尺寸）":
-                self.win_one,self.win_two,self.win_three,self.win_four = ctrW_AeroFiberbook(son_window).workField_1DdesignParam_sectionalSize()
+                if self.testWinTitle_son=="一维单元设计参数（截面尺寸）":
+                    self.win_one,self.win_two,self.win_three,self.win_four = ctrW_AeroFiberbook(son_window).workField_1DdesignParam_sectionalSize()
+                elif self.testWinTitle_son=="1D截面参数定义":
+                    self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroFiberbook(son_window).workField_1DSection_popUps()
+                elif self.testWinTitle_son=="铺层比定义":
+                    self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroFiberbook(son_window).workField_LayerThan_popUps()
+                else:
+                    raise MyException("没有找到需要切换的子窗口：%r" % self.testWinTitle_son)
             else:
                 raise MyException("没有找到需要切换的窗口：%r" % self.ModuMarking)
         else:

@@ -1,7 +1,7 @@
 
 
 from src.utils.otherMethods.initialize import UIA_link,pywin_openAProgram
-from src.utils.otherMethods.ControlOperationSuite_Aercheck import ControlOperationSuite_Aercheck
+from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite_Aercheck
 from tool import folderFile_dispose
 from config.relative_location import path
 from config.configurationFile import ProfileDataProcessing
@@ -124,9 +124,9 @@ class  module_initialize:
 moduleName= "Aerobook-Aerocheck"
 # 执行初始化
 
-module_initialize().start_Aerobook_Aercheck()
+# module_initialize().start_Aerobook_Aercheck()
 
-# module_initialize().LaminatedataPopup(moduleName,"csh001",["铺层数据库制作工具"])  # 铺层信息->铺层数据库制作工具
+module_initialize().LaminatedataPopup(moduleName,"csh001",["铺层数据库制作工具"])  # 铺层信息->铺层数据库制作工具
 
 module_initialize().LaminatedataPopup(moduleName,"csh002",["1D单元尺寸定义（模板）"]) # 尺寸信息->一维单元尺寸定义（模板）
 

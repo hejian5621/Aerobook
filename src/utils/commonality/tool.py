@@ -12,8 +12,10 @@ from pathlib import Path
 from src.utils.commonality.ExcelFile import read_excel
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
 from pywinauto import  findwindows
+import win32gui
 from functools import wraps
 
+from time import *
 
 
 
@@ -52,6 +54,48 @@ class  instrument:
         dlg_spec = aero_window.richText2  # 切换到信息窗口
         dlg_spec.send_keystrokes("^a")  # 全选信息窗口的文本信息
         dlg_spec.send_keystrokes("^c")  # 复制信息窗口的文本信息到粘贴板
+
+
+
+"""win32gui"""
+class win32guiHandle:
+    """win32gui"""
+
+    def __init__(self,title):
+        self.title=title
+
+
+    def Handlelink_window_open(self):
+        """
+        通过句柄链接窗口,以此判断窗口是否打开
+        :return:
+        """
+        n=0
+        hwnd=0
+        while n <= 3:
+            hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
+            if hwnd!=0:
+                break
+            time.sleep(0.1)
+            n+=1
+        return hwnd
+
+
+    def Handlelink_window_close(self):
+        """
+       通过句柄链接窗口
+       :return:
+       """
+        n = 0
+        hwnd = 0
+        while n <= 20:
+            hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
+            if hwnd == 0:
+                break
+            time.sleep(0.1)
+            n += 1
+        return hwnd
+
 
 
 """键盘鼠标操作"""
@@ -322,58 +366,49 @@ class  Check_winControl:
 
 
     """处理带有嵌套弹窗的弹窗"""
-    def nest_popUpWindows(self,nest_title,nest_triggerButton):
+    def nest_popUpWindows(self,nest_title,nest_triggerButton,tim=0.2):
         """
         处理带有嵌套弹窗的弹窗
         检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮
         :return:
         """
         while self.CircleInitial <= self.cycleIndex:
-            close_result=Check_winControl(self.title,self.triggerButton,1,1).popUp_Whether_close()   # 然后在检查弹窗有没有关闭
+            close_result=Check_winControl(self.title,self.triggerButton,1,1).popUp_Whether_close(tim)   # 然后在检查弹窗有没有关闭
             if close_result=="窗口已正常关闭":
                 break
-            time.sleep(0.5)
-            Check_winControl(nest_title, nest_triggerButton).popUp_Whether_close()  # 检查有没有嵌套弹框,有嵌套弹框就关掉
+            Check_winControl(nest_title, nest_triggerButton).popUp_Whether_close(tim)  # 检查有没有嵌套弹框,有嵌套弹框就关掉
             self.CircleInitial = self.CircleInitial + 1
             if self.CircleInitial == (self.cycleIndex + 1):
                 raise MyException("%r窗口没有关闭" % self.title)
 
 
     """检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮"""
-    def popUp_Whether_close(self):
+    def popUp_Whether_close(self,tim=0.2):
         """
         检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮
         首先通过获取句柄的形式来判断是否有弹窗，因为以句柄的形式会快一点
         :return:
         """
-        import win32gui
+        hwnd=0
+        py_app2=None
         while self.CircleInitial <= self.cycleIndex:
             try:
                 hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
-                if hwnd == 0:
-                    raise MyException("没有找到弹窗")  # 实例化一个异常,实例化的时候需要传参数
-            except Exception as obj:  # 万能捕获，之前的可能捕获不到，这里添加Exception作为保底
+                app2 = Application().connect(handle=hwnd)
+                py_app2 = app2.window(handle=hwnd)  # 切换到需要关闭的窗口
+                if py_app2[self.triggerButton].exists():  # 如果控件存在
+                    pass
+                else:
+                    raise MyException("没有找到弹窗")
+            except (RuntimeError,Exception):  # 万能捕获，之前的可能捕获不到，这里添加Exception作为保底
                 self.state = "窗口已正常关闭"
                 break
             else:
-                try:
-                    app1=Application().connect(title_re=self.title)
-                    py_app1 = app1.window(title_re=self.title)
-                except findwindows.ElementAmbiguousError:
-                    app2 = Application().connect(handle=hwnd)
-                    py_app2 = app2.window(handle=hwnd)  # 切换到需要关闭的窗口
-                    if py_app2[self.triggerButton].exists():  # 如果控件存在
-                        py_app2[self.triggerButton].click()
-                    else:
-                        raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
-                except findwindows.ElementNotFoundError:
-                    break
+                if py_app2[self.triggerButton].exists():  # 如果控件存在
+                    py_app2[self.triggerButton].click()
                 else:
-                    if py_app1[self.triggerButton].exists():  # 如果控件存在
-                        py_app1[self.triggerButton].click_input()
-                    else:
-                        raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
-                self.CircleInitial = self.CircleInitial + 1
+                    raise MyException("没有找到关闭窗口的按钮:%r" % self.title)
+            self.CircleInitial = self.CircleInitial + 1
         return self.state
 
 
@@ -384,6 +419,7 @@ class  Check_winControl:
         强行关闭弹窗
         :return:
         """
+
         import win32gui
         while self.CircleInitial <= self.cycleIndex:
             try:
@@ -395,24 +431,12 @@ class  Check_winControl:
                 self.state = "窗口已正常关闭"                   # 用于有嵌套弹窗的情况
                 break                                          # 退出循环
             else:
-                try:                                          # 根据标题在次连接弹窗
-                    app1 = Application().connect(title_re=self.title)
-                    py_app1 = app1.window(title_re=self.title)
-                except findwindows.ElementAmbiguousError:      # 抛出有多个相同标题的异常，就根据句柄一个一个的关闭弹窗
-                    app2 = Application().connect(handle=hwnd)
-                    py_app2 = app2.window(handle=hwnd)  # 切换到需要关闭的窗口
-                    if py_app2.exists():  # 如果控件存在
-                        py_app2.close()
-                    else:
-                        raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
-                except findwindows.ElementNotFoundError:
-                    print("根据弹窗标题判断弹窗已经关闭：",hwnd, __file__, sys._getframe().f_lineno)
-                    break
+                app = Application().connect(handle=hwnd)
+                py_app = app.window(handle=hwnd)  # 切换到需要关闭的窗口
+                if py_app.exists():  # 如果控件存在
+                    py_app.close()
                 else:
-                    if py_app1.exists():  # 如果控件存在
-                        py_app1.close()   # 强制关掉弹窗
-                    else:
-                        raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
+                    raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
                 self.CircleInitial = self.CircleInitial + 1
         return self.state
 
@@ -471,11 +495,9 @@ class  Check_winControl:
         确认勾选框是否勾选，如果没有勾选，就勾选
         :return:
         """
-        print("UseCase_ControlsName:",UseCase_ControlsName)
         self.triggerButton.click_input()  # 勾选勾选框
         while self.CircleInitial<self.cycleIndex:
             State=self.triggerButton.get_check_state()   # 返回勾选框的勾选状态
-            print("State:",State)
             if  UseCase_ControlsName=="不勾选":
                 if State==1:  # 0 表示没有勾选上
                     self.triggerButton.click_input()
@@ -507,13 +529,12 @@ class  Check_winControl:
                 self.triggerButton.set_text(data)
             self.CircleInitial = self.CircleInitial + 1
 
-
+    """选择下拉框"""
     def Verify_dropDownBox(self,data):
         """
         选择下拉框
         :return:
         """
-        print("data:",data)
         self.triggerButton.select(data)  # 下拉框
         while self.CircleInitial < self.cycleIndex:
             State = self.triggerButton.window_text()  # 是否选择预期数据
@@ -540,7 +561,8 @@ class  Check_winControl:
         检查被系统是否在被模块（Aerocherk、frmbook等）
         :return:
         """
-        titleName=None;moduleName=None
+        from src.utils.otherMethods.initialize import UIA_link
+        from src.utils.otherMethods.initialize import pywin_openAProgram
         if self.title=="Aerobook-Aerocheck":
             titleName= ProfileDataProcessing("commonality", "AerocheckEdition").config_File()  # 从配置文件获取Aerocheck窗口标题
             moduleName="Aerocheck"
@@ -550,19 +572,18 @@ class  Check_winControl:
         else:
             raise MyException("没有找到需要检查的模块：%r"%self.title)
         # 通过Aerobook标题链接Aerobook进程，并切换到Aerobook窗口
-        from src.utils.otherMethods.initialize import pywin_openAProgram
         aero_window = pywin_openAProgram().entrance_subroutine_title()
-        dlg_spec = aero_window.child_window(auto_id="panel_Graph", control_type="System.Windows.Forms.Panel")
         try:   # 是否能找到被测模块
-            dlg_spec.child_window(title=titleName, class_name="wxWindowNR").verify_enabled()
+            aero_window.child_window(title=titleName, class_name="wxWindowNR").verify_visible()
         except Exception:   # 如果没有找到抛出异常
             # 如果没有找到被测模块
-            from src.utils.otherMethods.initialize import  UIA_link
-            uia_app = UIA_link().EntrySubapplication(moduleName)  # 然后点击进入被测模块的按钮
+            UIA_link().EntrySubapplication(moduleName)  # 然后点击进入被测模块的按钮
             try:
-                dlg_spec.child_window(title=titleName, class_name="wxWindowNR",).wait("exists", timeout=60, retry_interval=0.5)  # 等待被测模块出现
+                aero_window.child_window(title=titleName, class_name="wxWindowNR").wait("exists", timeout=60, retry_interval=0.2)  # 等待被测模块出现
             except Exception:   # 如果抛出异常说明没有找到被测模块
                 raise MyException("没有找到被测试模块:%r"%titleName)
+            else:
+                pass
 
 
 
@@ -622,6 +643,8 @@ class htmlFormat:
         self.str_Name=None
         self.list_Name=[]
 
+
+    """取出Html文件中指定标签里的文本"""
     def takeOut_html_label(self,html_location,txt_location):
         """
         取出Html文件中指定标签里的文本
@@ -651,6 +674,23 @@ class htmlFormat:
         with open(txt_location, 'r') as f:
             self.str_Name = list(f)
         return self.str_Name
+
+
+
+    """取出Html文件中说有的日期时间本"""
+    def takeOut_html_dateAndtime(self, html_location):
+        """
+       取出Html文件中说有的日期时间
+       :param html_location:源文件地址
+       :return:
+       """
+        with open(html_location, "r", encoding="utf-8") as strf:
+            str = strf.read()
+        filtrate_1 = r'\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}'
+        list1 = re.findall(filtrate_1,str)
+        return list1
+
+
 
 
     def Filter_nonChinese(self, txt_location,txt_NewLocation):
@@ -854,7 +894,7 @@ class UseCase_parameterization:
         return self.list_dict_site
 
 
-"""统计函数运行的时间"""
+
 
 
 

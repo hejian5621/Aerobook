@@ -35,12 +35,6 @@ class UseCase_step:
         self.win_one,self.win_two,self.win_three,self.win_four=GetWindowInstance(self.property).get_window_instance()
         # 具体操作控件
         OperatingControls(self.win_one,self.win_two,self.win_three,self.win_four).console(self.testCase, self.property)
-        # 当所有的操作步骤操作完成后，需要等待一段时间，让系统进行计算
-        if self.results_waitTime :
-            pass
-        else:
-            self.results_waitTime=0
-        time.sleep(self.results_waitTime) # 实际值等待时间
         # 获取实际值
         self.example=[self.win_one,self.win_two,self.win_three,self.win_four]   # 把被测模块中的各个小窗口，打包
         self.actual_Text = GetActual_Value(self.property,self.example).ActualValue_controller(result)

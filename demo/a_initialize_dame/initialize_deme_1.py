@@ -1,5 +1,5 @@
 from src.utils.otherMethods.initialize import UIA_link,pywin_openAProgram
-from src.utils.otherMethods.ControlOperationSuite_Aercheck import ControlOperationSuite_Aercheck
+from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite_Aercheck
 from config.configurationFile import ProfileDataProcessing
 from tool import folderFile_dispose
 from config.relative_location import path

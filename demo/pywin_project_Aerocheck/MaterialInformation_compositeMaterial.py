@@ -1,14 +1,11 @@
 # 材料信息--复合材料需用值定义
 
-from config.configurationFile import ProfileDataProcessing
 from src.utils.otherMethods.initialize import pywin_openAProgram
-from src.utils.otherMethods.initialize import execute_useCase_initialize
-from OperatingControls.enterModule import BeingMeasured_popupWin,specialWay_OperatingControls,ctrW_AeroAerochcek
-import uiautomation
-from pywinauto.application import Application
+from OperatingControls.enterModule import BeingMeasured_popupWin,ctrW_AeroAerochcek
+
 import time
 from src.utils.OperatingControls.moduleControlOperation import OperatingControls
-from src.utils.otherMethods.ControlOperationSuite_Aercheck import ControlOperationSuite_Aercheck
+
 
 testCase_dict={"所在模块":"材料信息->定义复合材料参数"}
 

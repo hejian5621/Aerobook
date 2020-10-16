@@ -8,7 +8,7 @@ from pykeyboard import PyKeyboard
 from pywinauto  import  findwindows
 from OperatingControls.enterModule import BeingMeasured_popupWin
 from tool import MyException
-import  win32gui
+import  win32gui,sys
 
 
 """Aercheck控件操作套件"""
@@ -39,15 +39,17 @@ class  ControlOperationSuite_Aercheck:
         file_name = list_Popup_parameter[1]  # 取出输入的文件名
         close_Name = list_Popup_parameter[2]  # 取出关闭弹窗的按钮名称
         if window_one:
-            Check_winControl(Popup_Title, window_one).window_WhetherOpen()  # 判断预期窗口是否出现
+            Check_winControl(Popup_Title, window_one).window_WhetherOpen()  # 保证弹窗出现
         try :
-            app = Application().connect(title=Popup_Title,timeout=20)
-            self.dlg_spec = app.window(title=Popup_Title)  # 切换到选择文件弹窗窗口
-        except findwindows.ElementNotFoundError:
-            import sys, os
+            hwnd = win32gui.FindWindow(None, Popup_Title)
+            if hwnd == 0:  # 如果句柄不为零证明找到了该弹窗
+                raise MyException("没有找到弹窗")
+        except Exception:
             print("没有找到“%r“窗口"%Popup_Title, __file__, sys._getframe().f_lineno)
             raise MyException("没有找到“%r“窗口"%Popup_Title)
         else:
+            app = Application().connect(handle=hwnd, timeout=20)
+            self.dlg_spec = app.window(handle=hwnd)  # 切换到选择文件弹窗窗口
             # 切换控件
             dlg_spec1 = self.dlg_spec.child_window(class_name="WorkerW")
             dlg_spec2 = dlg_spec1.child_window(class_name="ReBarWindow32")
@@ -55,13 +57,12 @@ class  ControlOperationSuite_Aercheck:
             dlg_spec4 = dlg_spec3.child_window(class_name="msctls_progress32")  # 切换到选择文件弹窗中的地址栏
             dlg_spec5 = dlg_spec4.child_window(class_name="Breadcrumb Parent")
             dlg_spec6 = dlg_spec5.Toolbar
-            dlg_spec6.click()   # 点击地址栏，让地址栏输入框显示出来
+            dlg_spec6.click_input(coords = (10, 10))   # 点击地址栏，让地址栏输入框显示出来
             dlg_spec4.Edit.set_text(location)     # 在地址栏输入地址
             send_keys('{ENTER}')   # 点击回车键
             self.dlg_spec["Edit"].set_text(file_name)   # 在文件名中输入内容
             if Popup_type=="" or Popup_type=="无":
-                print("Popup_type：", Popup_type)
-                Check_winControl(Popup_Title, close_Name).popUp_Whether_close()
+                Check_winControl(Popup_Title, close_Name).popUp_Whether_close() # 检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮
             else:
                 list_AfterParsing = Popup_parameter.split("；")
                 print("Popup_parameter:",Popup_parameter)
@@ -78,8 +79,7 @@ class  ControlOperationSuite_Aercheck:
         :return:
         """
         from config.configurationFile import ProfileDataProcessing
-        dlg_app = entity.child_window(title=self.windowTitle, class_name="wxWindowNR"). \
-            wait("exists", timeout=60, retry_interval=0.5)
+        dlg_app = entity.child_window(title=self.windowTitle, class_name="wxWindowNR").wait("exists", timeout=60, retry_interval=0.2)
         dlg_app.menu_select(MenuOptions)  # 点击菜单选项
         Check_winControl("提示", "是").popUp_Whether_close()
         # 选择项目的保存路径
@@ -100,7 +100,7 @@ class  ControlOperationSuite_Aercheck:
             DetailedPath = source + "\Htail.fem"
             self.dlg_spec.Edit.wait("exists", timeout=60, retry_interval=1).set_text(DetailedPath)  # 在有限元模型路径对应的文本框中输入数据
             self.dlg_spec.wxPropertyGrid.click_input()
-            Check_winControl("项目设置", "完成").nest_popUpWindows("警告", "OK")  # 检查嵌套弹窗是否关闭
+            Check_winControl("项目设置", "完成").nest_popUpWindows("警告", "OK",4)  # 检查嵌套弹窗是否关闭
 
 
     """PYWIN独立显示蒙皮"""
@@ -222,8 +222,9 @@ class  ControlOperationSuite_Aercheck:
         在工作栏中选择工况
         :return:
         """
-        app = Application().connect(title=title_name,timeout=20)  # 连接校核工况弹窗
-        dlg_spec = app.window(title=title_name)
+        hwnd = win32gui.FindWindow(None, title_name)
+        app = Application().connect(handle=hwnd,timeout=20)  # 连接校核工况弹窗
+        dlg_spec = app.window(handle=hwnd)
         # dlg_spec.print_control_identifiers()
         txt=dlg_spec.ComboBox.window_text()  # 检查是否已经有工况组合
         if txt:  # 如果txt不为空，说明有工况组合数据
@@ -247,11 +248,14 @@ class  ControlOperationSuite_Aercheck:
         :return:
         """
         try:
-            app = Application().connect(title="选择铺层库信息",timeout=20)
-            self.dlg_spec = app.window(title="选择铺层库信息")  # 切换到选择文件弹窗窗口
-        except findwindows.ElementNotFoundError:
+            hwnd = win32gui.FindWindow(None, "选择铺层库信息")
+            if hwnd ==0:
+                raise MyException("没有找到窗口")  # 实例化一个异常,实例化的时候需要传参数
+        except Exception:
             print("没有找到“选择铺层库信息“窗口"% __file__, sys._getframe().f_lineno)
         else:
+            app = Application().connect(handle=hwnd, timeout=20)
+            self.dlg_spec = app.window(handle=hwnd)  # 切换到选择文件弹窗窗口
             dlg_spec=self.dlg_spec.child_window(title="GridWindow", class_name="wxWindowNR")  # 切换到网格窗口
             if line=="第一行":
                 dlg_spec.double_click_input(coords=(150, 10), button="left")  # 选择第一行数据
