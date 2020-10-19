@@ -90,6 +90,8 @@ class OperatingControls:
                         OperatingControls(dlg_spec).scrollMouse()
                     else:
                         raise MyException("说明控件属性")
+                    print("waitingTime:",waitingTime)
+                    print(type(waitingTime))
                     if type(waitingTime)==int or type(waitingTime)==float :
                         time.sleep(waitingTime)
                 else:

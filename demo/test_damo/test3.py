@@ -1,7 +1,7 @@
 
 
-import time
+from tool import Check_winControl
 
-a=10.0
 
-print(type(a))
+
+Check_winControl().closure_Excel_course()  # 关闭弹窗

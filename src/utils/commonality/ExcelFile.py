@@ -173,12 +173,17 @@ class read_excel():
 
 
 
+
+
 #
 # dict1 = {"详细地址": r"src\testCase\c_useCase_file\Fiberbook\设置变量\一维单元设计参数（截面尺寸）.xlsx", "表单名称": "测试一",
 #          "初始行": 1,"初始列":1}
 # read_excel(dict1).readExcel_testCase_blank()
 #
 # read_excel(dict1).readExcel_testCase()
+
+# read_excel(None).closure_Excel_course()
+
 
 
 

@@ -228,12 +228,34 @@ class folderFile_dispose:
         强制删除文件夹
         :return:
         """
-        if os.path.isdir(r"F:\Aerobook\\src\testCase\projectFile\automateFile"):
-            shutil.rmtree(self.sourceDir )
-            print('文件“%s“删除完毕' % self.sourceDir )
+        n=0
+        i=5
+        e=None
+        while n<=i:
+            try:
+                if os.path.isdir(r"F:\Aerobook\\src\testCase\projectFile\automateFile"):
+                    shutil.rmtree(self.sourceDir )
+            except PermissionError as e:
+                e=str(e)
+                if "另一个程序正在使用此文件" in e:
+                    if ".xlsx" in e:
+                        Check_winControl().closure_Excel_course()  # 强行关闭Excel进程
+                    else:
+                        print("错误：", e)
+                else:
+                    print("错误：",e)
+            else:
+                print('文件“%s“删除完毕' % self.sourceDir)
+                break
+            n+=1
+        if n>i :
+            raise MyException("有文件没有关闭")
 
 
-    #  批量删除文件
+
+
+
+            #  批量删除文件
     def delfile(self, dict_testCase):
         """
         批量删除文件
@@ -322,6 +344,7 @@ class  Check_winControl:
         # 判断弹窗是否弹窗，如果没有弹出，就继续点击
         while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
             try:
+                time.sleep(0.2)
                 hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
                 if hwnd != 0:                                 # 如果句柄不为零证明找到了该弹窗
                     raise MyException("没有找到弹窗")           # 如果找到了该弹窗，则主动抛出异常
@@ -439,6 +462,26 @@ class  Check_winControl:
                     raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
                 self.CircleInitial = self.CircleInitial + 1
         return self.state
+
+
+    """强行关闭Excel进程"""
+    def closure_Excel_course(self):
+        """
+        强行关闭Excel进程
+        :return:
+        """
+        import psutil
+        pids = psutil.pids()
+        for pid in pids:
+            try:
+                p = psutil.Process(pid)
+                print('pid=%s,pname=%s' % (pid, p.name()))
+                # 关闭excel进程
+                if p.name() == 'EXCEL.EXE':
+                    cmd = 'taskkill /F /IM EXCEL.EXE'
+                    os.system(cmd)
+            except Exception as e:
+                print(e)
 
 
     """通过窗口的类名获取句柄，通句柄判断窗口是否存在"""

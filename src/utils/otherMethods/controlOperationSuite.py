@@ -35,21 +35,31 @@ class  ControlOperationSuite_Aercheck:
         :param Popup_parameter: 在文件名文本框输入的内容
         :return:
         """
+        hwnd=0
         Popup_Title = list_Popup_parameter[0]  # 取出弹窗标题
         file_name = list_Popup_parameter[1]  # 取出输入的文件名
         close_Name = list_Popup_parameter[2]  # 取出关闭弹窗的按钮名称
         if window_one:
             Check_winControl(Popup_Title, window_one).window_WhetherOpen()  # 保证弹窗出现
         try :
-            hwnd = win32gui.FindWindow(None, Popup_Title)
+            n=0
+            i=10
+            while n<=i:
+                time.sleep(0.2)
+                hwnd = win32gui.FindWindow(None, Popup_Title)
+                if hwnd !=0:
+                    break
+                n+=1
             if hwnd == 0:  # 如果句柄不为零证明找到了该弹窗
                 raise MyException("没有找到弹窗")
         except Exception:
             print("没有找到“%r“窗口"%Popup_Title, __file__, sys._getframe().f_lineno)
             raise MyException("没有找到“%r“窗口"%Popup_Title)
         else:
+            print("hwnd:",hwnd)
             app = Application().connect(handle=hwnd, timeout=20)
             self.dlg_spec = app.window(handle=hwnd)  # 切换到选择文件弹窗窗口
+            # self.dlg_spec.print_control_identifiers()
             # 切换控件
             dlg_spec1 = self.dlg_spec.child_window(class_name="WorkerW")
             dlg_spec2 = dlg_spec1.child_window(class_name="ReBarWindow32")

@@ -90,10 +90,25 @@ class pywin_openAProgram:
         进入子程序,通过标题链接
         :return:
         """
-        time.sleep(0.2)
-        hwnd = win32gui.FindWindow(None, self.aero_title)
-        main_window = Application().connect(handle=hwnd, timeout=10)
-        Aerobook_main = main_window.window(handle=hwnd)
+        n=0
+        i=10
+        from tool import MyException
+        Aerobook_main=None
+        while n<=i:
+            try:
+                time.sleep(0.2)
+                hwnd = win32gui.FindWindow(None, self.aero_title)
+                print("hwnd:",hwnd)
+                main_window = Application().connect(handle=hwnd, timeout=10)
+            except RuntimeError:
+                print("没有找到")
+            else:
+                Aerobook_main = main_window.window(handle=hwnd)
+                break
+            n += 1
+        if n>i:
+           raise MyException("没有找到标题为%r的弹窗" % self.aero_title)
+        n+=1
         return Aerobook_main
 
 
