@@ -218,7 +218,7 @@ class  ctrW_AeroFiberbook:
         return self.workField
 
 
-    def workField_1DdesignParam_sectionalSize(self):
+    def workField_1DDESVAR_sectionSize(self):
         """
         一维单元设计参数（截面尺寸）
         :return:
@@ -243,6 +243,16 @@ class  ctrW_AeroFiberbook:
         self.win_one = BeingMeasured_popupWin("1D截面参数定义").menu_LetsGoTopopover()
         return self.win_one,self.win_two,self.win_three,self.win_four
 
+    def workField_2DDESVAR_popUps(self):
+        """
+        二维单元设计参数--》铺层厚度/铺层比定义
+        :return:
+        """
+        win = self.workField.child_window(title="grid", class_name="wxWindowNR")
+        # 打开“1D截面参数定义弹窗”
+        win.double_click_input(coords=(100, 40), button="left")
+        self.win_one = BeingMeasured_popupWin("铺层厚度/铺层比定义").menu_LetsGoTopopover()
+        return self.win_one, self.win_two, self.win_three, self.win_four
 
     def workField_LayerThan_popUps(self):
         """
@@ -254,6 +264,15 @@ class  ctrW_AeroFiberbook:
         win.double_click_input(coords=(60, 10), button="left")
         self.win_one = BeingMeasured_popupWin("铺层比定义").menu_LetsGoTopopover()
         return self.win_one,self.win_two,self.win_three,self.win_four
+
+
+    def workField_2DDESVAR(self):
+        """
+        二维单元设计参数
+        :return:
+        """
+        self.win_two = self.workField.child_window(title="grid", class_name="wxWindowNR")
+        return self.workField, self.win_two, self.win_three, self.win_four
 
 
 
@@ -363,13 +382,42 @@ class GetWindowInstance:
                 self.win_one =ctrW_AeroFiberbook(son_window).workField_general()
             elif self.ModuMarking == "设计变量--一维单元设计变量（截面尺寸）":
                 if self.testWinTitle_son=="一维单元设计参数（截面尺寸）":
-                    self.win_one,self.win_two,self.win_three,self.win_four = ctrW_AeroFiberbook(son_window).workField_1DdesignParam_sectionalSize()
+                    self.win_one,self.win_two,self.win_three,self.win_four = ctrW_AeroFiberbook(son_window).workField_1DDESVAR_sectionSize()
                 elif self.testWinTitle_son=="1D截面参数定义":
                     self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroFiberbook(son_window).workField_1DSection_popUps()
                 elif self.testWinTitle_son=="铺层比定义":
                     self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroFiberbook(son_window).workField_LayerThan_popUps()
                 else:
                     raise MyException("没有找到需要切换的子窗口：%r" % self.testWinTitle_son)
+            elif self.ModuMarking == "设计变量--一维单元设计变量（截面积）":
+                self.win_one =ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "设计变量--二维单元设计参数":
+                if self.testWinTitle_son == "二维单元设计参数":
+                    self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroFiberbook(son_window).workField_2DDESVAR()
+                elif self.testWinTitle_son == "铺层厚度/铺层比定义":
+                    self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroFiberbook(son_window).workField_2DDESVAR_popUps()
+            elif self.ModuMarking == "应变设计响应--一维单元应变设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "应变设计响应--二维单元应变设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "应变设计响应--二维单元应变耦合DRESP3":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "应力设计响应->一维单元应力设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "应力设计响应->二维单元应力设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "丢成/厚度比设计响应--一维单元丢成/厚度比设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "丢成/厚度比设计响应--二维单元丢成/厚度比设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "优化设置--泊松比匹配响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "刚度约束设计响应--位移设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "刚度约束设计响应--刚度比设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "机翼优化响应--梁腹板缘条厚度比设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
             else:
                 raise MyException("没有找到需要切换的窗口：%r" % self.ModuMarking)
         else:

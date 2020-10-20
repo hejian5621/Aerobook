@@ -9,7 +9,7 @@ import sys,os,time
 
 
 
-txet=r"F:\Aerobook\demo\pywin_ToFindControl"
+text=r"F:\Aerobook\demo\pywin_ToFindControl"
 
 testdicts ={"所在模块":"求解计算->求解计算"}
 
@@ -24,11 +24,11 @@ dlg_spec.print_control_identifiers()
 
 
 # 属性更新对应的路径的文本框
-# dlg_spec.Edit.set_text(txet)
+# dlg_spec.Edit.set_text(text)
 
 
 # 载荷提取对应的路径文本框
-# dlg_spec.Edit2.set_text(txet)
+# dlg_spec.Edit2.set_text(text)
 
 
 # 点击属性更新路径对应的浏览按钮

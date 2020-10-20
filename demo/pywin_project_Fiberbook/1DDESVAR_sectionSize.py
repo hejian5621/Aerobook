@@ -6,7 +6,7 @@ import time
 from src.utils.OperatingControls.moduleControlOperation import OperatingControls
 
 from OperatingControls.enterModule import BeingMeasured_popupWin
-# 全局设置
+#  1D单元设计变量(截面尺寸)
 
 from OperatingControls.enterModule import ctrW_AeroFiberbook
 

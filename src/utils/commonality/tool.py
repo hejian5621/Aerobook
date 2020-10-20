@@ -4,16 +4,12 @@ from pywinauto import mouse
 from config.configurationFile import ProfileDataProcessing
 from aip import AipOcr
 import win32clipboard as wc
-import os,shutil,win32con,time,os,sys
 from pywinauto.application import Application
-import re,datetime
 from os import listdir
 from pathlib import Path
 from src.utils.commonality.ExcelFile import read_excel
 from src.utils.otherMethods.dataFormatConversion import FormatConversion
-from pywinauto import  findwindows
-import win32gui
-from functools import wraps
+import win32gui, win32com.client,re,datetime,shutil,win32con,time,os,sys
 
 from time import *
 
@@ -637,22 +633,23 @@ class WindowTop:
     def __init__(self,window_name):
         self.window_name=window_name
 
-    def console(self,):
+    def console(self):
         """
         弹窗置顶操作
         :return:
         """
-        print("\033[0;31m%r弹窗置顶"%self.window_name, __file__, sys._getframe().f_lineno)
-        print("")
+        print("\033[0;31m开始%r弹窗置顶操作"%self.window_name, __file__, sys._getframe().f_lineno)
         # 首先判断控件是否是最大化
         main_window = Application().connect(title_re=self.window_name, timeout=10)
         Aerobook_main = main_window.window(title_re=self.window_name)
         WindowState=Aerobook_main.is_maximized()  # 判断窗口是否是最大化
         if WindowState:  # 如果是
-            pass
+            print("弹窗已经是最大化")
         else:            # 如果不是最大化
             Aerobook_main.maximize()  # 窗口最大化
+            print("进行弹窗最大化操作")
         WindowTop(self.window_name).EnumWindows()  # 窗口置顶显示
+
 
 
     def window_enum_callback(self,hwnd, wildcard):
@@ -662,7 +659,6 @@ class WindowTop:
         :param wildcard:
         :return:
         """
-        import win32gui, win32com.client,re
         if re.match(wildcard, str(win32gui.GetWindowText(hwnd))) is not None:
             win32gui.BringWindowToTop(hwnd)
             # 先发送一个alt事件，否则会报错导致后面的设置无效：pywintypes.error: (0, 'SetForegroundWindow', 'No error message is available')
@@ -672,9 +668,17 @@ class WindowTop:
             win32gui.SetForegroundWindow(hwnd)
 
 
+
+
+
     def EnumWindows(self):
-        import win32gui
         win32gui.EnumWindows(WindowTop(None).window_enum_callback, ".*%s.*" % self.window_name)  # 此处为你要设置的活动窗口名
+        print("弹窗已经置顶")
+        print("")
+
+
+
+
 
 
 
@@ -794,7 +798,6 @@ class htmlFormat:
         htmlFormat().takeOut_html_label(HTML_address, layoffPeriod_TXT)
         # 过滤没有中文的行
         htmlFormat(). Filter_nonChinese(layoffPeriod_TXT, ultimately_TXT)
-
         return ultimately_TXT
 
 
@@ -849,65 +852,14 @@ class UseCase_parameterization:
         获取读取电子表格的路径和相关参数
         :return:
         """
-        location=None
-        if moduleName=="Aerobook-Aerocheck":
-            if sole_ModuleIdentifier=="程序初始化用例":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "initializeUsecase").config_File()
-            elif sole_ModuleIdentifier=="铺层信息--铺层库优化":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "LaminateOptimize").config_File()
-            elif sole_ModuleIdentifier=="铺层信息--铺层数据库制作工具":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "LaminatedataPopup").config_File()
-            elif sole_ModuleIdentifier == "尺寸信息--一维单元尺寸定义":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "SizeDefinition_1D").config_File()
-            elif sole_ModuleIdentifier == "尺寸信息--二维单元尺寸定义":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "SizeDefinition_2D").config_File()
-            elif sole_ModuleIdentifier=="尺寸信息--一维单元尺寸定义（模板）":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "sizeInfo_1DXls").config_File()
-            elif sole_ModuleIdentifier=="尺寸信息--二维单元尺寸定义（模板）":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "sizeInfo_2DXls").config_File()
-            elif sole_ModuleIdentifier == "求解计算--求解计算":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "solveCalculation").config_File()
-            elif sole_ModuleIdentifier == "载荷信息--载荷数据库制作工具":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "loaddatabase_popUp").config_File()
-            elif sole_ModuleIdentifier == "载荷信息--编辑工况":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "editWorkingCondition").config_File()
-            elif sole_ModuleIdentifier == "材料信息--定义复合材料参数":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "compositeMaterial").config_File()
-            elif sole_ModuleIdentifier == "材料信息--定义金属材料参数":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "definitionMetalMaterial").config_File()
-            elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核1D":
-                 location= ProfileDataProcessing("testCase-Aerobook-Aerocheck", "CompoundStrengthCheck_1D").config_File()
-            elif sole_ModuleIdentifier == "复材结构强度校核--复合材料强度校核2D":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "CompoundStrengthCheck_2D").config_File()
-            elif sole_ModuleIdentifier == "紧固件强度校核--紧固件信息输入":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "fastener_parameterInput").config_File()
-            elif sole_ModuleIdentifier == "紧固件强度校核--紧固件参数设置":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "fastener_parameterSetting").config_File()
-            elif sole_ModuleIdentifier == "紧固件强度校核--紧固件强度校核":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "fastener_intensityCheck").config_File()
-            elif sole_ModuleIdentifier == "紧固件优化--紧固件参数优化":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "fastener_parOptimization").config_File()
-            elif sole_ModuleIdentifier == "金属结构强度校核--金属一维单元强度校核":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "metal_intensityCheck1D").config_File()
-            elif sole_ModuleIdentifier == "金属结构强度校核--金属二维单元强度校核":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "metal_intensityCheck2D").config_File()
-            elif sole_ModuleIdentifier == "金属结构强度校核--金属加筋板强度校核":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "metal_stiffenedPlate").config_File()
-            elif sole_ModuleIdentifier == "金属结构强度校核--金属曲板后驱曲强度校核":
-                location = ProfileDataProcessing("testCase-Aerobook-Aerocheck", "metal_rearGuard").config_File()
-            else:
-                raise MyException("没有地址:%r"%sole_ModuleIdentifier)
-        elif moduleName=="Aerobook-Fiberbook":
-            if sole_ModuleIdentifier=="程序初始化用例":
-                location = ProfileDataProcessing("testCase-Aerobook-Fiberbook", "initializeUsecase").config_File()
-            elif sole_ModuleIdentifier=="优化设置--全局设置":
-                location = ProfileDataProcessing("testCase-Aerobook-Fiberbook", "globalSetting").config_File()
-            elif sole_ModuleIdentifier=="设计变量--一维单元设计变量（截面尺寸）":
-                location = ProfileDataProcessing("testCase-Aerobook-Fiberbook", "1DdesignParam_sectionalSize").config_File()
-            else:
-                raise MyException("没有地址:%r"%sole_ModuleIdentifier)
+        # 取出测试用例所在地址
+        site = {"详细地址": r"src\testCase\c_useCase_file\initialize\自动化测试公共属性.xlsx", "表单名称": moduleName,
+                "初始行": 3, "初始列": 1}
+        dicts_title = read_excel(site).readExcel_common()  # 从Excel文件里取出，字典数据类型的测试用例地址
+        if sole_ModuleIdentifier in dicts_title:
+            location=dicts_title[sole_ModuleIdentifier]
         else:
-            raise MyException("没有找到执行模块的用例:%r"%moduleName)
+            raise MyException("没有找到被测试模块的用例所在地址:%r" % sole_ModuleIdentifier)
         if list_tableName:
             for tableName in list_tableName:
                 dict_site={"详细地址": location,"表单名称": tableName, "初始行": 1,"初始列":1}

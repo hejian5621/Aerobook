@@ -90,8 +90,6 @@ class OperatingControls:
                         OperatingControls(dlg_spec).scrollMouse()
                     else:
                         raise MyException("说明控件属性")
-                    print("waitingTime:",waitingTime)
-                    print(type(waitingTime))
                     if type(waitingTime)==int or type(waitingTime)==float :
                         time.sleep(waitingTime)
                 else:
@@ -213,6 +211,8 @@ class OperatingControls:
             self.dlg_spec = self.win_one.Edit15
         elif str_Name == "Edit16":
             self.dlg_spec = self.win_one.Edit16
+        elif str_Name == "CheckBox":
+            self.dlg_spec = self.win_one.CheckBox
         elif str_Name == "CheckBox0":
             self.dlg_spec = self.win_one.CheckBox0
         elif str_Name == "CheckBox1":
@@ -303,6 +303,8 @@ class OperatingControls:
             self.dlg_spec = self.win_one.RadioButton13
         elif str_Name == "RadioButton14":
             self.dlg_spec = self.win_one.RadioButton14
+        elif str_Name == "ComboBox":
+            self.dlg_spec = self.win_one.ComboBox
         elif str_Name == "ComboBox0":
             self.dlg_spec = self.win_one.ComboBox0
         elif str_Name == "ComboBox1":
@@ -423,7 +425,7 @@ class OperatingControls:
         OperatingControls(self.win_one).coord_dblclick(discern)
         if Popup_type=="选择铺层库信息":
             ControlOperationSuite_Aercheck(None).select_Laminatedata(argument)
-        elif Popup_type=="1D截面参数定义" or Popup_type=="铺层比定义":
+        elif Popup_type=="1D截面参数定义" or Popup_type=="铺层比定义" or Popup_type=="铺层厚度/铺层比定义":
             ControlOperationSuite_Fiberbook(None).designVariableSection_definition(Popup_type)
         else:
             raise MyException("没有弹窗类型：%r"%Popup_type)

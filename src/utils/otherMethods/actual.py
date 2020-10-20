@@ -32,6 +32,7 @@ class GetActual_Value:
         """
         from utils.otherMethods.unittest_start_finish import handlingMethod
         results_waitTime = self.property["测试结果等待时间"]
+        ProjectPath=self.property["被测程序文件地址"]
         if result==1:
             pass
         else:
@@ -45,12 +46,21 @@ class GetActual_Value:
             else:                      # 如果预期值信息类型值中没有“；”，就说明有只有一个检查类型
                 self.list_Message_type.append(Message_type)
             for Message_type in self.list_Message_type:   # 循环取出检查类型
-                if Message_type == "警告弹窗":  # 获取警告弹窗的文本信息（实际值）
-                    result= Warning_PopUp().Check_warning(results_waitTime)
+                self.dicti_actual=None
+                if Message_type == "警告弹窗" or Message_type == "提示弹窗":  # 获取警告弹窗的文本信息（实际值）
+                    Popup_type="警告"
+                    close_button="OK"
+                    if "警告弹窗" == Message_type:
+                        Popup_type="警告"
+                        close_button = "OK"
+                    elif "提示弹窗" == Message_type:
+                        Popup_type = "提示"
+                        close_button = "确定"
+                    result= Warning_PopUp().Check_warning(results_waitTime,Popup_type)
                     if result:    # 如果警告弹窗存在
-                        self.dicti_actual = Warning_PopUp().Warning_PopUp_TXT(UseCase_Number)
+                        self.dicti_actual = Warning_PopUp().Warning_PopUp_TXT(UseCase_Number,Popup_type)
                         # 关闭警告窗口
-                        Check_winControl("警告", "OK").popUp_Whether_close()
+                        Check_winControl(Popup_type, close_button).popUp_Whether_close()
                     else:
                         self.dicti_actual="没有警告弹窗"
                 elif Message_type == "信息窗口":  # 获取信息窗口的文本信息（实际值）
@@ -60,7 +70,7 @@ class GetActual_Value:
                     n=0
                     results_waitTime=results_waitTime*10
                     while n<= results_waitTime:
-                        newTime = handlingMethod().infoWin_new_dateAndTime()
+                        newTime = handlingMethod().infoWin_new_dateAndTime(ProjectPath)
                         if newTime > oldTime:
                             new_content = Information_Win().acquire_HTML_TXT(ProjectPath)  # 取出信息窗口实时数据
                             self.dicti_actual = FormatConversion().GetLatestData(new_content, old_content)
@@ -83,7 +93,7 @@ class GetActual_Value:
                     # 列表转化成字符串,强行转化
                     self.dicti_actual=str(self.dicti_actual)
                 else:
-                    raise MyException("该%r测试用例没有说实际值的获取途径" % UseCase_Number)
+                    raise MyException("该%r测试用例没有说实际值的获取途径:%r" % (UseCase_Number,Message_type))
                 # 把获取的单个检查类型放在列表嵌套字典中
                 self.actual_dicti_type[Message_type]=self.dicti_actual
             print("\033[0;34m获取到的实际值：\033[0m",self.actual_dicti_type)
@@ -108,22 +118,25 @@ class Warning_PopUp:
     def __init__(self):
         pass
 
-    def Check_warning(self,timeut=0.5):
+    def Check_warning(self,timeut=0.5,Popup_Name="警告"):
         """
         检查警告弹窗是否存在
         :return:
         """
         from pywinauto import findwindows,timings
+        import win32gui
         try:
-            app = Application().connect(title_re="警告",timeout=timeut)
-            dlg_spec = app.window(title="警告")
-        except (findwindows.ElementNotFoundError,timings.TimeoutError):
+            time.sleep(0.2)
+            hand=win32gui.FindWindow(None,Popup_Name)
+            app = Application().connect(handle=hand,timeout=timeut)
+            app.window(handle=hand)
+        except (findwindows.ElementNotFoundError,timings.TimeoutError,RuntimeError):
             return False
         else:
             return True
 
 
-    def Warning_PopUp_TXT(self,UseCase_Number):
+    def Warning_PopUp_TXT(self,UseCase_Number,Popup_Name):
         """
         获取警告窗口的文本信息
         :return:
@@ -131,20 +144,21 @@ class Warning_PopUp:
         from config.relative_location import path
         atLast_actuals =None
         relativeAddress = path.location()  # 获取项目相对位置
-        app = Application().connect(title_re="警告")
-        dlg_spec = app.window(title="警告")
+        app = Application().connect(title_re=Popup_Name)
+        dlg_spec = app.window(title=Popup_Name)
         # 切换到文本信息窗口
-        dlg_spec1=dlg_spec.警告DirectUIHWND
+        dlg_spec1=dlg_spec.DirectUIHWND
         # 获取预期值
-        location=relativeAddress+r"src\testCase\d_useCase_screenshot\Aerocheck\\"+UseCase_Number+".png"
+        location=relativeAddress+r"src\testCase\d_useCase_screenshot\expectScreenshots\\"+UseCase_Number+".png"
         time.sleep(0.5)
         dlg_spec1.capture_as_image().save(location)  # 获取警告弹窗的文本截图
         actuals=pictureProcessing(location).screenshot()    # 读取截图中的文本
-        print("actuals",actuals)
         if "」OK" in actuals:
             atLast_actuals=re.sub("」OK", '', actuals)
         elif "OK" in actuals:
             atLast_actuals = re.sub("OK", '', actuals)
+        elif "确定取消" in actuals:
+            atLast_actuals = re.sub("确定取消", '', actuals)
         else:
             atLast_actuals=actuals
         dlg_spec.child_window(title="OK", class_name="Button")  # 关闭弹窗

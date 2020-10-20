@@ -105,7 +105,6 @@ class  test_UseCaseSet_Aerocheck(unittest.TestCase):
         print(" ")
 
 
-
     """用于测试报告中的截图"""
     def save_img(self, img_name):  # 错误截图
         """

@@ -60,7 +60,7 @@ class Initializing:
         """ 用例在执行前，首先获取信息窗口的文本信息，用于获取最新的信息窗口文本信息"""
         old_content = Information_Win().acquire_HTML_TXT(ProjectPath)
         """在用例执行前取出信息窗口里面最新的日期时间"""
-        newTime=handlingMethod().infoWin_new_dateAndTime()
+        newTime=handlingMethod().infoWin_new_dateAndTime(ProjectPath)
         """用例运行前删除指定的文件"""
         folderFile_dispose(ProjectPath).delfile(dict_testCase)
         """打包参数"""
@@ -269,13 +269,18 @@ class handlingMethod:
             ProfileDataProcessing("commonality-Aerobook-Aerocheck", "ProjectSave_path").config_File_amend(source)
 
 
-    def infoWin_new_dateAndTime(self):
+    def infoWin_new_dateAndTime(self,ProjectPath):
         """
         取出信息窗口最新的时间
         :return:
         """
+        import datetime
         from utils.commonality.tool import htmlFormat
-        HTML_address = r"F:\Aerobook\src\testCase\projectFile\automateFile\Aerocheck_prjLog_2020-10-16.html"
+        today = str(datetime.date.today())  # datetime.date类型当前日期
+        HTML_address = ProjectPath+"\\"+"Aerocheck_prjLog_" + today + ".html"
         list_time=htmlFormat().takeOut_html_dateAndtime(HTML_address)
-        newTime=list_time[-1]
+        if list_time :
+            newTime=list_time[-1]
+        else:
+            newTime=today
         return newTime

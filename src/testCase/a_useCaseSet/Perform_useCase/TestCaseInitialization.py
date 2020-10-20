@@ -124,16 +124,16 @@ class  module_initialize:
 moduleName= "Aerobook-Aerocheck"
 # 执行初始化
 
-# module_initialize().start_Aerobook_Aercheck()
+module_initialize().start_Aerobook_Aercheck()
 
 # module_initialize().LaminatedataPopup(moduleName,"csh001",["铺层数据库制作工具"])  # 铺层信息->铺层数据库制作工具
 #
 # module_initialize().LaminatedataPopup(moduleName,"csh002",["1D单元尺寸定义（模板）"]) # 尺寸信息->一维单元尺寸定义（模板）
 #
 # module_initialize().LaminatedataPopup(moduleName,"csh003",["2D单元尺寸定义（模板）"]) # 尺寸信息->二维单元尺寸定义（模板）
-
+#
 # module_initialize().LaminatedataPopup(moduleName,"csh004",["求解计算"])             # 求解计算->求解计算
-
+#
 # module_initialize().LaminatedataPopup(moduleName,"csh005",["载荷数据库制作工具"])     # 载荷信息->载荷数据库制作工具
 #
 # module_initialize().LaminatedataPopup(moduleName,"csh006",["定义材料许用值"])        # 材料信息->定义复合材料参数
