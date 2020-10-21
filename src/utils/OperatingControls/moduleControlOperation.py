@@ -349,6 +349,12 @@ class OperatingControls:
             self.dlg_spec = self.win_one.均
         elif str_Name == "机身半径Edit":
             self.dlg_spec = self.win_one.机身半径Edit
+        elif str_Name == "GroupBox7":
+            self.dlg_spec = self.win_one.GroupBox7
+        elif str_Name == "GroupBox6":
+            self.dlg_spec = self.win_one.GroupBox6
+        elif str_Name == "输出到include文件Edit":
+            self.dlg_spec = self.win_one.输出到include文件Edit
         else:
             print("没有找到唯一标识拼接方法:",str_Name, __file__, sys._getframe().f_lineno)
             self.dlg_spec = self.win_one[str_Name]

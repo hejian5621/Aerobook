@@ -275,6 +275,16 @@ class  ctrW_AeroFiberbook:
         return self.workField, self.win_two, self.win_three, self.win_four
 
 
+    def workField_Pole_stability(self):
+        """
+        稳定性设计响应--杆柱稳定性响应和约束
+        :return:
+        """
+        self.win_two = self.workField.材料类型_wx_SysTabCtl32
+        self.win_three = self.win_two.child_window(title="grid", class_name="wxWindowNR").child_window(title="GridWindow", class_name="wxWindowNR")
+        return self.workField, self.win_two, self.win_three, self.win_four
+
+
 
 """特殊情况下的控件操作，一般是正常方法识别不了控件"""
 class specialWay_OperatingControls:
@@ -414,10 +424,24 @@ class GetWindowInstance:
                 self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
             elif self.ModuMarking == "刚度约束设计响应--位移设计响应":
                 self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "刚度约束设计响应--扭转角约束设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
             elif self.ModuMarking == "刚度约束设计响应--刚度比设计响应":
                 self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
             elif self.ModuMarking == "机翼优化响应--梁腹板缘条厚度比设计响应":
                 self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "机翼优化响应--梁腹板缘条铺层比之差设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "机翼优化响应--肋站位EI GJ设计响应":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "稳定性设计响应--杆柱稳定性响应和约束":
+                self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroFiberbook(son_window).workField_Pole_stability()
+            elif self.ModuMarking == "稳定性设计响应--平板稳定性响应约束":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "稳定性设计响应--曲板稳定性响应约束":
+                self.win_one = ctrW_AeroFiberbook(son_window).workField_general()
+            elif self.ModuMarking == "稳定性设计响应--加筋板稳定性响应约束":
+                self.win_one, self.win_two, self.win_three, self.win_four = ctrW_AeroFiberbook(son_window).workField_Pole_stability()
             else:
                 raise MyException("没有找到需要切换的窗口：%r" % self.ModuMarking)
         else:
