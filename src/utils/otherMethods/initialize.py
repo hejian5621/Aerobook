@@ -98,7 +98,6 @@ class pywin_openAProgram:
             try:
                 time.sleep(0.2)
                 hwnd = win32gui.FindWindow(None, self.aero_title)
-                print("hwnd:",hwnd)
                 main_window = Application().connect(handle=hwnd, timeout=10)
             except RuntimeError:
                 print("没有找到")

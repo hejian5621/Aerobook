@@ -53,10 +53,9 @@ class  ControlOperationSuite_Aercheck:
             if hwnd == 0:  # 如果句柄不为零证明找到了该弹窗
                 raise MyException("没有找到弹窗")
         except Exception:
-            print("没有找到“%r“窗口"%Popup_Title, __file__, sys._getframe().f_lineno)
+            print("没有找到“%r“窗口，获取的句柄为：%r"%(Popup_Title,hwnd), __file__, sys._getframe().f_lineno)
             raise MyException("没有找到“%r“窗口"%Popup_Title)
         else:
-            print("hwnd:",hwnd)
             app = Application().connect(handle=hwnd, timeout=20)
             self.dlg_spec = app.window(handle=hwnd)  # 切换到选择文件弹窗窗口
             # self.dlg_spec.print_control_identifiers()
@@ -75,8 +74,6 @@ class  ControlOperationSuite_Aercheck:
                 Check_winControl(Popup_Title, close_Name).popUp_Whether_close() # 检查点击按钮后窗口是否关闭，如果没有关闭，继续点击按钮
             else:
                 list_AfterParsing = Popup_parameter.split("；")
-                print("Popup_parameter:",Popup_parameter)
-                print("list_AfterParsing :",list_AfterParsing )
                 nest_PopWinTitle=list_AfterParsing[0]
                 nest_control_Name = list_AfterParsing[1]
                 Check_winControl(Popup_Title, close_Name).nest_popUpWindows(nest_PopWinTitle,nest_control_Name)  # 检查嵌套弹窗是否关闭

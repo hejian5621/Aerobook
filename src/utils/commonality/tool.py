@@ -161,7 +161,6 @@ class pictureProcessing:
         :return:
         """
         from src.utils.otherMethods.initialize import pywin_openAProgram
-        print("\033[0;34m对被测系统进行截图\033[0m", __file__, sys._getframe().f_lineno)
         aero_window = pywin_openAProgram().entrance_subroutine_title()
         location = r"F:\Aerobook\src\testCase\a_useCaseSet\Aerockeck\img\test_1.png"   # 截图的保存位置
         aero_window.capture_as_image().save(location)  # 获取警告弹窗的文本截图
@@ -338,7 +337,7 @@ class  Check_winControl:
         import win32gui
         self.triggerButton.click_input()   # 点击触发弹窗的按钮
         # 判断弹窗是否弹窗，如果没有弹出，就继续点击
-        while self.CircleInitial <= self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
+        while self.CircleInitial < self.cycleIndex:  # 如果没有找到控件，就继续点击触发按钮
             try:
                 time.sleep(0.2)
                 hwnd = win32gui.FindWindow(None, self.title)  # 通过弹窗的标题获取弹窗的句柄
@@ -352,7 +351,7 @@ class  Check_winControl:
                 elif self.CircleInitial == 1:                  # 如果第一次链接不上，在点击一次
                     self.triggerButton.click_input()
             self.CircleInitial = self.CircleInitial + 1
-        if self.CircleInitial == (self.cycleIndex + 1):
+        if self.CircleInitial == self.cycleIndex:
             raise MyException("%r窗口没有找到" % self.title)
 
 
@@ -458,6 +457,24 @@ class  Check_winControl:
                     raise MyException("没有找到关闭窗口的按钮:%r"%self.title)
                 self.CircleInitial = self.CircleInitial + 1
         return self.state
+
+
+
+    def CheckWin_close(self,list_title):
+        """
+        检查窗口是否关闭，并返回没有关闭窗口标题的列表
+        :return:
+        """
+        list_title_close=[]
+        if list_title:  # 列表不为空的情况
+            for title in list_title:
+                hwnd = win32gui.FindWindow(None, title)  # 通过弹窗的标题获取弹窗的句柄
+                if hwnd != 0: # 如果句柄不等于0证明该窗口没有关闭
+                    list_title_close.append(title)
+        return list_title_close
+
+
+
 
 
     """强行关闭Excel进程"""

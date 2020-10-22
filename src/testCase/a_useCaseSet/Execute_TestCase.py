@@ -13,6 +13,7 @@ from testCaseSet_Aerocheck import test_UseCaseSet_Aerocheck
 file_name=time.strftime("%m%d%H%M%S")+"Aerobook测试报告"    # 测试报告名称
 # 测试报告存放地址
 relativeAddress = path.location()
+print("relativeAddress:",relativeAddress)
 logPath = relativeAddress+"report//Aerocheck//" # 测试报告保存地址
 # 用例名称
 useCase_name="Aerocheck测试报告"

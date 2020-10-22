@@ -1,14 +1,8 @@
 # 铺层库优化工作栏
 
 import unittest
-from assertpy import assert_that
-import time, os
 from GenerateTestReports import BeautifulReport
-from parameterized.parameterized import parameterized
-from src.utils.otherMethods.dataFormatConversion import FormatConversion
-from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import execute_step
-from ddt import ddt, data, unpack, file_data
-import numpy as np
+from ddt import ddt, data
 
 
 @ddt

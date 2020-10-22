@@ -30,9 +30,7 @@ class GetActual_Value:
         :param result: 因为在程序启动或执行用例前需要做的初始化前不需要实例值
         :return:
         """
-        from utils.otherMethods.unittest_start_finish import handlingMethod
-        results_waitTime = self.property["测试结果等待时间"]
-        ProjectPath=self.property["被测程序文件地址"]
+        waitTime=[]
         if result==1:
             pass
         else:
@@ -45,47 +43,26 @@ class GetActual_Value:
                self.list_Message_type = Message_type.split("；")
             else:                      # 如果预期值信息类型值中没有“；”，就说明有只有一个检查类型
                 self.list_Message_type.append(Message_type)
+            results_waitTime = self.property["测试结果等待时间"]
+            if "；" in str(results_waitTime):
+                waitTime=results_waitTime.split("；")
+            else:
+                waitTime.append(results_waitTime)
             for Message_type in self.list_Message_type:   # 循环取出检查类型
                 self.dicti_actual=None
                 if Message_type == "警告弹窗" or Message_type == "提示弹窗":  # 获取警告弹窗的文本信息（实际值）
-                    Popup_type="警告"
-                    close_button="OK"
-                    if "警告弹窗" == Message_type:
-                        Popup_type="警告"
-                        close_button = "OK"
-                    elif "提示弹窗" == Message_type:
-                        Popup_type = "提示"
-                        close_button = "确定"
-                    result= Warning_PopUp().Check_warning(results_waitTime,Popup_type)
-                    if result:    # 如果警告弹窗存在
-                        self.dicti_actual = Warning_PopUp().Warning_PopUp_TXT(UseCase_Number,Popup_type)
-                        # 关闭警告窗口
-                        Check_winControl(Popup_type, close_button).popUp_Whether_close()
-                    else:
-                        self.dicti_actual="没有警告弹窗"
+                    self.dicti_actual = Warning_PopUp(self.property).get_WarningPopUp(Message_type,waitTime)
                 elif Message_type == "信息窗口":  # 获取信息窗口的文本信息（实际值）
-                    old_content = self.property["信息窗口之前的文本"]  # 取出之前的信息窗口数据
-                    ProjectPath = self.property["被测程序文件地址"]
-                    oldTime = self.property["信息窗口最新的日期时间"]
-                    n=0
-                    results_waitTime=results_waitTime*10
-                    while n<= results_waitTime:
-                        newTime = handlingMethod().infoWin_new_dateAndTime(ProjectPath)
-                        if newTime > oldTime:
-                            new_content = Information_Win().acquire_HTML_TXT(ProjectPath)  # 取出信息窗口实时数据
-                            self.dicti_actual = FormatConversion().GetLatestData(new_content, old_content)
-                            break
-                        time.sleep(0.1)
-                        n+=1
+                    self.dicti_actual = Information_Win(self.property).get_infoWindow(waitTime)  # 取出信息窗口实时数据
                 elif Message_type == "控件文本":  # 获取信息窗口的文本信息（实际值）
-                    time.sleep(results_waitTime)
+                    time.sleep(int(waitTime[0]))
                     self.dicti_actual = localControl(self.instance).LocalControl_TXT(self.property)
                 elif Message_type == "控件截图":  # 获取控件的实际值截图
-                    time.sleep(results_waitTime)
+                    time.sleep(int(waitTime[0]))
                     # 获取工况组合下拉框里的文本信息
                     self.dicti_actual =screenshot(self.instance).interceptPicture(self.property,Message_type)
                 elif Message_type == "文件检查":  #
-                    time.sleep(results_waitTime)
+                    time.sleep(waitTime[0])
                     ProjectPath = self.property["被测程序文件地址"]
                     BeforeTime = self.property["用例步骤执行前时间"]
                     # 取出文件夹里文件所有的名称, 并且根据实际筛选出符合时间条件的文件名称
@@ -115,8 +92,39 @@ class Warning_PopUp:
     """警告弹窗实际值"""
 
 
-    def __init__(self):
-        pass
+    def __init__(self,property=None):
+        self.property=property
+        self.dicti_actual={}
+
+
+    def get_WarningPopUp(self,Message_type,waitTime):
+        """
+        获取警告弹窗的文本信息
+        :param Message_type: 弹窗的类型
+        :param waitTime:     是个列表，等待弹窗出现的时间
+        :return:
+        """
+        waitTime=waitTime[0]     # 取出等待时间
+        UseCase_Number = self.property["用例编号"]   # 用于生产截图的名称
+        Popup_type = "警告"    # 定义弹窗标题，默认为“警告”
+        close_button = "OK"   # 定义弹窗的关闭按钮名称，默认为“OK”
+        # 获取弹窗的类型，预期类型不多，所有写死
+        if "警告弹窗" == Message_type:
+            Popup_type = "警告"
+            close_button = "OK"
+        elif "提示弹窗" == Message_type:
+            Popup_type = "提示"
+            close_button = "确定"
+        result = Warning_PopUp().Check_warning(waitTime, Popup_type)   # 确定弹窗是否存在
+        if result:  # 如果警告弹窗存在
+            self.dicti_actual = Warning_PopUp().Warning_PopUp_TXT(UseCase_Number, Popup_type)  # 获取弹窗的文本
+            Check_winControl(Popup_type, close_button).popUp_Whether_close()    # 关闭警告窗口
+        else:
+            self.dicti_actual = "没有警告弹窗"
+        return self.dicti_actual
+
+
+
 
     def Check_warning(self,timeut=0.5,Popup_Name="警告"):
         """
@@ -275,8 +283,48 @@ class Information_Win:
     """获取信息窗口的时间值"""
 
 
-    def __init__(self):
-        pass
+    def __init__(self,property=None):
+        self.property=property
+        self.dicti_actual= {}
+
+
+    def get_infoWindow(self,waitTime):
+        """
+        获取信息窗口实际值,
+        :return:
+        """
+        from utils.otherMethods.unittest_start_finish import handlingMethod
+        print("\033[0;32;34m获取信息窗口数据\033[0m", __file__, sys._getframe().f_lineno)
+        print("")
+        list_old_content = self.property["信息窗口之前的文本"]
+        ProjectPath = self.property["被测程序文件地址"]
+        oldTime = self.property["信息窗口最新的日期时间"]
+        """获取实际值出现的时间和实际值会有多少条"""
+        if len(waitTime)==2:
+            latencyTime=waitTime[0]  # 等待实际值时间
+            ActualNumber=waitTime[1] # 实际值条数
+        else:
+            latencyTime = waitTime[0]  # 等待实际值时间
+            ActualNumber = 1  # 实际值条数
+        """获取实际值，动态的实际值等待时间"""
+        n = 0
+        results_waitTime = int(latencyTime) * 10
+        while n <= results_waitTime:  # 等待时间
+            newTime,allTime = handlingMethod().infoWin_new_dateAndTime(ProjectPath)  # 取出信息窗口最新的时间
+            if newTime > oldTime:  # 当有新的数据时
+                new_content = Information_Win().acquire_HTML_TXT(ProjectPath)  # 取出信息窗口实时数据
+                # 因为在获取最新的信息窗口信息时，是直接使用del方法删除列表，所有只有重新生成一个列表
+                old_list=[]
+                for old_content in list_old_content:
+                    old_list.append(old_content)
+                self.dicti_actual = FormatConversion().GetLatestData(new_content, old_list)  # 两个列表对吧，去掉前面重复的数据
+                timeAmount =len(self.dicti_actual)  # 获取新出现的实际值条数
+                if timeAmount>=int(ActualNumber):   # 判断新出现的实际值条数是否符合预期
+                    break
+            time.sleep(0.2)
+            n += 1
+        return self.dicti_actual
+
 
 
     def copyAndPaste(self,dlg_spec,dataQuantity):
@@ -327,8 +375,6 @@ class Information_Win:
         通过获取HTML文件里的文本，来获取信息窗口的实际值
         :return:
         """
-        print("\033[0;32;34m获取信息窗口数据\033[0m", __file__, sys._getframe().f_lineno)
-        print("")
         # 取出HTML文本，只留下有中文的行，在存入TXT文件中
         today = str(datetime.date.today())  # datetime.date类型当前日期
         Name = "Aerocheck_prjLog_" + today + ".html"

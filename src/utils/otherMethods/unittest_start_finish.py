@@ -11,14 +11,14 @@ import os,sys
 from config.relative_location import path
 from src.utils.otherMethods.initialize import pywin_openAProgram
 from src.utils.otherMethods.controlOperationSuite import ControlOperationSuite_Aercheck
+from time import *
 
 
 
 
 
 
-
-import time
+# import time
 
 
 
@@ -53,14 +53,14 @@ class Initializing:
         global_hostModule = handlingMethod().host_Module_one(real_hostModule, global_hostModule)
         """在子模块第一次运行用例前需要做的准备工作"""
         testCase, global_sonmoduleName = handlingMethod().son_Module_one(dictSet, dict_testCase)
-        """ 用例运行前首先检查有没有弹窗没有关闭"""
+        """用例运行前首先检查有没有弹窗没有关闭"""
         handlingMethod().Loop_closeWindow(global_sonmoduleName,real_hostModule)
         """获取项目所在路径 """
         ProjectPath =handlingMethod().Get_Project_path(real_hostModule)
         """ 用例在执行前，首先获取信息窗口的文本信息，用于获取最新的信息窗口文本信息"""
         old_content = Information_Win().acquire_HTML_TXT(ProjectPath)
         """在用例执行前取出信息窗口里面最新的日期时间"""
-        newTime=handlingMethod().infoWin_new_dateAndTime(ProjectPath)
+        newTime,allTime=handlingMethod().infoWin_new_dateAndTime(ProjectPath)
         """用例运行前删除指定的文件"""
         folderFile_dispose(ProjectPath).delfile(dict_testCase)
         """打包参数"""
@@ -88,7 +88,7 @@ class finish_clear:
         sole_ModuleIdentifier = dictSet["模块唯一标识"]
         moduleName=dictSet["测试主模块"]
         """在关闭弹窗前首先截图，用于如果断言失败后，在测试报告上显示测试失败的截图"""
-        actuals = pictureProcessing(None).BeingMeasured_system_screenshot()
+        # pictureProcessing(None).BeingMeasured_system_screenshot()
         """ 收尾，如果有警告弹框就关掉"""
         handlingMethod().Loop_closeWindow(sole_ModuleIdentifier,moduleName)
         """处理预期结果和实际结果，用以实际结果和预期结果文本对比"""
@@ -151,8 +151,12 @@ class handlingMethod:
             else:  # 如果字典的值里没有“；”，就强行转化成列表
                 self.list_CloseWindows.append(CloseWindows)
             print("\033[0;32;34m检查%r模块，弹窗是否关闭,需要检查的弹窗标题：%r\033[0m" % (sole_ModuleIdentifier, self.list_CloseWindows), __file__, sys._getframe().f_lineno)
-            for title in self.list_CloseWindows:  # 依次取出预期关闭的弹窗的标题
-                Check_winControl(title).Force_close_popUp()  # 关闭弹窗
+            self.list_CloseWindows = Check_winControl().CheckWin_close(self.list_CloseWindows)  # 取出没有关闭弹窗的标题列表
+            if self.list_CloseWindows:  # 如果有没有关闭的弹窗
+                for title in self.list_CloseWindows:  # 依次取出预期关闭的弹窗的标题
+                    Check_winControl(title).Force_close_popUp()  # 关闭弹窗
+            else:
+                print("\033[0;32;34m所有的弹窗都已经关闭\033[0m", __file__, sys._getframe().f_lineno)
         else:
             if "全部模块" in  dicts_title:  # 如果没有找到对应模块的关闭窗口，就全部找一遍
                 CloseWindows = dicts_title["全部模块"]
@@ -161,9 +165,12 @@ class handlingMethod:
                 else:  # 如果字典的值里没有“；”，就强行转化成列表
                     self.list_CloseWindows.append(CloseWindows)
                 print("\033[0;32;34m因为该被测模块名没有找到对应关闭窗口的名称，所以全部关闭一遍，被测模块名称：%r\033[0m" % sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
-                time.sleep(0.1)
-                for title in self.list_CloseWindows:  # 依次取出预期关闭的弹窗的标题
-                    Check_winControl(title).Force_close_popUp()  # 关闭弹窗
+                self.list_CloseWindows=Check_winControl().CheckWin_close(self.list_CloseWindows)  # 取出没有关闭弹窗的标题列表
+                if self.list_CloseWindows:   # 如果有没有关闭的弹窗
+                    for title in self.list_CloseWindows:  # 依次取出预期关闭的弹窗的标题
+                        Check_winControl(title).Force_close_popUp()  # 关闭弹窗
+                else:
+                    print("\033[0;32;34m所有的弹窗都已经关闭\033[0m", __file__, sys._getframe().f_lineno)
         print("\033[0;32;34m%r模块弹窗检查完毕\033[0m" % sole_ModuleIdentifier, __file__, sys._getframe().f_lineno)
         print("")
 
@@ -283,4 +290,6 @@ class handlingMethod:
             newTime=list_time[-1]
         else:
             newTime=today
-        return newTime
+        return newTime,list_time
+
+

@@ -1,15 +1,11 @@
 # 尺寸信息--1D2D尺寸定义
-import unittest,time,datetime,sys
+import unittest, datetime,sys
 from assertpy import assert_that
 from BeautifulReport import BeautifulReport
-from src.testCase.b_testCaseStep.Aerocheck.TestCaseStep import UseCase_step
+from TestCaseStep import UseCase_step
 from ddt import ddt,data
-from utils.otherMethods.unittest_start_finish import Initializing,finish_clear,handlingMethod
+from utils.otherMethods.unittest_start_finish import Initializing,finish_clear
 from utils.commonality.tool import UseCase_parameterization
-from time import *
-
-
-
 
 """测试用例集"""
 @ddt
@@ -90,8 +86,10 @@ class  test_UseCaseSet_Aerocheck(unittest.TestCase):
         print("")
 
 
+
+
     """用例执行完成收尾操作"""
-    @BeautifulReport.add_test_img("test_1")   # 如果用例执行失败，就把用例失败的截图放入测试报告中
+    @BeautifulReport.add_test_img("tearDown")   # 如果用例执行失败，就把用例失败的截图放入测试报告中
     def tearDown(self):
         """用例执行完成收尾操作"""
         self.expect_result, self.actual_result = finish_clear().controller(self.dict_testCase)  # 当每条用例执行完毕，执行收尾工作
@@ -105,6 +103,7 @@ class  test_UseCaseSet_Aerocheck(unittest.TestCase):
         print(" ")
 
 
+
     """用于测试报告中的截图"""
     def save_img(self, img_name):  # 错误截图
         """
@@ -113,7 +112,12 @@ class  test_UseCaseSet_Aerocheck(unittest.TestCase):
         :param img_name:
         :return:
         """
-        pass
+        from src.utils.otherMethods.initialize import pywin_openAProgram
+        print("\033[0;34m对被测系统进行截图\033[0m", __file__, sys._getframe().f_lineno)
+        aero_window = pywin_openAProgram().entrance_subroutine_title()
+        old_location = r"F:/Aerobook/"+"/img/"+img_name+".png"  # 截图的保存位置
+        aero_window.capture_as_image().save(old_location)  # 获取警告弹窗的文本截图
+
 
 
 
@@ -123,17 +127,4 @@ if __name__ == '__main__':
     unittest.main()
 
 
-# if __name__ == '__main__':
-#     import unittest, time
-#     from BeautifulReport import BeautifulReport
-#     from config.relative_location import path
-#     suite = unittest.TestSuite()
-#     # 测试报告名称
-#     file_name = time.strftime("%m%d%H%M%S") + "Aerobook测试报告"  # 测试报告名称
-#     # 测试报告存放地址
-#     relativeAddress = path.location()
-#     logPath = relativeAddress + "report//Aerocheck//"  # 测试报告保存地址
-#     # 用例名称
-#     useCase_name = "Aerocheck测试报告"
-#     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(test_UseCaseSet_Aerocheck))
-#     result = BeautifulReport(suite).report(filename=file_name,log_path=logPath,description=useCase_name)
+

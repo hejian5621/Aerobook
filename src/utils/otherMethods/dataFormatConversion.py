@@ -104,6 +104,7 @@ class FormatConversion:
                 break
         return list_new
 
+
     def takeOut_space(self,str_spacing):
         """
         去掉空格
@@ -183,6 +184,24 @@ class FormatConversion:
                 v1=dict_two[k]
                 new_dict[k]=v1
         return new_dict
+
+
+
+    def greater_oldTime(self,list_time,oldTime):
+        """
+        取出列表中大于莫个时间的条数
+        :param list_time:
+        :param oldTime:
+        :return: 大于的数目
+        """
+        n=0
+        print("list_time:",list_time)
+        print("oldTime:", oldTime)
+        for tim in list_time:
+
+            if tim>oldTime:
+                n+=1
+        return n
 
 
 

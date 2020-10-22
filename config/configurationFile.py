@@ -4,6 +4,9 @@ import configparser
 import os
 import time
 from configobj import ConfigObj
+from time import *
+
+
 
 class ProfileDataProcessing:
     """读取配置文件"""

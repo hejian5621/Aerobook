@@ -1,18 +1,18 @@
-from src.utils.commonality.ExcelFile import read_excel
+from src.utils.otherMethods.dataFormatConversion import FormatConversion
+from utils.otherMethods.unittest_start_finish import handlingMethod
 
 
-moduleName="Aerobook-Aerocheck"
+# allTime=['2020-10-22 09:35:02', '2020-10-22 09:35:03','2020-10-22 09:35:04','2020-10-22 09:35:05','2020-10-22 09:35:06','2020-10-22 09:35:07','2020-10-22 09:35:08',
+#          '2020-10-22 09:35:09','2020-10-22 09:35:10','2020-10-22 09:35:11','2020-10-22 09:35:12','2020-10-22 09:35:13']
+#
+# oldTime="2020-10-22 09:35:11"
+#
+# timeAmount = FormatConversion().greater_oldTime(allTime, oldTime)
+#
+# print("timeAmount:",timeAmount)
+ProjectPath=r"F:\Aerobook\src\testCase\projectFile\automateFile"
 
+newTime,allTime = handlingMethod().infoWin_new_dateAndTime(ProjectPath)  # 取出信息窗口最新的时间
 
-sole_ModuleIdentifier="金属结构强度校核--金属曲板后驱曲强度校核"
-
-site = {"详细地址": r"src\testCase\c_useCase_file\initialize\自动化测试公共属性.xlsx", "表单名称": moduleName,
-        "初始行": 3, "初始列": 1}
-dicts_title = read_excel(site).readExcel_common()  # 从Excel表格中取出要关闭窗口的标题
-
-
-location=dicts_title[sole_ModuleIdentifier]
-
-print("dicts_title：",dicts_title )
-
-print("location：",location )
+print("newTime:",newTime)
+print("allTime:",allTime)

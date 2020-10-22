@@ -16,7 +16,6 @@ WindowTop(title).console()
 
 
 hwnd1=win32gui.GetForegroundWindow()
-print("hwnd1:",hwnd1)
 # 这个是qq登录界面的窗口句柄
 # hwnd = win32gui.FindWindow(None, title)
 # print("hwnd:",hwnd)
